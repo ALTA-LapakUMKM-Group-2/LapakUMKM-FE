@@ -4,13 +4,14 @@ import Layout from '../components/Layout'
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import ProdukCard from '../components/ProdukCard'
 import { Rating } from '@smastrom/react-rating';
-import { useNavigate } from 'react-router-dom'
+import { IoIosArrowDropdown } from 'react-icons/io'
+import { IoIosArrowDropup } from 'react-icons/io'
 
-const Home = () => {
+const HomeFilter = () => {
 
-    const navigate = useNavigate()
-    const [kategori, setKategori] = useState('')
+    const [showFilter, setShowFilter] = useState(false);
 
+    console.log(showFilter)
     return (
         <Layout>
             <Navbar
@@ -18,23 +19,39 @@ const Home = () => {
             email='faizaltriasaa@gmail.com'
             imgUser={FotoProfile}
             />
-            <div className="flex flex-col w-11/12">
-                <div className="flex mt-10 space-x-10 mx-auto w-3/6">
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none" 
-                    onClick={()=> navigate(`/home/${kategori}`,{
-                        state:{
-                            kategori: setKategori("kaos")
-                        }
-                    })}>
-                        Kaos
-                    </button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Celana</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Sepatu</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Sendal</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Sembako</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Kerajinan</button>
+            <div className="flex w-11/12">
+                <div className="flex mt-10 ml-auto">
+                    <div className="w-80 h-fit bg-white border rounded-xl shadow-xl flex flex-col">
+                        <div className="flex flex-col">
+                            <div className="flex flex-row justify-between border-b-2 mx-3 mt-2">
+                                <p className='my-auto text-xl font-semibold'>Filter</p>
+                                    <label className="swap swap-rotate">
+                                        <input type="checkbox" />
+                                        <IoIosArrowDropup onClick={()=> setShowFilter(true)}  className="swap-on fill-current w-8 h-8"/>
+                                        <IoIosArrowDropdown onClick={()=> setShowFilter(false)} className="swap-off fill-current w-8 h-8"/>
+                                    </label>
+                            </div>
+                            <div className={`mx-2 text-lapak font-semibold w-1/2 md:w-1/4 transition-all duration-300 ${ showFilter ? 'block' : 'hidden' }`}>
+                                <div className="px-4 py-3 text-sm text-gray-900">
+                                    <div>
+                                        <label className="block font-light mb-2" htmlFor='kategori'>
+                                        Kategori
+                                        </label>
+                                        <input
+                                            className={'input input-primary'}
+                                            id={'kategori'}
+                                            type={"text"}
+                                            name={'kategori'}
+                                            placeholder={'Min Price'}
+                                        />
+                                    </div>
+                                    <div className="font-medium truncate"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="my-4 gap-y-5 gap-x-5 grid grid-cols-5 mx-auto mt-10">
+                <div className="my-4 gap-y-5 gap-x-2 grid grid-cols-5 mx-auto mt-10">
                     <ProdukCard
                     produkName='Apple Watch Series 7 GPS, Alumunium Case, starligth sport'
                     location='jakarta'
@@ -101,4 +118,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default HomeFilter
