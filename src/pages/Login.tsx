@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import bgLogin from '../assets/bgLogin.jpg'
+import bgregis from '../assets/bgregis.jpg'
 import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
-import { TfiUnlock } from "react-icons/tfi";
+
 import { useNavigate } from 'react-router-dom';
 import LapakUmkm from '../assets/LapakUmkm2.png'
+import Layout from '../components/Layout';
 
 
 const Login = () => {
@@ -19,80 +20,89 @@ const navigate = useNavigate()
         backgroundImage: `linear-gradient(
           rgba(0, 0, 0, 0.3),
           rgba(0, 0, 0, 0.3)
-        ), url('${bgLogin}')`,
+        ), url('${bgregis}')`,
         backgroundSize: "cover",
       };
   return (
-    <div style={bg} className="h-screen w-screen top-0 mt-0 flex items-center">
-      <div className="mx-auto lg:max-w-md w-full  bg-white rounded-lg p-10 px-20">
+    <Layout>
+    <div className="relative flex flex-col justify-center min-h-screen overflow-hidden w-screen" style={{backgroundImage : `URL(${bgregis})`}}>
+    <div className="w-full p-20 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl">
+    <img src={LapakUmkm} width={300} className='flex justify-center mx-auto mb-20' />
+        <form className="mt-6 w-full">
+            
+            <div className="mb-5">
+                <label
+                    htmlFor="email"
+                    className="block text-md font-semibold text-gray-800"
+                >
+                    Email
+                </label>
+                <input
+                    type="email"
+                    className="input input-bordered input-info w-full max-w-lg"
+                />
+            </div>
+            <div className="mb-5">
+                <label
+                    htmlFor="password"
+                    className="block text-md font-semibold text-gray-800"
+                >
+                    Password
+                </label>
+                <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="input input-bordered input-info w-full max-w-lg pr-10"
+              />
+              <button
+                type="button"
+                className="absolute right-2 top-3 text-black"
+                onClick={handleTogglePassword}
+              >
+                {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
+              </button>
+            </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500
+                  border-gray-300 rounded"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  Remember me
+                </label>
+              </div>
 
-<img src={LapakUmkm} width={200} className='flex justify-center mx-auto mb-20' />
-<form className="flex flex-col">
-  
-  <div className="relative z-0 w-full mb-5 2xl:mb-10 group ">
-    <input
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      type="email"
-      name="email"
-      id="email"
-      className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-black appearance-none dark:text-black dark:border-black dark:focus:border-black focus:outline-none focus:ring-0 focus:border-black peer"
-      placeholder=" "
-      required
-    />
-    <label
-      htmlFor="email"
-      className="peer-focus:font-medium flex flex-row gap-2 absolute text-sm text-black dark:text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-    >
-      <HiOutlineMail size={20} /> Email address
-    </label>
-  </div>
-  <div className="relative z-0 w-full mb-10 group">
-    <input
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      type={showPassword ? "text" : "password"}
-      name="password"
-      id="password"
-      className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-black appearance-none dark:text-black dark:border-black dark:focus:border-black focus:outline-none focus:ring-0 focus:border-black peer"
-      placeholder=" "
-      required
-    />
-    <label
-      htmlFor="password"
-      className="flex flex-row gap-2 peer-focus:font-medium absolute text-sm text-black dark:text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-white peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-    >
-      <TfiUnlock size={20} /> Password
-    </label>
-    <button
-      type="button"
-      className="absolute right-2 top-2 text-white"
-      onClick={handleTogglePassword}
-    >
-      {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
-    </button>
-  </div>
+              <div className="text-sm">
+                <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                  Forgot password?
+                </a>
+              </div>
+            </div>
+            <div className="mt-10">
+                <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-lapak rounded-md hover:lapak focus:outline-none focus:bg-lapak hover:translate-y-1">
+                    Masuk pak eko
+                </button>
+            </div>
+        </form>
 
-  <button
-    type="submit"
-    className="btn btn-wide btn-md 2xl:btn-lg flex mx-auto 2xl:mt-10 2xl:mb-10 px-4 tracking-wide border-lapak hover:border-lapak text-white transition-colors duration-200 transform bg-lapak rounded-md hover:bg-lapak focus:outline-none focus:bg-dark-alta"
-  >
-    <p className="text-xl 2xltext-2xl">Masuk Pak eko</p>
-  </button>
-</form>
-
-<p className="mt-8 text-lg font-light text-center text-white mb-10">
-  {" "}
-  Don't have an account?{" "}
-  <p
-    onClick={() => navigate('/register')}
-    className="font-medium text-white hover:underline hover:text-orange-600"
-  >
-    Sign up
-  </p>
-</p>
+        <p className="mt-8 text-sm font-semibold font-light text-center text-gray-700">
+            {" "}
+            Don't have an account?{" "}
+            <a
+                href="/register"
+                className="font-medium text-indigo-600 hover:underline"
+            >
+                Sign up
+            </a>
+        </p>
+    </div>
 </div>
-        </div>
+</Layout>
   
   )
 }
