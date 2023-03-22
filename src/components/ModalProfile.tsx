@@ -5,11 +5,11 @@ import CustomInput from "./CutomInput"
 const ModalProfile = () => {
 
   return (
-    <div className="bg-white flex py-5">
-      <div className="w-6/12 flex flex-col items-center justify-center">
+    <div className="bg-white flex flex-col md:flex-row lg:flex-row py-5">
+      <div className="w-11/12 md:w-6/12 lg:w-6/12 flex flex-col items-center justify-center">
         <p className="text-zinc-800 text-[22px] font-semibold mb-8">Tambah Foto Porfile</p>
         <div
-          className="md:w-[12rem] md:h-[12rem] lg:w-[16rem] lg:h-[16rem] overflow-hidden rounded-full"
+          className="w-[10em] h-[10rem] md:w-[12rem] md:h-[12rem] lg:w-[16rem] lg:h-[16rem] overflow-hidden rounded-full"
         >
           <img
             src={Avatar}
@@ -21,12 +21,12 @@ const ModalProfile = () => {
           id="upload_gambar"
           type="file"
           accept="image.png, image.jpeg, image.jpg"
-          className="w-full mt-8 text-[18px] text-zinc-800 text-center file:rounded-lg file:bg-lapak file:py-2 file:lg:px-10 file:md:px-8 file:px-5 file:text-[18px] file:text-zinc-50 hover:file:bg-green-400 hover:file:text-zinc-800 hover:file:cursor-pointer"
+          className="w-full mt-8 text-[18px] text-zinc-800 text-center file:rounded-lg file:bg-lapak file:py-1 file:md:py-2 file:lg:py-2 file:px-4 file:md:px-8 file:lg:px-10   file:text-[18px] file:text-white hover:file:bg-sky-500 hover:file:cursor-pointer"
         />
       </div>
 
-      <div className="w-6/12 items-center mx-24">
-        <div className="space-y-5">
+      <div className="w-11/12 md:w-6/12 lg:w-6/12 items-center mx-2 md:mx-24 lg:mx-24 mt-8 md:mt-0 lg:mt-0">
+        <form className="space-y-5">
           <CustomInput
             id="input-nama"
             label="Nama Lengkap :"
@@ -58,7 +58,7 @@ const ModalProfile = () => {
             type="text"
             placeholder={"Contoh : 089523894188"}
           />
-        </div>
+        </form>
 
         <div className="mt-8">
           <CustomButton

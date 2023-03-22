@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+
+import withreactcontent from "sweetalert2-react-content"
+import Swal from "sweetalert2"
 
 import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
@@ -15,11 +19,30 @@ import { FiEdit } from "react-icons/fi"
 import ModalProfile from "../components/ModalProfile"
 
 const Profile = () => {
-
+  const navigate = useNavigate()
+  const MySwal = withreactcontent(Swal)
   const [modal, setModal] = useState<string>("modal")
 
   const handleModal = () => {
     setModal("modal-open")
+  }
+
+  const handleVerified = () => {
+    MySwal.fire({
+      icon: "info",
+      title: "Ingin melanjutkan verifikasi ?",
+      text: "pilih lanjutkan",
+      confirmButtonText: "lanjutkan",
+      confirmButtonColor: "#31CFB9",
+      reverseButtons: true,
+      showCancelButton: true,
+      cancelButtonText: "kembali",
+      cancelButtonColor: "#db1f1f"
+    }).then((lanjutkan) => {
+      if (lanjutkan.isConfirmed) {
+        console.log("oke")
+      }
+    })
   }
 
   return (
@@ -53,9 +76,10 @@ const Profile = () => {
 
         <div className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><MdOutlineWorkHistory size={24} />Lihat history pembelian ?</div>
 
-        <div className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><GoPackage size={24} />Lihat product anda</div>
+        <div onClick={() => handleVerified()} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag size={24} />Ingin menjadi penjual ?</div>
 
-        <div className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag size={24} />Ingin menjadi penjual ?</div>
+        <div onClick={() => navigate("/listproduct")} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><GoPackage size={24} />Lihat product anda</div>
+
 
         <div className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-red-400"><VscTrash size={24} />Hapus akun </div>
       </div>
