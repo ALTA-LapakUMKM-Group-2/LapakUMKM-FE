@@ -22,7 +22,6 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/payment" element={<Payment />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/home/:kategori" element={<HomeFilter />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/listproduct" element={<ListProduct />} />
