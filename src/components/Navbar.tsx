@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie';
 import { HiCog6Tooth } from 'react-icons/hi2'
 import { FaSignOutAlt } from 'react-icons/fa'
 import { MdOutlineWorkHistory } from 'react-icons/md'
+import { MdOutlineShoppingCart } from 'react-icons/md'
 import { AiOutlineSearch } from 'react-icons/ai'
 import Logo from '../assets/LapakUmkm2.png'
 
@@ -14,12 +15,13 @@ import axios from 'axios';
 
 interface NavbarProps {
     name?: string
+    email?: string
     handleProfile?: React.MouseEventHandler;
     children?: React.ReactNode
     imgUser?: string
 }
 
-const Navbar: React.FC<NavbarProps> = ({ name, handleProfile, children, imgUser }) => {
+const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, imgUser }) => {
 
 
     // handle log out
@@ -64,7 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, handleProfile, children, imgUser 
     const [img, setImg] = React.useState<any>()
 
     return (
-        <div className="navbar w-screen bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
+        <div className="navbar w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
             <div className='flex gap-4 flex-between justify-center w-full mx-10'>
                 <div>
                     <button onClick={() => navigate("/home")} className="font-semibold md:flex text-4xl text-white hover:text-accent">
@@ -73,7 +75,6 @@ const Navbar: React.FC<NavbarProps> = ({ name, handleProfile, children, imgUser 
 
                 </div>
                 <div className="w-full justify-center mx-20">
-                    
                     <form>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -83,10 +84,9 @@ const Navbar: React.FC<NavbarProps> = ({ name, handleProfile, children, imgUser 
                             <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-lapak hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
                         </div>
                     </form>
-
                 </div>
-
-                <div className="flex-none">
+                <div className="flex">
+                    <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10'/>
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="">
                         <div className="avatar">
@@ -95,8 +95,13 @@ const Navbar: React.FC<NavbarProps> = ({ name, handleProfile, children, imgUser 
                             </div>
                         </div>
                         </label>
-                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow rounded-box w-52 text-lapak font-bold">
+                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold">
+                            <div className="px-4 py-3 text-sm text-gray-900">
+                                <div>{name}</div>
+                                <div className="font-medium truncate">{email}</div>
+                            </div>
                             <li onClick={() => navigate('/')}><a>
+
                                 <HiCog6Tooth />
                                 Profile
                             </a>
