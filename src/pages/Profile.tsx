@@ -49,7 +49,7 @@ const Profile = () => {
     <Layout>
       <Navbar />
 
-      <div className=" px-5 md:px-16 lg:px-28">
+      <div className="w-full px-5 md:px-16 lg:px-28">
         <h1 className="text-zinc-800 text-[30px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 tracking-wider">Profile Detail Saya</h1>
 
         <div className="flex flex-col md:flex-row lg:flex-row mt-4 md:mt-10 lg:mt-14">

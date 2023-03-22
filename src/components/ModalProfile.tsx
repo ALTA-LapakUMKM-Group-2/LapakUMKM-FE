@@ -2,6 +2,8 @@ import Avatar from "../assets/profile.jpg"
 import CustomButton from "./CustomButton"
 import CustomInput from "./CutomInput"
 
+import CurrencyInput from "react-currency-input-field"
+
 const ModalProfile = () => {
 
   return (
@@ -58,6 +60,7 @@ const ModalProfile = () => {
             type="text"
             placeholder={"Contoh : 089523894188"}
           />
+
         </form>
 
         <div className="mt-8">
