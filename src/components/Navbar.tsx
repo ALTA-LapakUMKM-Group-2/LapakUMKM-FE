@@ -96,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, handleProfile, children, imgUser 
                         </div>
                         </label>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow rounded-box w-52 text-lapak font-bold">
-                            <li onClick={() => navigate('/')}><a>
+                            <li onClick={() => navigate('/')}><a id='link-profile' href='/profile'>
                                 <HiCog6Tooth />
                                 Profile
                             </a>
