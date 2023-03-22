@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'bgLogin': "url('/src/assets/bgLogin.jpg')",   
+        'bgLogin': "url('/src/assets/bgLogin.jpg')",
+         'bgregis' :"url ('/src/assets/bgregis.jpg')"   
       },
       colors: {
         'lapak' : '#31CFB9'
