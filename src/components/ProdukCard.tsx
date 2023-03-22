@@ -1,7 +1,10 @@
 import React from 'react';
 import { AiFillStar } from 'react-icons/ai';
+import { MdLocationOn } from 'react-icons/md'
+import { TbShoppingCartPlus } from 'react-icons/tb'
 import { useNavigate } from 'react-router';
 import { Rating } from '@smastrom/react-rating';
+import '@smastrom/react-rating/style.css'
 
 interface ListingProps {
     id: number;
@@ -10,6 +13,7 @@ interface ListingProps {
     rating: number;
     price: number;
     image: string;
+    sell?: number
     edit?: boolean
     toDelete?: boolean
     handleEdit?: React.MouseEventHandler
@@ -29,6 +33,7 @@ const ProdukCard: React.FC<ListingProps> = ({
     edit,
     handleDelete,
     handleEdit,
+    sell,
     toDelete,
     name,
     handlename
@@ -42,8 +47,8 @@ const ProdukCard: React.FC<ListingProps> = ({
 
     const customStyles = {
         itemShapes: StarDrawing,
-        activeFillColor: '#fdd231',
-        inactiveFillColor: '#0b3c95',
+        activeFillColor: '#FDD231',
+        inactiveFillColor: '#ffffff',
 
     };
 
@@ -51,59 +56,30 @@ const ProdukCard: React.FC<ListingProps> = ({
     return (
 
         
-        <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-60 h-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg">
             <a href="#">
-                <img className="p-8 rounded-t-lg" src={image} alt="product image" />
+                <img className="p-4 rounded-t-lg cover w-screen h-72" src={image} alt="product image" />
             </a>
-            <div className="px-5 pb-5">
+            <div className="px-5 pb-5 flex flex-col space-y-1">
                 <a href="#">
-                    <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
+                    <h5 className="text-l font-semibold tracking-tight text-gray-900">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
                 </a>
-                <div className="rating h-10">
+                <h5 className="text-l font-semibold tracking-tight text-gray-900 flex"><MdLocationOn className=' w-6 h-6'/> {location}</h5>
+                <div className="rating">
                     <Rating
                         value={rating}                        
-                        style={{ maxWidth: 20 }}
+                        style={{ maxWidth: 100 }}
                         itemStyles={customStyles}
                     />
+                    <span className="bg-teal-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">{rating}</span>
                 </div>
+                <p>Terjual {sell}</p>
                 <div className="flex items-center justify-between">
                     <span className="text-xl font-bold text-gray-900 dark:text-white">Rp. {price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.")}</span>
-                    <a href="#" className="text-white bg-lapak hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">See Product</a>
+                    <button className="btn btn-sm bg-lapak border-none hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300" onClick={()=> navigate(`/detail/${id}`)} ><TbShoppingCartPlus/></button>
                 </div>
             </div>
         </div>
-
-        // <div className='flex relative justify-center w-full mx-auto'>
-        //     <button onClick={() => navigate(`/stays/${id}`)} className="card w-full bg shadow-xl p-0">
-        //         <figure>
-        //             <img 
-        //             className='object-cover w-screen h-60' 
-        //             src={image}
-        //             onError={({ currentTarget }) => {
-        //                 currentTarget.onerror = null;
-        //                 currentTarget.src="https://www.nj.com/resizer/QgEkPOPu3r2bkqGAf7DjtCH7sJM=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/HK5EHPHYX5CR7BS2E5TGVHZBGE.JPG";
-        //             }}
-        //             />
-        //         </figure>
-        //         <div className="card-body p-0 py-5 mx-5">
-        //             <h2 className="card-title text-lg justify-between w-full">
-        //                 {location}
-        //                 <div className="badge badge-accent"><AiFillStar />{rating}</div>
-        //             </h2>
-        //             <p className='font-light text-start'>{name}</p>
-        //             <p className='font-light text-start'>Rp. {price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.")} / night</p>
-        //         </div>
-        //     </button>
-
-        //     <div className={`flex flex-col font-semibold ${edit ? "absolute bottom-5 right-3" : "hidden"}`}>
-        //         <p className='text-accent hover:cursor-pointer' onClick={handleEdit}>
-        //             edit
-        //         </p>
-        //         <p className='text-warning hover:cursor-pointer' onClick={handleDelete}>
-        //             delete
-        //         </p>
-        //     </div>
-        // </div>
     )
 }
 
