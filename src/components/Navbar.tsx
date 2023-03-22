@@ -101,6 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                                 <div className="font-medium truncate">{email}</div>
                             </div>
                             <li onClick={() => navigate('/')}><a>
+
                                 <HiCog6Tooth />
                                 Profile
                             </a>
