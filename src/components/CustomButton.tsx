@@ -16,7 +16,7 @@ const CustomButton: FC<ButtonProps> = ({
     <button
       id={id}
       disabled={loading}
-      className={`rounded-xl bg-lapak w-full max-w-full px-6 py-2 text-[18px] font-semibold capitalize tracking-wider text-zinc-50 hover:bg-green-400 hover:text-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-400 ${loading && "cursor-not-allowed bg-zinc-400 text-zinc-800"
+      className={`rounded-xl bg-lapak w-full max-w-full px-6 py-2 text-[18px] font-semibold capitalize tracking-wider text-zinc-50 hover:bg-sky-500 disabled:cursor-not-allowed disabled:bg-zinc-400 ${loading && "cursor-not-allowed bg-zinc-400 text-zinc-800"
         }`}
       {...props}
     >
