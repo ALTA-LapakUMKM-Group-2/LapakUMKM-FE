@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "room_name": "Kaso polos",
+        "description": "Experience a new kind of vacation at Sanata Villa. Surrounded by nature, our modern villas are built with comfort and convenience to ensure that your stay will be relaxing and enjoyable. From spacious bedrooms to private gardens, you’ll enjoy a peaceful getaway with your loved ones. Our villa has a fast internet connection, so you can stay connected with your friends and family. The swimming pool is also right outside the kitchen and living room area, so you can enjoy a relaxing break by the pool",
+        "address": "Bogor, Indonesia",
+        "rating": 4.5,
+        "available": "Apr 10 - 15",
+        "price": 2500000,
+        "room_picture": "https://www.google.com/imgres?imgurl=https%3A%2F%2Flzd-img-global.slatic.net%2Fg%2Fp%2F1ca3f10f9f6208aca6e1c92276d2f97d.jpg_720x720q80.jpg_.webp&tbnid=Q72laQd90fMxWM&vet=12ahUKEwjWzLSP7O79AhXn-XMBHZ4lAwwQMygGegUIARDTAQ..i&imgrefurl=https%3A%2F%2Fwww.lazada.co.id%2Fproducts%2Fkaos-keren-kekinian-unisex-unkl-varian-black-full-katun-kombed-30s-i2079800113.html&docid=FFDo0QKVl7xoqM&w=720&h=720&itg=1&q=Unkl&ved=2ahUKEwjWzLSP7O79AhXn-XMBHZ4lAwwQMygGegUIARDTAQ"
+    },
+    {
+        "id": 2,
+        "user_id": 2,
+        "room_name": "Topi Keren",
+        "description": "It is a luxury Bali resort style villa located close to Bogor Taman Safari. private garden with private swimming pool can be used independently. It is a beautiful green and stylish Bali resort concept in the Bogor region. I picked up one piece of each, and imagined the time of your complete rest. I hope you have a wonderful break at Art Hill Villa. Thank you",
+        "address": "Bogor, Indonesia",
+        "rating": 3.9,
+        "available": "Apr 20 - 29",
+        "price": 1700000,
+        "room_picture": "https://www.google.com/imgres?imgurl=https%3A%2F%2Flzd-img-global.slatic.net%2Fg%2Fp%2Fe0b198ac353983abfd2679215b299e64.jpg_720x720q80.jpg_.webp&tbnid=-ffuXkbFz9WfuM&vet=12ahUKEwjWzLSP7O79AhXn-XMBHZ4lAwwQMygKegUIARDbAQ..i&imgrefurl=https%3A%2F%2Fwww.lazada.co.id%2Fproducts%2Fkaos-original-unkl347-hc-apart-peach-i1637540603.html&docid=aFfyDHA_cTyaWM&w=720&h=720&itg=1&q=Unkl&ved=2ahUKEwjWzLSP7O79AhXn-XMBHZ4lAwwQMygKegUIARDbAQ"
+    },
+    {
+        "id": 3,
+        "user_id": 1,
+        "room_name": "kaos keren nyaman ga gerah apapun ituu",
+        "description": "Experience a new kind of vacation at Sanata Villa. Surrounded by nature, our modern villas are built with comfort and convenience to ensure that your stay will be relaxing and enjoyable. From spacious bedrooms to private gardens, you’ll enjoy a peaceful getaway with your loved ones. Our villa has a fast internet connection, so you can stay connected with your friends and family. The swimming pool is also right outside the kitchen and living room area, so you can enjoy a relaxing break by the pool",
+        "address": "Bogor, Indonesia",
+        "rating": 4.5,
+        "available": "Apr 10 - 15",
+        "price": 2500000,
+        "room_picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDBt7t85uzuasQ5eZKkovo7o9EBLu3lClffQ&usqp=CAU"
+    },
+    {
+        "id": 4,
+        "user_id": 1,
+        "room_name": "baju jelek tapi bagus",
+        "description": "Experience a new kind of vacation at Sanata Villa. Surrounded by nature, our modern villas are built with comfort and convenience to ensure that your stay will be relaxing and enjoyable. From spacious bedrooms to private gardens, you’ll enjoy a peaceful getaway with your loved ones. Our villa has a fast internet connection, so you can stay connected with your friends and family. The swimming pool is also right outside the kitchen and living room area, so you can enjoy a relaxing break by the pool",
+        "address": "Bogor, Indonesia",
+        "rating": 0,
+        "available": "Apr 10 - 15",
+        "price": 2500000,
+        "room_picture": "https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg"
+    },
+    {
+        "id": 5,
+        "user_id": 1,
+        "room_name": "Unkl T-shirt",
+        "description": "Experience a new kind of vacation at Sanata Villa. Surrounded by nature, our modern villas are built with comfort and convenience to ensure that your stay will be relaxing and enjoyable. From spacious bedrooms to private gardens, you’ll enjoy a peaceful getaway with your loved ones. Our villa has a fast internet connection, so you can stay connected with your friends and family. The swimming pool is also right outside the kitchen and living room area, so you can enjoy a relaxing break by the pool",
+        "address": "Bogor, Indonesia",
+        "rating": 0,
+        "available": "Apr 10 - 15",
+        "price": 2500000,
+        "room_picture": "data:image/jpeg;base64,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"
+    }
+]
