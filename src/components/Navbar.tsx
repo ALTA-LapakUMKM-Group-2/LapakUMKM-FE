@@ -90,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="">
                         <div className="avatar">
-                            <div className="w-20 rounded-full">
+                            <div className="w-14 rounded-full">
                                 <img src={imgUser} />
                             </div>
                         </div>

@@ -6,6 +6,7 @@ import Detail from "./pages/Detail";
 import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 import HomeFilter from "./pages/HomeFilterPage";
+import Cart from "./pages/Cart";
 
 
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/detail/:id" element={<Detail/>}/>
           <Route path="/payment" element={<Payment/>} />
+          <Route path="/cart" element={<Cart/>} />
           <Route path="/home" element={<Home/>}/>       
           <Route path="/home/:kategori" element={<HomeFilter/>}/>       
           <Route path="/profile" element={<Profile/>} />
