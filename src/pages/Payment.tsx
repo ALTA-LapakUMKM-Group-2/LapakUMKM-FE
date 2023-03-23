@@ -8,7 +8,7 @@ const Payment = () => {
     const [showModal, setShowModal] = useState(false);
 
     const toggleModal = () => {
-      setShowModal(!showModal);
+        setShowModal(!showModal);
     };
 
 

@@ -9,6 +9,7 @@ import Payment from "./pages/Payment";
 import Detail from "./pages/Detail";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import NotifikasiCoba from "./pages/NotifikasiCoba";
 
 
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/listproduct" element={<ListProduct />} />
           <Route path="/historypembeli" element={<HistoryPembeli />} />
+          <Route path="/notif" element={<NotifikasiCoba />} />
 
         </Routes >
       </BrowserRouter >
