@@ -17,18 +17,18 @@ const Register = () => {
     return (
         <Layout>
             <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
-                <div className="w-full p-20 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl">
+                <div className="w-full p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl mx-auto">
                     <img src={LapakUmkm} width={300} className='flex justify-center mx-auto mb-10' />
                     <form className="mt-6 w-full">
                         <div className="mb-5">
                             <label
-                                htmlFor="email"
+                                htmlFor="name"
                                 className="block text-md font-semibold text-gray-800"
                             >
                                 fullName
                             </label>
                             <input
-                                type="email"
+                                type="name"
                                 className="input input-bordered input-accent w-96 max-w-lg"
                             />
                         </div>
@@ -73,7 +73,7 @@ const Register = () => {
                         </div>
                     </form>
 
-                    <p className="mt-8 text-sm font-semibold font-light text-center text-gray-700">
+                    <p className="mt-8 text-sm font-semibold  text-center text-gray-700">
                         {" "}
                         Already have an account?{" "}
                         <a

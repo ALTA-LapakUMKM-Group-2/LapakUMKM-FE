@@ -94,6 +94,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                                 <img src={imgUser} />
 
                             </div>
+                            </div>
                         </label>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold">
                             <div className="px-4 py-3 text-sm text-gray-900">
