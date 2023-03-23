@@ -7,6 +7,7 @@ import CustomButton from "../components/CustomButton"
 import { useState } from "react"
 import Modal from "../components/Modal"
 import CustomInput from "../components/CutomInput"
+import FeedbackCard from "../components/FeedbackCard"
 
 const HistoryPembeli = () => {
 
@@ -22,6 +23,30 @@ const HistoryPembeli = () => {
       <Navbar />
       <div className="w-full h-full px-8 md:px-28 lg:px-52 mb-28">
         <h1 className="mt-12 mb-14 text-[24px] font-semibold">History Pembelian</h1>
+
+        <FeedbackCard
+        id={1}
+        produkImg={Kaos}
+        sellerName="Toko@7"
+        produkName='Baju Jelek'
+        size={'L'}
+        price={50000}
+        status="Done"
+        rating={4}
+        quantity={2}
+        />
+
+        <FeedbackCard
+        id={1}
+        produkImg={Kaos}
+        sellerName="Toko@7"
+        produkName='Baju Jelek'
+        size={'L'}
+        price={35000}
+        status="Pending"
+        rating={0}
+        quantity={2}
+        />
 
         <div className="mt-5 md:w-11/12 lg:w-8/12 px-8 py-4 bg-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.4)]">
           <p className="border-b-2 pb-2">Toko Arif Muhammad</p>

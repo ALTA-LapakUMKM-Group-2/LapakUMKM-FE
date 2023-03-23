@@ -1,7 +1,7 @@
 import { FC, ButtonHTMLAttributes } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  id: string;
+  id: any
   label: string;
   loading?: boolean;
 }
