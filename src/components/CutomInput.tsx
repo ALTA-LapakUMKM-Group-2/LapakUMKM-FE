@@ -6,7 +6,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   placeholder: string;
   type?: string;
-  value?: string
+  value?: string | number
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   classes?: string
 }
