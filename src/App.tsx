@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import HistoryPembeli from "./pages/HistoryPembeli";
 import HomeFilter from "./pages/HomeFilterPage";
@@ -14,12 +15,14 @@ import Home from "./pages/Home";
 import NotifikasiCoba from "./pages/NotifikasiCoba";
 
 function App() {
+  const [cookie, setCookie] = useCookies(["token"]);
+  const checkToken = cookie.token;
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={checkToken ? <Home /> : <Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
