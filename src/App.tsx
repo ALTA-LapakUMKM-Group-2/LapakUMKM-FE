@@ -13,9 +13,6 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import NotifikasiCoba from "./pages/NotifikasiCoba";
 
-
-
-
 function App() {
 
   return (
@@ -35,8 +32,8 @@ function App() {
           <Route path="/historypembeli" element={<HistoryPembeli />} />
           <Route path="/toko" element={<Toko />} />
           <Route path="/notif" element={<NotifikasiCoba />} />
-        </Routes>
-      </BrowserRouter>
+        </Routes >
+      </BrowserRouter >
     </>
   )
 }
