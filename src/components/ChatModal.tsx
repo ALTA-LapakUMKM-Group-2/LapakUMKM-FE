@@ -15,7 +15,7 @@ type ChatModalProps = {
 const ChatModal: React.FC<ChatModalProps> = ({ isOpen, isClose, img, children, size, titleStyle }) => {
     return (
         <div
-            className={`${isOpen ? "fixed" : "hidden"
+            className={`transition-opacity ${isOpen ? "fixed opacity-100" : "opacity-0 hidden"
                 } bottom-10 right-10 h-3/6 flex items-center justify-center z-50`}
         >
             <div className={`w-96 h-full block bg-white rounded-lg overflow-auto`}>

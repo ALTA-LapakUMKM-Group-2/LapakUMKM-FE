@@ -60,12 +60,10 @@ const HomeFilter = () => {
             email='faizaltriasaa@gmail.com'
             imgUser={FotoProfile}
             />
-           
             <div className="flex w-11/12">
                 <div className="flex mt-10 ml-auto">
                     <div className="w-96 h-fit bg-white border rounded-xl shadow-xl flex flex-col ">
-                        <div className="flex flex-col transition-all duration-300">
-                           
+                        <div className="flex flex-col">
                             <div className="flex flex-row justify-between border-b-2 mx-3 mt-2">
                                 <p className='my-auto text-xl font-semibold'>Filter</p>
                                     <label className="swap swap-rotate">
@@ -74,7 +72,7 @@ const HomeFilter = () => {
                                         <IoIosArrowDropdown onClick={()=> setShowFilter(false)} className="swap-off fill-current w-8 h-8"/>
                                     </label>
                             </div>
-                            <div className={`mx-2 text-lapak font-semibold w-80 ${ showFilter ? 'block' : 'hidden' }`}>
+                            <div className={`mx-2 text-lapak font-semibold w-80 transition-all duration-300 ${ showFilter ? 'block' : 'hidden' }`}>
                                 <div className="px-4 py-3 text-sm text-gray-900"> 
                                     <form onSubmit={handleSubmit} className="space-y-5">
                                         <div className='w-full'>
@@ -127,7 +125,7 @@ const HomeFilter = () => {
                                                 />
                                         </div>
                                         <div className="">
-                                            <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minrating" id='minrating'>Maximum Price</label>
+                                            <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minrating" id='minrating'>Minimum Ratings</label>
                                             <Rating
                                                 itemStyles={customStyles}
                                                 isRequired

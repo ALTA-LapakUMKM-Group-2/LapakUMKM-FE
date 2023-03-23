@@ -79,7 +79,7 @@ const Cart = () => {
                                             <input 
                                             type="checkbox" 
                                             className="checkbox"
-                                            onChange={() => handleCheck(totalPrice)}
+                                            onChange={(e:any) => handleCheck(e, price)}
                                             />
                                         </label>
                                     </th>

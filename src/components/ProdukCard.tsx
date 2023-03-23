@@ -60,7 +60,7 @@ const ProdukCard: React.FC<ListingProps> = ({
             <a href="#">
                 <img className="p-4 rounded-t-lg cover w-screen h-72" src={image} alt="product image" />
             </a>
-            <div className="px-5 pb-5 flex flex-col space-y-1">
+            <div className="px-5 pb-5 flex flex-col space-y-1 gap-2">
                 <a href="#">
                     <h5 className="text-l font-semibold tracking-tight text-gray-900">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
                 </a>
@@ -70,6 +70,7 @@ const ProdukCard: React.FC<ListingProps> = ({
                         value={rating}                        
                         style={{ maxWidth: 100 }}
                         itemStyles={customStyles}
+                        readOnly
                     />
                     <span className="bg-teal-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">{rating}</span>
                 </div>
