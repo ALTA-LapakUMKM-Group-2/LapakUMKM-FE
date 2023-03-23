@@ -9,6 +9,7 @@ import { IoIosArrowDropup } from 'react-icons/io'
 import CustomInput from '../components/CutomInput'
 import CurrencyInput from 'react-currency-input-field';
 import CustomButton from '../components/CustomButton'
+import ChatModal from '../components/ChatModal'
 
     interface FormValues {
     minprice: number;
@@ -16,19 +17,16 @@ import CustomButton from '../components/CustomButton'
     kategori: string;
     minrating: number;
     }
-  
     const initialFormValues: FormValues = {
         minprice: 0,
         maxprice: 0,
         kategori: '',
         minrating: 0
     };
-  
-
 const HomeFilter = () => {
 
     const [showFilter, setShowFilter] = useState(false);
-
+    const [showChat, setShowChat] = useState(false)
     const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
     
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +60,39 @@ const HomeFilter = () => {
             email='faizaltriasaa@gmail.com'
             imgUser={FotoProfile}
             />
+            <ChatModal
+            img={FotoProfile}
+            isOpen={showChat}
+            isClose={()=> setShowChat(false)}
+            >
+                <div className="chat chat-start">
+                    <div className="chat-image avatar">
+                        <div className="w-10 rounded-full">
+                            <img src={FotoProfile} />
+                        </div>
+                    </div>
+                    <div className="chat-header">
+                        Obi-Wan Kenobi
+                    </div>
+                    <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
+                    </div>
+                    <div className="chat chat-end">
+                    <div className="chat-image avatar">
+                        <div className="w-10 rounded-full">
+                            <img src={FotoProfile} />
+                        </div>
+                    </div>
+                    <div className="chat-header">
+                        Anakin
+                    </div>
+                    <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
+                </div>
+            </ChatModal>
             <div className="flex w-11/12">
                 <div className="flex mt-10 ml-auto">
                     <div className="w-96 h-fit bg-white border rounded-xl shadow-xl flex flex-col ">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col transition-all duration-300">
+                            <button className='btn w-20' onClick={()=> setShowChat(true)}>Cek Chat</button>
                             <div className="flex flex-row justify-between border-b-2 mx-3 mt-2">
                                 <p className='my-auto text-xl font-semibold'>Filter</p>
                                     <label className="swap swap-rotate">
@@ -74,14 +101,14 @@ const HomeFilter = () => {
                                         <IoIosArrowDropdown onClick={()=> setShowFilter(false)} className="swap-off fill-current w-8 h-8"/>
                                     </label>
                             </div>
-                            <div className={`mx-2 text-lapak font-semibold w-80 transition-all duration-300 ${ showFilter ? 'block' : 'hidden' }`}>
-                                <div className="px-4 py-3 text-sm text-gray-900">
+                            <div className={`mx-2 text-lapak font-semibold w-80 ${ showFilter ? 'block' : 'hidden' }`}>
+                                <div className="px-4 py-3 text-sm text-gray-900"> 
                                     <form onSubmit={handleSubmit} className="space-y-5">
                                         <div className='w-full'>
                                             <label className="text-zinc-800 text-[18px] font-semibold" htmlFor='kategori'>
                                                 Kategori
                                             </label>
-                                            <select className="text-zinc-800 text-[18px] select select-bordered w-full"
+                                            <select className=" border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
                                             defaultValue={''}
                                             id='kategori'
                                             name='kategori'
@@ -131,6 +158,7 @@ const HomeFilter = () => {
                                             <Rating
                                                 itemStyles={customStyles}
                                                 isRequired
+                                                style={{ maxWidth: 200 }}
                                                 value={formValues.minrating}
                                                 // visibleLabelId="minrating"
                                                 onChange={(selectedValue: any) =>
