@@ -18,7 +18,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, isClose, title, children, size, t
             className={`${isOpen ? "fixed" : "hidden"
                 } inset-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50`}
         >
-
             <div className={`${size} bg-gray-100 rounded-lg p-6 overflow-auto`}>
                 <a onClick={isClose} className="text-black text-4xl hover:text-accent cursor-pointer">
                     <HiOutlineXMark />
@@ -29,11 +28,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, isClose, title, children, size, t
                     </h1>
                 </div>
                 <div>{children}</div>
-                <Rating
-                    value={3}
-                    style={{ maxWidth: 180 }}
-                    readOnly
-                />
             </div>
         </div>
     );
