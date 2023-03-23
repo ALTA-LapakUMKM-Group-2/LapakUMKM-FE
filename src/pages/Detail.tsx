@@ -46,33 +46,33 @@ const Detail = () => {
 
       {/* chatting */}
       <ChatModal
-            img={FotoProfile}
-            isOpen={showChat}
-            isClose={()=> setShowChat(false)}
-            >
-                <div className="chat chat-start">
-                    <div className="chat-image avatar">
-                        <div className="w-10 rounded-full">
-                            <img src={FotoProfile} />
-                        </div>
-                    </div>
-                    <div className="chat-header">
-                        Obi-Wan Kenobi
-                    </div>
-                    <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
-                    </div>
-                    <div className="chat chat-end">
-                    <div className="chat-image avatar">
-                        <div className="w-10 rounded-full">
-                            <img src={FotoProfile} />
-                        </div>
-                    </div>
-                    <div className="chat-header">
-                        Anakin
-                    </div>
-                    <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
-                </div>
-            </ChatModal>
+        img={FotoProfile}
+        isOpen={showChat}
+        isClose={() => setShowChat(false)}
+      >
+        <div className="chat chat-start">
+          <div className="chat-image avatar">
+            <div className="w-10 rounded-full">
+              <img src={FotoProfile} />
+            </div>
+          </div>
+          <div className="chat-header">
+            Obi-Wan Kenobi
+          </div>
+          <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
+        </div>
+        <div className="chat chat-end">
+          <div className="chat-image avatar">
+            <div className="w-10 rounded-full">
+              <img src={FotoProfile} />
+            </div>
+          </div>
+          <div className="chat-header">
+            Anakin
+          </div>
+          <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
+        </div>
+      </ChatModal>
       {/* card for image */}
       <div className='w-full mt-10 mx-auto px-5 py-10  border rounded-lg'>
         <div className="max-w-7xl mx-auto">
@@ -93,7 +93,7 @@ const Detail = () => {
               <div className="w-full h-full">
                 <div className="flex justify-between items-center mb-5">
                   <h1 className="font-bold text-2xl">Adudas Mentawai</h1>
-                  <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={()=> setShowChat(true)}>
+                  <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={() => setShowChat(true)}>
                     <BsChatText size={20} />
                   </button>
                 </div>

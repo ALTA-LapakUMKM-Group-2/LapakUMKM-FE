@@ -2,24 +2,77 @@ import React, { useState } from 'react'
 import Layout from '../components/Layout'
 import LapakUmkm from '../assets/LapakUmkm2.png'
 import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
-    const [name , setName] = useState('')
+    const [name, setName] = useState('')
+
+    const navigate = useNavigate()
+
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
-    };
+    }
 
+    console.log(password);
+    console.log(name);
+    console.log(email);
+
+    const handleRegister = async (e: any) => {
+        e.preventDefault()
+
+        if (!email || !password || !name) {
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                text: 'All fields are required',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+        const data = {
+            email: email,
+            password: password,
+            fullname: name,
+        }
+        try {
+            const res = await axios.post('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/auth/register', data)
+            if (res.data) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    text: 'Registered successfully',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                setEmail('');
+                setPassword('');
+                setName('');
+                navigate('/');
+            }
+        } catch (error) {
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: { error },
+                showConfirmButton: true,
+            });
+        }
+
+    }
 
     return (
         <Layout>
             <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
                 <div className="w-full p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl mx-auto">
                     <img src={LapakUmkm} width={300} className='flex justify-center mx-auto mb-10' />
-                    <form className="mt-6 w-full">
+                    <form className="mt-6 w-full" onSubmit={handleRegister}>
                         <div className="mb-5">
                             <label
                                 htmlFor="name"
@@ -28,11 +81,11 @@ const Register = () => {
                                 fullName
                             </label>
                             <input
+                                onChange={(e) => setName(e.target.value)}
                                 type="name"
                                 className="input input-bordered input-accent w-96 max-w-lg"
                             />
                         </div>
-
                         <div className="mb-5">
                             <label
                                 htmlFor="email"
@@ -41,6 +94,7 @@ const Register = () => {
                                 Email
                             </label>
                             <input
+                                onChange={(e) => setEmail(e.target.value)}
                                 type="email"
                                 className="input input-bordered input-accent w-96 max-w-lg"
                             />
@@ -54,6 +108,7 @@ const Register = () => {
                             </label>
                             <div className="relative">
                                 <input
+                                    onChange={(e) => setPassword(e.target.value)}
                                     type={showPassword ? "text" : "password"}
                                     className="input input-bordered input-accent w-full max-w-lg pr-10"
                                 />
