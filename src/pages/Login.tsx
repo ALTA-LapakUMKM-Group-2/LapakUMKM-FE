@@ -39,7 +39,7 @@ const navigate = useNavigate()
                 </label>
                 <input
                     type="email"
-                    className="input input-bordered input-info w-full max-w-lg"
+                    className="input input-bordered input-accent w-full max-w-lg"
                 />
             </div>
             <div className="mb-5">
@@ -52,7 +52,7 @@ const navigate = useNavigate()
                 <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                className="input input-bordered input-info w-full max-w-lg pr-10"
+                className="input input-bordered input-accent w-full max-w-lg pr-10"
               />
               <button
                 type="button"
@@ -70,15 +70,15 @@ const navigate = useNavigate()
                   name="remember-me"
                   type="checkbox"
                   className="h-4 w-4 text-indigo-600 focus:ring-indigo-500
-                  border-gray-300 rounded"
+                  border-gray-300 rounded cursor-pointer"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-black font-medium">
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <a href="#" className="font-medium text-black hover:underline ">
                   Forgot password?
                 </a>
               </div>
@@ -90,7 +90,7 @@ const navigate = useNavigate()
             </div>
         </form>
 
-        <p className="mt-8 text-sm font-semibold font-light text-center text-gray-700">
+        <p className="mt-8 text-sm font-semibold  text-center text-gray-700">
             {" "}
             Don't have an account?{" "}
             <a

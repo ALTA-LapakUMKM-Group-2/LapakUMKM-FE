@@ -6,6 +6,7 @@ import Detail from "./pages/Detail";
 import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 import HomeFilter from "./pages/HomeFilterPage";
+import Toko from "./pages/Toko";
 
 
 
@@ -23,7 +24,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>       
           <Route path="/home/:kategori" element={<HomeFilter/>}/>       
           <Route path="/profile" element={<Profile/>} />
-
+          <Route path="/toko" element={<Toko />} />
         </Routes>
       </BrowserRouter>
     </>

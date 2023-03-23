@@ -3,36 +3,44 @@ import Navbar from '../components/Navbar'
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import dai from '../assets/dai.jpg'
 import Swal from 'sweetalert2'
+import Modal from '../components/Modal'
+import CustomInput from '../components/CutomInput'
+import CustomButton from '../components/CustomButton'
+import axios from 'axios'
+
 const Payment = () => {
+    const [showModal, setShowModal] = useState(false)
 
-    const [showModal, setShowModal] = useState(false);
+    const handleAddAlamat = async () => {
+        try {
+            const res = await axios.post('')
+        } catch (error) {
 
-    const toggleModal = () => {
-      setShowModal(!showModal);
-    };
-
+        }
+    }
 
     return (
         <div className='w-full h-full'>
+            <Modal isOpen={showModal} size='w-96' isClose={() => setShowModal(false)} title='Tambah Alamat'>
+                <form action="" onSubmit={handleAddAlamat}>
+                    <div className='space-y-5 mt-10'>
+                        <CustomInput id={'alamat'} label={'alamat'} name={'alamat'} placeholder={'masukkan alamat'} />
+                        <CustomInput id={'pos'} label={'Kode Pos'} name={'pos'} placeholder={'Kode pos'} />
+                        <CustomButton id={'btn'} label={'Save'}></CustomButton>
+                    </div>
+                </form>
+
+            </Modal>
             <Navbar />
             <div className="flex flex-col bg-gradient-to-r px-10 min-h-screen ">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:cols-row-2 w-full md:mx-auto mt-20 md:mt-24 gap-5 pb-32 md:px-32">
                     {/* Card 1 */}
-                    <div className="card w-full bg-base-100 shadow-xl border mb-5 h-full">
+                    <div className="grid grid-rows-2 bg-base-100 shadow-xl border mb-5 h-full">
                         <div className="card-body">
                             <div>
-                                <button className='btn w-full bg-lapak hover:bg-lapak border-none mb-5' onClick={toggleModal}>
+                                <button className='btn w-full bg-lapak hover:bg-lapak border-none mb-5' onClick={() => setShowModal(true)}>
                                     Pilih Alamat palsu
                                 </button>
-                                {showModal ? (
-                                    <div className='modal'>
-                                        <div className='modal-content'>
-                                            <h2>Pilih Alamat palsu</h2>
-                                            <input type='text' placeholder='Alamat palsu' />
-                                            <button onClick={toggleModal}>Close</button>
-                                        </div>
-                                    </div>
-                                ) : null}
                             </div>
                             {/* nama toko dan foto */}
                             <div className='flex flex-col p-10  rounded-lg shadow-2xl'>
