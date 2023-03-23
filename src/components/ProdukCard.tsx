@@ -5,6 +5,7 @@ import { TbShoppingCartPlus } from 'react-icons/tb'
 import { useNavigate } from 'react-router';
 import { Rating } from '@smastrom/react-rating';
 import '@smastrom/react-rating/style.css'
+import { formatValue } from 'react-currency-input-field'
 
 interface ListingProps {
     id: number;
@@ -62,7 +63,7 @@ const ProdukCard: React.FC<ListingProps> = ({
             </a>
             <div className="px-5 pb-5 flex flex-col space-y-1 gap-2">
                 <a href="#">
-                    <h5 className="text-l font-semibold tracking-tight text-gray-900">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
+                    <h5 className="text-l font-semibold tracking-tight text-gray-900">{produkName}</h5>
                 </a>
                 <h5 className="text-l font-semibold tracking-tight text-gray-900 flex"><MdLocationOn className=' w-6 h-6'/> {location}</h5>
                 <div className="rating">
@@ -76,7 +77,12 @@ const ProdukCard: React.FC<ListingProps> = ({
                 </div>
                 <p>Terjual {sell}</p>
                 <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-gray-900 dark:text-white">Rp. {price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.")}</span>
+                    <span className="text-lg font-semibold text-gray-900 ">{formatValue({
+                  prefix: 'Rp. ',
+                  value: JSON.stringify(price),
+                  groupSeparator: '.',
+                  decimalSeparator: ',',
+                })}</span>
                     <button className="btn btn-sm bg-lapak border-none hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300" onClick={()=> navigate(`/detail/${id}`)} ><TbShoppingCartPlus/></button>
                 </div>
             </div>

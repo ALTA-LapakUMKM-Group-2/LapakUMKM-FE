@@ -1,31 +1,54 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Layout from '../components/Layout'
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import ProdukCard from '../components/ProdukCard'
 import { Rating } from '@smastrom/react-rating';
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import Loading from '../components/Loading'
+import Loading2 from '../components/Loading2'
 
 const Home = () => {
 
     const navigate = useNavigate()
     const [kategori, setKategori] = useState('')
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [search, setSearch] = useState('')
 
+    const getAllList = async () => {
+        setLoading(true)
+        try {
+            const res = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/products')
+            setData(res.data.data)
+
+
+        } catch (error) {
+
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        getAllList()
+    }, [])
+    console.log(data);
     return (
         <Layout>
             <Navbar
-            name='Paisalll'
-            email='faizaltriasaa@gmail.com'
-            imgUser={FotoProfile}
+                name='Paisalll'
+                email='faizaltriasaa@gmail.com'
+                imgUser={FotoProfile}
             />
             <div className="flex flex-col w-11/12">
                 <div className="flex mt-10 space-x-10 mx-auto w-3/6">
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none" 
-                    onClick={()=> navigate(`/home/${kategori}`,{
-                        state:{
-                            kategori: setKategori("kaos")
-                        }
-                    })}>
+                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none"
+                        onClick={() => navigate(`/home/${kategori}`, {
+                            state: {
+                                kategori: setKategori("kaos")
+                            }
+                        })}>
                         Kaos
                     </button>
                     <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Celana</button>
@@ -35,7 +58,28 @@ const Home = () => {
                     <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Kerajinan</button>
                 </div>
                 <div className="my-4 gap-y-5 gap-x-5 grid grid-cols-5 mx-auto mt-10">
-                    <ProdukCard
+
+                    {
+                       loading ? <Loading /> :
+                       data?.map((item: any) => {
+                      
+                        return (
+                            <ProdukCard
+                                produkName={item.product_name}
+                                location='jakarta'
+                                sell={item.stock_sold}
+                                id={1}
+                                key={1}
+                                image={'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
+                                rating={4}
+                                price={item.price}
+                            />
+                        )
+                    })
+                    }
+
+
+                    {/* <ProdukCard
                     produkName='Apple Watch Series 7 GPS, Alumunium Case, starligth sport'
                     location='jakarta'
                     sell={2}
@@ -94,7 +138,7 @@ const Home = () => {
                     image={'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
                     rating={3}
                     price={125000}
-                    />
+                    /> */}
                 </div>
             </div>
         </Layout>
