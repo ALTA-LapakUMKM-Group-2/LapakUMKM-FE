@@ -88,10 +88,11 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10' />
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="">
-                            <div className="avatar">
-                                <div className="w-20 rounded-full">
-                                    <img src={imgUser} />
-                                </div>
+
+                        <div className="avatar">
+                            <div className="w-14 rounded-full">
+                                <img src={imgUser} />
+
                             </div>
                         </label>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold">
