@@ -29,7 +29,7 @@ const Profile = () => {
   const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<any>([])
-
+  const [disable, setDisable] = useState<boolean>(true);
 
 
   const handleModal = () => {
@@ -77,6 +77,7 @@ const Profile = () => {
 
   const handleEditProfile = async(e:any) => {
     e.preventDefault() 
+    
     const formData = new FormData()
     formData.append('fullname', fullName)
     formData.append('address', address)
@@ -84,12 +85,14 @@ const Profile = () => {
     formData.append('phone_number', phone)
     // formData.append('photo_profile' , imageProfile)  
     try {
-      const res = await axios.put('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/users/1' ,formData)
+      const res = await axios.put('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/users/1' ,formData ,{
+      
+      })
       if (res.data) {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Villa Edited Successfully",
+          title: "profile Update berhasil",
           showConfirmButton: false,
           timer: 1500
         }) 
@@ -99,6 +102,8 @@ const Profile = () => {
     }
   }
   console.log(data);
+
+ 
 
   return (
     <Layout>
@@ -182,25 +187,25 @@ const Profile = () => {
             <div className="w-11/12 md:w-6/12 lg:w-6/12 items-center mx-2 md:mx-24 lg:mx-24 mt-8 md:mt-0 lg:mt-0">
              
                 <CustomInput
-                  id="input-nama"
+                  id="fullname"
                   label="Nama Lengkap :"
-                  name="nama"
+                  name="fullname"
                   type="text"
                   placeholder={data.fullname}
                   onChange={(e) => setFullName(e.target.value)}
                 />
 
                 <CustomInput
-                  id="input-alamat"
+                  id="address"
                   label="Alamat Lengkap :"
-                  name="alamat"
+                  name="address"
                   type="text"
                   placeholder={data.address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
 
                 <CustomInput
-                  id="input-email"
+                  id="email"
                   label="E-mail :"
                   name="email"
                   type="text"
@@ -209,9 +214,9 @@ const Profile = () => {
                 />
 
                 <CustomInput
-                  id="input-telepon"
+                  id="phone_number"
                   label="Telepon :"
-                  name="telepon"
+                  name="phone_number"
                   type="text"
                   placeholder={data.phone_number}
                   onChange={(e) => setPhone(e.target.value)}
@@ -223,6 +228,7 @@ const Profile = () => {
                 <CustomButton
                   id="btn-update"
                   label="Perbarui Profile"
+                  loading={!fullName && !address && !email && !phone }
                 />
               </div>
             </div>
