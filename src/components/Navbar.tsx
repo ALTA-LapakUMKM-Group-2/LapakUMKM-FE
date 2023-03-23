@@ -89,11 +89,12 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="">
 
-                        <div className="avatar">
-                            <div className="w-14 rounded-full">
-                                <img src={imgUser} />
-
+                            <div className="avatar">
+                                <div className="w-14 rounded-full">
+                                    <img src={imgUser} />
+                                </div>
                             </div>
+
                         </label>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold">
                             <div className="px-4 py-3 text-sm text-gray-900">
