@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import HistoryPembeli from "./pages/HistoryPembeli";
 import HomeFilter from "./pages/HomeFilterPage";
 import ListProduct from "./pages/ListProduct";
 import Register from "./pages/Register";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/home/:kategori" element={<HomeFilter />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/listproduct" element={<ListProduct />} />
+          <Route path="/historypembeli" element={<HistoryPembeli />} />
 
         </Routes >
       </BrowserRouter >

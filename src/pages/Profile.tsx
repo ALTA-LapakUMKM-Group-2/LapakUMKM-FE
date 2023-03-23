@@ -74,7 +74,7 @@ const Profile = () => {
 
         <div onClick={() => handleModal()} className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 text-zinc-800 font-medium gap-2 mt-10 text-center hover:cursor-pointer hover:text-zinc-500"><FiEdit size={24} />Perbarui Profile</div>
 
-        <div className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><MdOutlineWorkHistory size={24} />Lihat history pembelian ?</div>
+        <div onClick={() => navigate('/historypembeli')} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><MdOutlineWorkHistory size={24} />Lihat history pembelian ?</div>
 
         <div onClick={() => handleVerified()} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag size={24} />Ingin menjadi penjual ?</div>
 
