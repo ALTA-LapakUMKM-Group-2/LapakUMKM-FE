@@ -26,7 +26,7 @@ import ChatModal from '../components/ChatModal'
 const HomeFilter = () => {
 
     const [showFilter, setShowFilter] = useState(false);
-    const [showChat, setShowChat] = useState(false)
+
     const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
     
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

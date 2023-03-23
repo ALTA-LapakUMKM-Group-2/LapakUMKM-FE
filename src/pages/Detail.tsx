@@ -10,11 +10,13 @@ import CardFeedback from '../components/CardFeedback'
 import { formatValue } from 'react-currency-input-field'
 import { useNavigate } from 'react-router-dom'
 import product from '../dummy/prouct.json'
+import ChatModal from '../components/ChatModal'
 
 const Detail = () => {
   const [count, setCount] = useState(1)
   const [price, setPrice] = useState(250000);
   const [totalPrice, setTotalPrice] = useState(price)
+  const [showChat, setShowChat] = useState(false)
   const navigate = useNavigate()
 
   const handleIncrement = () => {
@@ -41,6 +43,36 @@ const Detail = () => {
   return (
     <Layout>
       <Navbar />
+
+      {/* chatting */}
+      <ChatModal
+        img={FotoProfile}
+        isOpen={showChat}
+        isClose={() => setShowChat(false)}
+      >
+        <div className="chat chat-start">
+          <div className="chat-image avatar">
+            <div className="w-10 rounded-full">
+              <img src={FotoProfile} />
+            </div>
+          </div>
+          <div className="chat-header">
+            Obi-Wan Kenobi
+          </div>
+          <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
+        </div>
+        <div className="chat chat-end">
+          <div className="chat-image avatar">
+            <div className="w-10 rounded-full">
+              <img src={FotoProfile} />
+            </div>
+          </div>
+          <div className="chat-header">
+            Anakin
+          </div>
+          <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
+        </div>
+      </ChatModal>
       {/* card for image */}
       <div className='w-full mt-10 mx-auto px-5 py-10  border rounded-lg'>
         <div className="max-w-7xl mx-auto">
@@ -61,7 +93,7 @@ const Detail = () => {
               <div className="w-full h-full">
                 <div className="flex justify-between items-center mb-5">
                   <h1 className="font-bold text-2xl">Adudas Mentawai</h1>
-                  <button className="btn btn-ghost bg-lapak rounded-xl">
+                  <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={() => setShowChat(true)}>
                     <BsChatText size={20} />
                   </button>
                 </div>

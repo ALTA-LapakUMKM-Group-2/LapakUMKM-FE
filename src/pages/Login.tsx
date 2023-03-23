@@ -87,10 +87,12 @@ const Login = () => {
   return (
     <Layout>
       {loading ? <Loading /> :
-        <div className="relative flex flex-col justify-center min-h-screen overflow-hidden w-screen" style={{ backgroundImage: `URL(${bgregis})` }}>
-          <div className="w-full p-20 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl">
+        
+        <div className="relative flex flex-col justify-center min-h-screen overflow-hidden " >
+          <div className="w-full p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl mx-auto">
             <img src={LapakUmkm} width={300} className='flex justify-center mx-auto mb-20' />
             <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full">
+
               <div className="mb-5">
                 <label
                   htmlFor="email"
@@ -100,10 +102,11 @@ const Login = () => {
                 </label>
                 <input
                   type="email"
-                  className="input input-bordered input-accent w-full max-w-lg"
+                  className="input input-bordered input-accent w-96 max-w-lg"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+
               <div className="mb-5">
                 <label
                   htmlFor="password"
