@@ -66,13 +66,8 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [verivyPassword, setVerivyPassword] = useState<string>("");
   const [modalPassword, setModalPassword] = useState<boolean>(false);
-  const [fullName, setFullName] = useState('')
-  const [address, setAddress] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
   const [hide, setHide] = useState<boolean>(false)
   const [hideConfirm, setHideConfirm] = useState<boolean>(false)
-  const [imageProfile, setImageProfile] = useState<File>()
 
 
   const handleVerified = () => {
