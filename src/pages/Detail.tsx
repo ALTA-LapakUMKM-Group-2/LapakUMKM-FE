@@ -2,38 +2,34 @@ import { formatValue } from 'react-currency-input-field'
 import { useNavigate, useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
-
 import CardFeedback from '../components/CardFeedback'
 import ChatModal from '../components/ChatModal'
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
-
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import dai from '../assets/dai.jpg'
-
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsChatText } from 'react-icons/bs'
 import { MdStarRate } from 'react-icons/md'
-
 import product from '../dummy/prouct.json'
 import Loading from '../components/Loading'
+import { useCookies } from 'react-cookie'
 
 const Detail = () => {
   const { id } = useParams();
   const MySwal = withReactContent(Swal);
   const [loading, setLoading] = useState<boolean>(false);
-
   const [product, setProduct] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [stock, setStock] = useState<number>(0);
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState<number>(1);
   const [size, setSize] = useState('')
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
+  const [cookie, setCookie] = useCookies(['token'])
   const navigate = useNavigate()
   
   const handleUpdate = (e: any) => {
@@ -59,15 +55,15 @@ const Detail = () => {
   useEffect(() => {
     fetchData();
   }, [])
-
+  
   function fetchData() {
     setLoading(true);
     axios
-      .get(`https://lapakumkm.mindd.site/products/${id}`)
+    .get(`https://lapakumkm.mindd.site/products/${id}`)
       .then((res) => {
-        console.log('detail', res.data.data);
+        console.log('detail', res.data.data.user_id);
         const { full_name, address } = res.data.data.user
-        const { product_name, description, price, stock_remaining, size } = res.data.data;
+        const { product_name, description, price, stock_remaining, size ,user_id ,id} = res.data.data;
         setProduct(product_name);
         setDescription(description);
         setPrice(price);
@@ -76,6 +72,8 @@ const Detail = () => {
         setName(full_name)
         setAddress(address)
         setTotalPrice(price);
+        setUserId(user_id)
+        setProductId(id)
       })
       .catch((err) => {
         console.log(err.response.statusText)
@@ -90,10 +88,60 @@ const Detail = () => {
         })
       })
       .finally(() => setLoading(false))
-  }
-  console.log("alamat ", address);
-  console.log("nama ", name);
+    }
+    console.log("alamat ", address);
+    console.log("nama ", name);
 console.log('total price', totalPrice);
+
+
+
+const [productId ,setProductId] = useState<any>()
+const [userId, setUserId] =useState<any>()
+
+const addToCart =  async () => {
+  
+  const data = {
+    product_id: parseInt(productId),
+    product_pcs: count,
+    user_id: userId
+
+  };
+  console.log(typeof data);
+  console.log(typeof count);
+  
+  console.log("test id ", data);
+  try {
+    
+const res = await axios.post('https://lapakumkm.mindd.site/carts', data ,{
+      headers : {
+        Authorization: `Bearer ${cookie.token}`
+      }
+    })
+    if(res.data) {  
+      console.log('testos add to cart', res.data);
+      MySwal.fire({
+        icon: "success",
+        title: "Produk ditambahkan ke keranjang",
+        showCancelButton: false,
+       
+      })
+    }
+    navigate('/cart');
+    
+  } catch (err : any) {
+    console.log('Failed add to cart', err.response);
+      MySwal.fire({
+        icon: "error",
+        title: "Gagal menambahkan produk ke keranjang",
+        text: err.response.statusText,
+        showCancelButton: false,
+        confirmButtonText: "Dibaca",
+        confirmButtonColor: "#31CFB9",
+        showConfirmButton: true
+      })
+  }
+
+}
 
 
   return (
@@ -184,7 +232,7 @@ console.log('total price', totalPrice);
                         <button className="btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit" onClick={() => {
                           navigate('/payment')
                         }}>Bayar Langsung</button>
-                        <button className='btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit' >Tambah Keranjang</button>
+                        <button className='btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit' onClick={addToCart}>Tambah Keranjang</button>
                       </div>
                     </div>
                   </div>
