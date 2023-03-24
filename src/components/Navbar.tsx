@@ -19,9 +19,10 @@ interface NavbarProps {
     handleProfile?: React.MouseEventHandler;
     children?: React.ReactNode
     imgUser?: string
+    searchTerm?: string
 }
 
-const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, imgUser }) => {
+const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, imgUser,searchTerm }) => {
 
 
     // handle log out

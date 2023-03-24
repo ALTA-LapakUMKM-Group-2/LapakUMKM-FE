@@ -34,7 +34,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/listproduct" element={<ListProduct />} />
           <Route path="/historypembeli" element={<HistoryPembeli />} />
-          <Route path="/toko" element={<Toko />} />
+          <Route path="/toko/:id" element={<Toko />} />
           <Route path="/notif" element={<NotifikasiCoba />} />
         </Routes >
       </BrowserRouter >

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import withreactcontent from "sweetalert2-react-content"
 import Swal from "sweetalert2"
@@ -21,19 +21,47 @@ import Modal from "../components/Modal"
 import CustomInput from "../components/CutomInput"
 import CustomButton from "../components/CustomButton"
 import axios from "axios"
+import { useCookies } from "react-cookie"
+import Loading from "../components/Loading"
 
 const Profile = () => {
   const navigate = useNavigate()
   const MySwal = withreactcontent(Swal)
   const [modal, setModal] = useState<string>("modal")
   const [showModal, setShowModal] = useState(false)
+  const [modalAing, setModalAing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<any>([])
   const [disable, setDisable] = useState<boolean>(true);
+  const [shopName, setShopName] = useState('')
 
+  const handleUpdateStatus = async (e: any) => {
+    e.preventDefault()
+    try {
+      const res = await axios.post('https://lapakumkm.mindd.site/users/update-to-seller', {
+        shop_name: shopName
+      }, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      })
+      const { data } = res.data
+      console.log(data);
 
-  const handleModal = () => {
-    setModal("modal-open")
+      if (data) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Berhasil update nama toko",
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+      getProfile()
+      setModalAing(false)
+    } catch (error) {
+
+    }
   }
 
   const handleVerified = () => {
@@ -55,13 +83,19 @@ const Profile = () => {
   }
 
   const getProfile = async () => {
+    setLoading(true)
     try {
-      const res = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/users')
+      const res = await axios.get('https://lapakumkm.mindd.site/users', {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      })
       setData(res.data.data)
 
     } catch (error) {
 
     }
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -72,21 +106,27 @@ const Profile = () => {
   const [address, setAddress] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-
+  const [cookies, setCookies,removeCookies] = useCookies(['token'])
   const [imageProfile, setImageProfile] = useState<File>()
+  console.log("test token ", cookies.token);
+  const id = useParams()
 
   const handleEditProfile = async (e: any) => {
     e.preventDefault()
 
-    const formData = new FormData()
-    formData.append('fullname', fullName)
-    formData.append('address', address)
-    formData.append('email', email)
-    formData.append('phone_number', phone)
+    const data = {
+      full_name: fullName,
+      address: address,
+      email: email,
+      phone_number: phone
+    }
     // formData.append('photo_profile' , imageProfile)  
     try {
-      const res = await axios.put('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/users/1', formData, {
+      const res = await axios.post(`https://lapakumkm.mindd.site/users`, data, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
 
+        }
       })
       if (res.data) {
         Swal.fire({
@@ -97,15 +137,79 @@ const Profile = () => {
           timer: 1500
         })
       }
+      getProfile()
+      setShowModal(false)
     } catch (error) {
       console.log(error);
     }
   }
-  console.log(data);
+  
+  const deleteUser = async() => {
+    const res = await Swal.fire({
+    title: "Hapus Akun?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Hapus",
+    cancelButtonText: "Tidak",
+    color: '#353E3C',
+    background: '#ffffff ',
+    confirmButtonColor: "#31CFB9",
+    cancelButtonColor: "#FE4135",
+  });
+
+  if (res.isConfirmed) {
+    try {
+      const res = await axios.delete('https://lapakumkm.mindd.site/users', {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      });
+      console.log(res.data);
+      if(res.data) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Hapus Akun Berhasil",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        removeCookies('token');
+         navigate("/");
+
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
+
+
+
+
 
   return (
     <Layout>
       <Navbar />
+        {
+          loading ? <Loading /> : <>
+            <Modal isOpen={modalAing} isClose={() => setModalAing(false)}>
+        <form onSubmit={handleUpdateStatus}>
+          <CustomInput
+            onChange={(e) => setShopName(e.target.value)}
+            id="shop_name"
+            label="Nama Toko"
+            name="shop_name"
+            placeholder="Masukkan nama toko anda" />
+          <div className="mt-8">
+            <CustomButton
+              id="btn-update"
+              label="Perbaharui"
+              loading={!shopName}
+            />
+          </div>
+        </form>
+      </Modal>
 
       <div className="w-full px-5 md:px-16 lg:px-28">
         <h1 className="text-zinc-800 text-[30px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 tracking-wider">Profile Detail Saya</h1>
@@ -118,7 +222,7 @@ const Profile = () => {
               <img src={data.photo_profile} alt="profile.png" className="" />
             </div>
 
-            <p className="text-[20px] font-semibold text-zinc-800 mt-8">{data.fullname}</p>
+            <p className="text-[20px] font-semibold text-zinc-800 mt-8">{data.shop_name ? data.shop_name : data.full_name}</p>
             <p className="text-[20px] font-semibold text-zinc-800">{data.role}</p>
           </div>
 
@@ -130,19 +234,18 @@ const Profile = () => {
             <p className="flex gap-2 mt-5 md:mt-10 lg:mt-10 font-semibold text-center"><HiOutlineDevicePhoneMobile size={24} />Telepon :</p>
             <p className="tracking-wide"> {data.phone_number}</p>
           </div>
-
         </div>
 
         <div onClick={() => setShowModal(true)} className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 text-zinc-800 font-medium gap-2 mt-10 text-center hover:cursor-pointer hover:text-zinc-500"><FiEdit size={24} />Perbarui Profile</div>
 
         <div onClick={() => navigate('/historypembeli')} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><MdOutlineWorkHistory size={24} />Lihat history pembelian ?</div>
 
-        <div onClick={() => handleVerified()} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag size={24} />Ingin menjadi penjual ?</div>
+        <div onClick={() => setModalAing(true)} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag size={24} />Ingin menjadi penjual ?</div>
 
         <div onClick={() => navigate("/listproduct")} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><GoPackage size={24} />Lihat product anda</div>
 
 
-        <div className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-red-400"><VscTrash size={24} />Hapus akun </div>
+        <div onClick={deleteUser} className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-red-400"><VscTrash size={24} />Hapus akun </div>
       </div>
 
       <Modal isOpen={showModal} isClose={() => setShowModal(false)} title='Edit Profile'>
@@ -170,9 +273,9 @@ const Profile = () => {
             <div className="w-11/12 md:w-6/12 lg:w-6/12 items-center mx-2 md:mx-24 lg:mx-24 mt-8 md:mt-0 lg:mt-0">
 
               <CustomInput
-                id="fullname"
+                id="full_name"
                 label="Nama Lengkap :"
-                name="fullname"
+                name="full_name"
                 type="text"
                 placeholder={data.fullname}
                 onChange={(e) => setFullName(e.target.value)}
@@ -218,6 +321,8 @@ const Profile = () => {
           </div>
         </form>
       </Modal>
+          </> 
+        }
 
     </Layout>
   )

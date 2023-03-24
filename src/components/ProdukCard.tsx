@@ -23,6 +23,7 @@ interface ListingProps {
     handleDelete?: React.MouseEventHandler
     name?: string
     handlename?: boolean
+    size?: string
 }
 
 
@@ -40,6 +41,7 @@ const ProdukCard: React.FC<ListingProps> = ({
     toDelete,
     name,
     handlename,
+    size
 }) => {
 
     const navigate = useNavigate()
@@ -70,8 +72,9 @@ const ProdukCard: React.FC<ListingProps> = ({
             <div className="px-5 pb-5 flex flex-col space-y-1 gap-2">
                 <a href="#">
                     <h5 className="text-l font-semibold tracking-tight text-gray-900">{produkName}</h5>
+                    <h5 className="text-l font-medium tracking-tight text-gray-900">Ukuran : {size }</h5>
                 </a>
-                <h5 className="text-l font-semibold tracking-tight text-gray-900 flex"><MdLocationOn className=' w-6 h-6' /> {location}</h5>
+                <h5 className="text-l font-semibold tracking-tight text-gray-900 flex"><MdLocationOn className=' w-6 h-6 mr-2' />{location}</h5>
                 <div className="rating">
                     <Rating
                         value={rating}

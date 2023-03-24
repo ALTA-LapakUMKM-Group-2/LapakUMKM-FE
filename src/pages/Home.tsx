@@ -20,7 +20,7 @@ const Home = () => {
     const getAllList = async () => {
         setLoading(true)
         try {
-            const res = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/products')
+            const res = await axios.get('https://lapakumkm.mindd.site/products')
             setData(res.data.data)
 
 
@@ -66,6 +66,7 @@ const Home = () => {
 
                                 return (
                                     <ProdukCard
+                                        size={item.size}
                                         key={index}
                                         produkName={item.product_name}
                                         location='jakarta'
