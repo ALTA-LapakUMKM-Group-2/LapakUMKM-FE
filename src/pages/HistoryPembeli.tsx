@@ -132,6 +132,7 @@ const HistoryPembeli = () => {
                 placeholder="Masukkan ulasan anda disini"
                 typeof="text"
                 className="border-2 w-11/12 border-zinc-300 rounded-lg p-2 mt-2"
+                value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
               />
 

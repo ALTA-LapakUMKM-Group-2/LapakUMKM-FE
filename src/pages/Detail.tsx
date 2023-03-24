@@ -1,20 +1,35 @@
-import React, { useState } from 'react'
+import { formatValue } from 'react-currency-input-field'
+import { useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+
+import withReactContent from 'sweetalert2-react-content'
+import Swal from 'sweetalert2'
+
+import CardFeedback from '../components/CardFeedback'
+import ChatModal from '../components/ChatModal'
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
+
+import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import dai from '../assets/dai.jpg'
+
+import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsChatText } from 'react-icons/bs'
 import { MdStarRate } from 'react-icons/md'
-import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
-import { MdOutlineLocationOn } from 'react-icons/md'
-import CardFeedback from '../components/CardFeedback'
-import { formatValue } from 'react-currency-input-field'
-import { useNavigate } from 'react-router-dom'
+
 import product from '../dummy/prouct.json'
-import ChatModal from '../components/ChatModal'
 
 const Detail = () => {
-  const [count, setCount] = useState(1)
-  const [price, setPrice] = useState(250000);
+  const { id } = useParams();
+  const MySwal = withReactContent(Swal);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [product, setProduct] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
+  const [stock, setStock] = useState<number>(0);
+  const [count, setCount] = useState(1);
   const [totalPrice, setTotalPrice] = useState(price)
   const [showChat, setShowChat] = useState(false)
   const navigate = useNavigate()
@@ -22,9 +37,7 @@ const Detail = () => {
   const handleIncrement = () => {
     setCount(count + 1);
     setTotalPrice(price * (count + 1));
-
   };
-  console.log(totalPrice);
 
   const handleDecrement = () => {
     if (count > 1) {
@@ -35,9 +48,38 @@ const Detail = () => {
     }
   };
 
-
   const handleUpdate = (e: any) => {
     e.preventDefault()
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/products/${id}`)
+      .then((res) => {
+        const { product_name, description, price, stock_total } = res.data.data;
+        setProduct(product_name);
+        setDescription(description);
+        setPrice(price);
+        setStock(stock_total);
+      })
+      .catch((err) => {
+        console.log(err.response.statusText)
+        MySwal.fire({
+          icon: "error",
+          title: err.response.statusText,
+          text: "Gagal mengunduh data",
+          showCancelButton: false,
+          confirmButtonText: "Dibaca",
+          confirmButtonColor: "#31CFB9",
+          showConfirmButton: true
+        })
+      })
+      .finally(() => setLoading(false))
   }
 
   return (
@@ -92,12 +134,12 @@ const Detail = () => {
             <div className="p-5 rounded-md max-w-3xl w-full h-fit border-2 border-gray-200 shadow-lg mx-auto">
               <div className="w-full h-full">
                 <div className="flex justify-between items-center mb-5">
-                  <h1 className="font-bold text-2xl">Adudas Mentawai</h1>
+                  <h1 className="font-bold text-2xl">{product}</h1>
                   <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={() => setShowChat(true)}>
                     <BsChatText size={20} />
                   </button>
                 </div>
-                <h1 className="font-bold text-2xl">Stock Tersedia : <span className='ml-3'>{`5`}</span></h1>
+                <h1 className="font-bold text-2xl">Stock Tersedia : <span className='ml-3'>{stock}</span></h1>
                 <h1 className="font-bold text-2xl">Ukuran : <span className='ml-3'>{`M`}</span></h1>
                 <h1 className="font-bold text-2xl flex items-center gap-2">
                   Rating: <span className="text-yellow-500"> <MdStarRate size={25} className='ml-3' /></span> 4.5
@@ -144,14 +186,14 @@ const Detail = () => {
             </div>
             <h1 className='text-3xl font-bold'>Informasi Produk :</h1>
             <div className='w-full shadow-xl p-5 rounded-xl border text-lg font-semibold'>
-              <h1>stock : {`unlimited`}</h1>
+              <h1>stock : {stock}</h1>
               <h1>Kategori : {`spatu lari`}</h1>
-              <h1>Brand : {`adudas mentawai`}</h1>
+              <h1>Brand : {product}</h1>
               <h1>Ukuran : {`M`}</h1>
               <div className='border-2 mt-5 mb-5'>
               </div>
               <h1 >Deskripsi : </h1>
-              <h1>Sepatu asli buatan tangan Indonesia dengan kualitas terbaik dan 100% original</h1>
+              <h1>{description}</h1>
             </div>
           </div>
           {/* end */}
