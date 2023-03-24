@@ -22,7 +22,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={checkToken ? <Home /> : <Login />} />
+          {/* <Route path="/" element={checkToken ? <Home /> : <Login />} /> */}
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
