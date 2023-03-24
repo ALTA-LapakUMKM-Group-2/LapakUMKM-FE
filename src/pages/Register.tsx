@@ -39,10 +39,10 @@ const Register = () => {
         const data = {
             email: email,
             password: password,
-            fullname: name,
+            full_name: name,
         }
         try {
-            const res = await axios.post('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/auth/register', data)
+            const res = await axios.post('https://lapakumkm.mindd.site/auth/register', data)
             if (res.data) {
                 Swal.fire({
                     position: 'center',

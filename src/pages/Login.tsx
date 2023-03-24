@@ -3,17 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-
 import { handleAuth } from '../utils/redux/reducer/reducer';
 import Loading from '../components/Loading';
 import Layout from '../components/Layout';
-
 import LapakUmkm from '../assets/LapakUmkm2.png'
 import bgregis from '../assets/bgregis.jpg'
-
 import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
 import CustomButton from '../components/CustomButton';
 
@@ -49,7 +45,8 @@ const Login = () => {
     };
 
     axios
-      .post(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/auth/login`, body)
+      .post(`
+      https://lapakumkm.mindd.site/auth/login`, body)
       .then((res) => {
 
         const { message } = res.data
@@ -63,6 +60,7 @@ const Login = () => {
           showCancelButton: false,
           timer: 1500,
         })
+        navigate('/home')
       })
       .catch((err) => {
         const { data } = err.response;
@@ -75,8 +73,6 @@ const Login = () => {
       })
       .finally(() => setLoading(false))
   }
-
-
   const bg = {
     backgroundImage: `linear-gradient(
           rgba(0, 0, 0, 0.3),
