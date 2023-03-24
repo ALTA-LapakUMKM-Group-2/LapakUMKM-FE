@@ -54,6 +54,7 @@ const Login = () => {
 
         const { message } = res.data
         setCookie("token", res.data.data.token, { path: "/" });
+        dispatch(handleAuth(true))
         MySwal.fire({
           icon: "success",
           title: message,
@@ -87,7 +88,7 @@ const Login = () => {
   return (
     <Layout>
       {loading ? <Loading /> :
-        
+
         <div className="relative flex flex-col justify-center min-h-screen overflow-hidden " >
           <div className="w-full p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl mx-auto">
             <img src={LapakUmkm} width={300} className='flex justify-center mx-auto mb-20' />
