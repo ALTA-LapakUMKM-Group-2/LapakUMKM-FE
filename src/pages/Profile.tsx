@@ -205,7 +205,11 @@ const Profile = () => {
     };
 
     axios
-      .post(`https://lapakumkm.mindd.site/auth/change-password`, body)
+      .post(`https://lapakumkm.mindd.site/auth/change-password`, body ,{
+           headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+    })
       .then((res) => {
         const { message } = res.data;
         MySwal.fire({
