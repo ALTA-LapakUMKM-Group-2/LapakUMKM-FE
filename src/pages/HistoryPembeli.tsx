@@ -1,174 +1,162 @@
+import React, { useState, useEffect } from "react"
+
+import { Rating } from "@smastrom/react-rating"
+import '@smastrom/react-rating/style.css'
+
+import withReactContent from "sweetalert2-react-content"
+import Swal from "sweetalert2"
+
+import CustomButton from "../components/CustomButton"
+import FeedbackCard from "../components/FeedbackCard"
+import CustomInput from "../components/CutomInput"
+import Loading from "../components/Loading"
 import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
+import Modal from "../components/Modal"
 
 import Kaos from "../assets/kaos.png"
-import Kaos1 from "../assets/profile.jpg"
-import CustomButton from "../components/CustomButton"
-import { useState } from "react"
-import Modal from "../components/Modal"
-import CustomInput from "../components/CutomInput"
-import FeedbackCard from "../components/FeedbackCard"
+import { string } from "prop-types"
+import axios from "axios"
+
+interface FormValues {
+  rating: number;
+}
+const initialFormValues: FormValues = {
+  rating: 0,
+};
 
 const HistoryPembeli = () => {
+  const StarDrawing = (
+    <path d="M11.0748 3.25583C11.4141 2.42845 12.5859 2.42845 12.9252 3.25583L14.6493 7.45955C14.793 7.80979 15.1221 8.04889 15.4995 8.07727L20.0303 8.41798C20.922 8.48504 21.2841 9.59942 20.6021 10.1778L17.1369 13.1166C16.8482 13.3614 16.7225 13.7483 16.8122 14.1161L17.8882 18.5304C18.1 19.3992 17.152 20.0879 16.3912 19.618L12.5255 17.2305C12.2034 17.0316 11.7966 17.0316 11.4745 17.2305L7.60881 19.618C6.84796 20.0879 5.90001 19.3992 6.1118 18.5304L7.18785 14.1161C7.2775 13.7483 7.1518 13.3614 6.86309 13.1166L3.3979 10.1778C2.71588 9.59942 3.07796 8.48504 3.96971 8.41798L8.50046 8.07727C8.87794 8.04889 9.20704 7.80979 9.35068 7.45955L11.0748 3.25583Z" stroke="#fdd231" strokeWidth="1" ></path>
+  );
 
+  const customStyles = {
+    itemShapes: StarDrawing,
+    activeFillColor: '#FDD231',
+    inactiveFillColor: '#ffffff',
+  };
+
+  const MySwal = withReactContent(Swal)
   const [showFeedback, setShowFeedback] = useState<boolean>(false)
-  const [modalFeedback, setModalFeedback] = useState<string>("modal")
+  const [value, setValue] = useState<FormValues>(initialFormValues)
 
-  const modalfeedback = () => {
-    setModalFeedback("modal-open")
+  const [feedback, setFeedback] = useState<string>("")
+
+  const [loading, setLoading] = useState<boolean>(false)
+  const [disable, setDisable] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (value.rating !== 0) {
+      setDisable(false);
+    } else {
+      setDisable(true)
+    }
+  }, [value.rating, feedback])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
+    e.preventDefault();
+    const body = {
+      rating: value.rating,
+      feedback
+    };
+
+    axios
+      .post(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/feedbacks`, body)
+      .then((res) => {
+        const { message } = res.data;
+        MySwal.fire({
+          icon: "success",
+          title: message,
+          text: "Ulasan berhasil terkirim",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1200,
+        })
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        MySwal.fire({
+          icon: "error",
+          title: data.message,
+          text: "Ulasan gagal terkirim",
+          showCancelButton: false,
+          confirmButtonText: "Berikan ulang",
+          confirmButtonColor: "#31CFB9"
+        })
+      })
+      .finally(() => setLoading(false))
   }
 
   return (
     <Layout>
-      <Navbar />
-      <div className="w-full h-full px-8 md:px-28 lg:px-52 mb-28">
-        <h1 className="mt-12 mb-14 text-[24px] font-semibold">History Pembelian</h1>
+      {loading ? <Loading /> :
+        <>
+          <Navbar />
+          <div className="w-full h-full px-8 md:px-28 lg:px-52 mb-28">
+            <h1 className="mt-12 mb-14 text-[24px] font-semibold">History Pembelian</h1>
 
-        <FeedbackCard
-        id={1}
-        produkImg={Kaos}
-        sellerName="Toko@7"
-        produkName='Baju Jelek'
-        size={'L'}
-        price={50000}
-        status="Done"
-        rating={4}
-        quantity={2}
-        />
-
-        <FeedbackCard
-        id={1}
-        produkImg={Kaos}
-        sellerName="Toko@7"
-        produkName='Baju Jelek'
-        size={'L'}
-        price={35000}
-        status="Pending"
-        rating={0}
-        quantity={2}
-        />
-
-        <div className="mt-5 md:w-11/12 lg:w-8/12 px-8 py-4 bg-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.4)]">
-          <p className="border-b-2 pb-2">Toko Arif Muhammad</p>
-          <div className="flex flex-col md:flex-row lg:flex-row gap-5 mt-4">
-            <img src={Kaos} alt="produk.jpg" className="h-64 md:h-40 lg:h-44 " />
-            <div className="space-y-1">
-              <p>Kaos Lengan Pendek</p>
-              <p>Ukuran : L</p>
-              <p><span>Rp. 125.000</span> x 2</p>
-              <p>Total : Rp. 250.000</p>
-              <p>Status : Sukses</p>
-
-              <div className="flex flex-col-reverse md:flex-row-reverse lg:flex-row-reverse">
-                <div className="mt-5 md:mt-0 lg:mt-0 md:ml-20 lg:ml-28">
-                  <CustomButton
-                    id="btn-ulasan"
-                    label="Ulasan"
-                    onClick={() => modalfeedback()}
-                  />
-                </div>
-
-                <div className="rating">
-                  <input type="radio" name="rating-0" className="mask mask-star-2 bg-yellow-400" />
-                  <input type="radio" name="rating-0" className="mask mask-star-2 bg-yellow-400" />
-                  <input type="radio" name="rating-0" className="mask mask-star-2 bg-yellow-400" />
-                  <input type="radio" name="rating-0" className="mask mask-star-2 bg-yellow-400" defaultChecked />
-                  <input type="radio" name="rating-0" className="mask mask-star-2 bg-yellow-400" />
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-5 md:w-11/12 lg:w-8/12 px-8 py-4 bg-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.4)]">
-          <p className="border-b-2 pb-2">Toko Arif Muhammad</p>
-          <div className="flex flex-col md:flex-row lg:flex-row gap-5 mt-4">
-            <img src={Kaos} alt="produk.jpg" className="h-64 md:h-40 lg:h-44 " />
-            <div className="space-y-1">
-              <p>Kaos Lengan Pendek</p>
-              <p>Ukuran : L</p>
-              <p><span>Rp. 125.000</span> x 2</p>
-              <p>Total : Rp. 250.000</p>
-              <p>Status : Sukses</p>
-              <div className="flex flex-col-reverse md:flex-row-reverse lg:flex-row-reverse">
-                <div className="mt-5 md:mt-0 lg:mt-0 md:ml-20 lg:ml-28">
-                  <CustomButton
-                    id="btn-ulasan"
-                    label="Ulasan"
-                  />
-                </div>
-
-                <div className="rating">
-                  <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-                  <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-                  <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-                  <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" defaultChecked />
-                  <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="open-modalEdit" className={`modal ${modalFeedback}`}>
-        <div className="modal-box max-w-full shadow-xl md:w-6/12 lg:w-4/12">
-          <div
-            id="btn-closeModal1"
-            onClick={() => setModalFeedback("modal")}
-            className="rounded-full w-7 text-center absolute right-4 top-3 text-[20px] font-bold text-zinc-800 hover:cursor-pointer hover:bg-lapak hover:text-zinc-100"
-          >
-            ✕
-          </div>
-          <div className="bg-white">
-            <p className="text-[18px] font-semibold text-zinc-800">Ulasan anda :</p>
-            <textarea
-              id="input-ulasan"
-              name="Feedback"
-              placeholder="Masukkan ulasan anda disini"
-              typeof="text"
-              className="border-2 w-11/12 border-zinc-300 rounded-lg p-2 mt-2"
+            <FeedbackCard
+              id={1}
+              produkImg={Kaos}
+              sellerName="Toko@7"
+              produkName='Baju Jelek'
+              size={'L'}
+              price={50000}
+              status="Done"
+              rating={4}
+              quantity={2}
+              handleFeedback={() => setShowFeedback(true)}
             />
 
-            <p className="text-[18px] mb-2 font-semibold text-zinc-800 mt-5">Berikan penilaian anda </p>
-            <div className="rating">
-              <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-              <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-              <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-              <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" defaultChecked />
-              <input type="radio" name="rating-1" className="mask mask-star-2 bg-yellow-400" />
-            </div>
-
-            <div className="mt-8 pr-8">
-              <CustomButton
-                id="btn-feedback"
-                label="Tambahkan Ulasan"
-              />
-            </div>
+            <FeedbackCard
+              id={1}
+              produkImg={Kaos}
+              sellerName="Toko@7"
+              produkName='Baju Jelek'
+              size={'L'}
+              price={35000}
+              status="Pending"
+              rating={0}
+              quantity={2}
+              handleFeedback={() => setShowFeedback(true)}
+            />
           </div>
-        </div>
-      </div>
 
-      {/* <Modal
-        isOpen={showFeedback}
-        isClose={() => setShowFeedback(false)}
-        title="TEst"
-        size="w-4/12"
-      >
-        <div className="bg-white">
-          <p className="text-[18px] font-semibold text-zinc-800">Ulasan anda :</p>
-          <textarea
-            id="input-ulasan"
-            name="Feedback"
-            placeholder="Masukkan ulasan anda disini"
-            typeof="text"
-            className="border-2 border-zinc-300 rounded-lg p-2 mt-2"
-          />
+          <Modal isOpen={showFeedback} size='w-96' isClose={() => setShowFeedback(false)} title="Review" >
+            <form onSubmit={(e) => handleSubmit(e)}>
+              <p className="text-[18px] font-semibold text-zinc-800 border-t-2 border-zinc-600 pt-4">Ulasan anda :</p>
+              <textarea
+                id="input-ulasan"
+                name="Feedback"
+                placeholder="Masukkan ulasan anda disini"
+                typeof="text"
+                className="border-2 w-11/12 border-zinc-300 rounded-lg p-2 mt-2"
+                onChange={(e) => setFeedback(e.target.value)}
+              />
 
-          <p className="text-[18px] font-semibold text-zinc-800 mt-5">Berikan penilaian anda </p>
-        </div>
-      </Modal> */}
+              <p className="text-[18px] font-semibold text-zinc-800 mt-4">Penilaian anda :</p>
+              <div className="rating">
+                <Rating
+                  itemStyles={customStyles}
+                  isRequired
+                  style={{ maxWidth: 120 }}
+                  value={value.rating}
+                  onChange={(selectedValue: any) => setValue((data) => ({ ...data, rating: selectedValue }))}
+                />
+              </div>
+
+              <div className="mt-4 px-2">
+                <CustomButton
+                  id="btn-feedback"
+                  label="Tambah Ulasan"
+                  loading={disable || loading}
+                />
+              </div>
+            </form>
+          </Modal>
+        </>
+      }
 
     </Layout>
   )
