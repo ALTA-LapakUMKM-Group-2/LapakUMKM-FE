@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-
+import axios from "axios"
 import withreactcontent from "sweetalert2-react-content"
 import Swal from "sweetalert2"
-
+import CustomButton from "../components/CustomButton"
+import ModalProfile from "../components/ModalProfile"
+import CustomInput from "../components/CutomInput"
 import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
-
+import Modal from "../components/Modal"
 import Avatar from "../assets/profile.jpg"
-
-import { MdOutlineAlternateEmail, MdOutlineWorkHistory } from "react-icons/md"
+import { MdOutlineAlternateEmail, MdOutlineWorkHistory, MdLockReset } from "react-icons/md"
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { HiOutlineDevicePhoneMobile } from "react-icons/hi2"
 import { BsHouseDoor } from "react-icons/bs"
 import { GoPackage } from "react-icons/go"
 import { SlHandbag } from "react-icons/sl"
 import { VscTrash } from "react-icons/vsc"
 import { FiEdit } from "react-icons/fi"
-import ModalProfile from "../components/ModalProfile"
-import Modal from "../components/Modal"
-import CustomInput from "../components/CutomInput"
-import CustomButton from "../components/CustomButton"
-import axios from "axios"
 import { useCookies } from "react-cookie"
 import Loading from "../components/Loading"
+
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -64,6 +62,19 @@ const Profile = () => {
     }
   }
 
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [verivyPassword, setVerivyPassword] = useState<string>("");
+  const [modalPassword, setModalPassword] = useState<boolean>(false);
+  const [fullName, setFullName] = useState('')
+  const [address, setAddress] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [hide, setHide] = useState<boolean>(false)
+  const [hideConfirm, setHideConfirm] = useState<boolean>(false)
+  const [imageProfile, setImageProfile] = useState<File>()
+
+
   const handleVerified = () => {
     MySwal.fire({
       icon: "info",
@@ -102,6 +113,7 @@ const Profile = () => {
     getProfile()
   }, [])
 
+
   const [fullName, setFullName] = useState('')
   const [address, setAddress] = useState('')
   const [email, setEmail] = useState('')
@@ -110,6 +122,7 @@ const Profile = () => {
   const [imageProfile, setImageProfile] = useState<File>()
   console.log("test token ", cookies.token);
   const id = useParams()
+
 
   const handleEditProfile = async (e: any) => {
     e.preventDefault()
@@ -143,6 +156,7 @@ const Profile = () => {
       console.log(error);
     }
   }
+
   
   const deleteUser = async() => {
     const res = await Swal.fire({
@@ -186,7 +200,56 @@ const Profile = () => {
 
 
 
+  const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
+    e.preventDefault();
+    const body = {
+      old_password: oldPassword,
+      new_password: newPassword,
+      confirm_password: verivyPassword
+    };
 
+    axios
+      .post(`https://lapakumkm.mindd.site/auth/change-password`, body)
+      .then((res) => {
+        const { message } = res.data;
+        MySwal.fire({
+          icon: "success",
+          title: message,
+          text: "Berhasil melakukan edit password",
+          showCloseButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        MySwal.fire({
+          icon: "error",
+          title: data.message,
+          text: "Gagal melakukan edit password",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+      .finally(() => setLoading(false))
+  }
+
+  const Hide = () => {
+    setHide(!hide)
+  }
+  const HideConfirm = () => {
+    setHideConfirm(!hideConfirm)
+  }
+
+  useEffect(() => {
+    if (oldPassword === "" && newPassword === "" && verivyPassword === "") {
+      setDisable(true);
+    } else {
+      setDisable(false);
+    }
+  }, [oldPassword, newPassword, verivyPassword]);
 
   return (
     <Layout>
@@ -238,6 +301,8 @@ const Profile = () => {
 
         <div onClick={() => setShowModal(true)} className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 text-zinc-800 font-medium gap-2 mt-10 text-center hover:cursor-pointer hover:text-zinc-500"><FiEdit size={24} />Perbarui Profile</div>
 
+        <div onClick={() => setModalPassword(true)} className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><MdLockReset size={24} />Perbarui Password</div>
+
         <div onClick={() => navigate('/historypembeli')} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><MdOutlineWorkHistory size={24} />Lihat history pembelian ?</div>
 
         <div onClick={() => setModalAing(true)} className="flex text-[18px] w-10/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag size={24} />Ingin menjadi penjual ?</div>
@@ -247,6 +312,61 @@ const Profile = () => {
 
         <div onClick={deleteUser} className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-red-400"><VscTrash size={24} />Hapus akun </div>
       </div>
+
+      <Modal isOpen={modalPassword} isClose={() => setModalPassword(false)}>
+
+        <form onSubmit={(e) => changePassword(e)} className=" flex flex-col md:flex-col lg:flex-col py-5" title="Ganti Password">
+
+          <CustomInput
+            id="input-passwordlama"
+            label="Password Lama :"
+            name="password_lama"
+            type="text"
+            placeholder="**********"
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+
+          <div className="relative mt-4">
+            <CustomInput
+              id="input-passwordbaru"
+              label="Password Baru :"
+              name="password_baru"
+              placeholder="**********"
+              type={hide ? "text" : "password"}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+
+            <div onClick={() => Hide()} className="text-zinc-800 absolute top-[2.6rem] right-3 hover:cursor-pointer hover:text-zinc-600">
+
+              {hide ? <AiFillEye size={30} /> : <AiFillEyeInvisible size={30} />}
+            </div>
+          </div>
+
+          <div className="relative mt-4">
+            <CustomInput
+              id="input-passwordconfirm"
+              label="Konfirmasi Password :"
+              name="password_confirm"
+              placeholder="**********"
+              type={hideConfirm ? "text" : "password"}
+              onChange={(e) => setVerivyPassword(e.target.value)}
+            />
+
+            <div onClick={() => HideConfirm()} className="text-zinc-800 absolute top-[2.6rem] right-3 hover:cursor-pointer hover:text-zinc-600">
+
+              {hideConfirm ? <AiFillEye size={30} /> : <AiFillEyeInvisible size={30} />}
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <CustomButton
+              id="btn-update"
+              label="Perbarui Password"
+              loading={disable || loading}
+            />
+          </div>
+        </form>
+      </Modal>
 
       <Modal isOpen={showModal} isClose={() => setShowModal(false)} title='Edit Profile'>
         <form action="" onSubmit={handleEditProfile}>
@@ -324,7 +444,7 @@ const Profile = () => {
           </> 
         }
 
-    </Layout>
+    </Layout >
   )
 
 }

@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, RouterProvider } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
 
 import HistoryPembeli from "./pages/HistoryPembeli";
 import HomeFilter from "./pages/HomeFilterPage";
@@ -14,12 +15,24 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import NotifikasiCoba from "./pages/NotifikasiCoba";
 
+import { getDark } from "./utils/redux/reducer/reducer";
+import { useState, useEffect, useMemo } from "react";
+
 function App() {
+  const dispatch = useDispatch();
   const [cookie, setCookie] = useCookies(["token"]);
   const checkToken = cookie.token;
 
+  const handleToggleTheme = () => {
+    dispatch(getDark(true))
+    console.log("cek")
+    console.log(dispatch(getDark(true)))
+  }
+
   return (
     <>
+      <button onClick={handleToggleTheme}>Toggle Theme</button>
+
       <BrowserRouter>
         <Routes>
           {/* <Route path="/" element={checkToken ? <Home /> : <Login />} /> */}
