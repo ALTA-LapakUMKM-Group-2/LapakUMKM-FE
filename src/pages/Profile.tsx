@@ -75,9 +75,9 @@ const Profile = () => {
 
   const [imageProfile, setImageProfile] = useState<File>()
 
-  const handleEditProfile = async(e:any) => {
-    e.preventDefault() 
-    
+  const handleEditProfile = async (e: any) => {
+    e.preventDefault()
+
     const formData = new FormData()
     formData.append('fullname', fullName)
     formData.append('address', address)
@@ -85,8 +85,8 @@ const Profile = () => {
     formData.append('phone_number', phone)
     // formData.append('photo_profile' , imageProfile)  
     try {
-      const res = await axios.put('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/users/1' ,formData ,{
-      
+      const res = await axios.put('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/users/1', formData, {
+
       })
       if (res.data) {
         Swal.fire({
@@ -95,15 +95,13 @@ const Profile = () => {
           title: "profile Update berhasil",
           showConfirmButton: false,
           timer: 1500
-        }) 
+        })
       }
     } catch (error) {
       console.log(error);
     }
   }
   console.log(data);
-
- 
 
   return (
     <Layout>
@@ -147,21 +145,6 @@ const Profile = () => {
         <div className="flex text-[18px] w-7/12 md:w-3/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 mt-4 text-center hover:cursor-pointer hover:text-red-400"><VscTrash size={24} />Hapus akun </div>
       </div>
 
-
-      {/* <div id="open-modalEdit" className={`modal ${modal}`}>
-        <div className="modal-box max-w-full shadow-xl md:w-11/12 lg:w-9/12">
-          <div
-            id="btn-closeModal1"
-            onClick={() => setModal("modal")}
-            className="rounded-full w-7 text-center absolute right-4 top-3 text-[20px] font-bold text-zinc-800 hover:cursor-pointer hover:bg-lapak hover:text-zinc-100"
-          >
-            ✕
-          </div>
-       
-          <ModalProfile />
-        </div>
-        
-      </div> */}
       <Modal isOpen={showModal} isClose={() => setShowModal(false)} title='Edit Profile'>
         <form action="" onSubmit={handleEditProfile}>
           <div className=" flex flex-col md:flex-row lg:flex-row py-5">
@@ -185,42 +168,42 @@ const Profile = () => {
             </div>
 
             <div className="w-11/12 md:w-6/12 lg:w-6/12 items-center mx-2 md:mx-24 lg:mx-24 mt-8 md:mt-0 lg:mt-0">
-             
-                <CustomInput
-                  id="fullname"
-                  label="Nama Lengkap :"
-                  name="fullname"
-                  type="text"
-                  placeholder={data.fullname}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
 
-                <CustomInput
-                  id="address"
-                  label="Alamat Lengkap :"
-                  name="address"
-                  type="text"
-                  placeholder={data.address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
+              <CustomInput
+                id="fullname"
+                label="Nama Lengkap :"
+                name="fullname"
+                type="text"
+                placeholder={data.fullname}
+                onChange={(e) => setFullName(e.target.value)}
+              />
 
-                <CustomInput
-                  id="email"
-                  label="E-mail :"
-                  name="email"
-                  type="text"
-                  placeholder={data.email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+              <CustomInput
+                id="address"
+                label="Alamat Lengkap :"
+                name="address"
+                type="text"
+                placeholder={data.address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
 
-                <CustomInput
-                  id="phone_number"
-                  label="Telepon :"
-                  name="phone_number"
-                  type="text"
-                  placeholder={data.phone_number}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
+              <CustomInput
+                id="email"
+                label="E-mail :"
+                name="email"
+                type="text"
+                placeholder={data.email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <CustomInput
+                id="phone_number"
+                label="Telepon :"
+                name="phone_number"
+                type="text"
+                placeholder={data.phone_number}
+                onChange={(e) => setPhone(e.target.value)}
+              />
 
 
 
@@ -228,13 +211,12 @@ const Profile = () => {
                 <CustomButton
                   id="btn-update"
                   label="Perbarui Profile"
-                  loading={!fullName && !address && !email && !phone }
+                  loading={!fullName && !address && !email && !phone}
                 />
               </div>
             </div>
           </div>
         </form>
-
       </Modal>
 
     </Layout>
