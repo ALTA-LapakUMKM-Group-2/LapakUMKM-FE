@@ -5,10 +5,35 @@ import FotoProfile from '../assets/profile.jpg'
 import { formatValue } from 'react-currency-input-field'
 import CustomButton from '../components/CustomButton'
 import CartCard from '../components/CartCard'
+import { useCookies } from 'react-cookie'
 import produk from '../dummy/prouct.json'
 import axios from 'axios'
 
 const Cart = () => {
+
+    const [loading, setLoading] = useState(false)
+    const [data, setData] = useState<any>([])
+    const [cookies, setCookies,removeCookies] = useCookies(['token'])
+
+    const getProfile = async () => {
+        setLoading(true)
+        try {
+            const res = await axios.get('https://lapakumkm.mindd.site/users', {
+                headers: {
+                Authorization: `Bearer ${cookies.token}`
+                }
+            })
+            setData(res.data.data)
+            console.log(res.data.data)
+        } catch (error) {
+    
+        }
+        setLoading(false)
+    }
+    
+    useEffect(() => {
+        getProfile()
+    }, [])
 
     const [price, setPrice] = useState<number>(0)
     const [totalPrice, setTotalPrice] = useState<number>(price)
@@ -29,16 +54,18 @@ const Cart = () => {
         const allCheckboxesChecked = Array.from(allCheckboxes).every(
             (checkbox) => (checkbox as HTMLInputElement).checked
         );
-        const newPrice = allCheckboxesChecked ? price + productPrice : price - productPrice;
+        const newPrice = allCheckboxesChecked ? price - productPrice : price + productPrice;
         setPrice(newPrice);
         setChecked(allCheckboxesChecked);
     };
+
+    const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
     const fetchDataCart = async () => {
         try {
             const response = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/carts',{
                 headers: {
-                    Accept: 'application/json'
+                    Authorization: `Bearer ${cookies.token}`
                 }
             })
             setCart(response.data.data)
@@ -70,9 +97,9 @@ const Cart = () => {
     return (
         <Layout>
             <Navbar
-            imgUser={FotoProfile}
-            name='paisalll'
-            email='faizaltriasaa@gmail.com'
+            imgUser={data.photo_profile ? data.photo_profile : FotoProfile }
+            name={data.full_name}
+            email={data.email}
             />
             <div className="flex flex-row mx-auto space-x-20 relative justify-center box-content border shadow-xl mt-20 w-[1200px] bg-white p-10">
                     <div className="flex ">

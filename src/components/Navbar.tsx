@@ -19,10 +19,9 @@ interface NavbarProps {
     handleProfile?: React.MouseEventHandler;
     children?: React.ReactNode
     imgUser?: string
-    searchTerm?: string
 }
 
-const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, imgUser,searchTerm }) => {
+const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, imgUser }) => {
 
 
     // handle log out
@@ -62,8 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         });
     }
 
-    //Handle Profile Picture
- 
+    //Handle Profile Picture 
     const [img, setImg] = React.useState<any>()
 
     return (
@@ -75,19 +73,15 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     </button >
                 </div>
                 <div className="w-full justify-center mx-20">
-
-                    <form>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <AiOutlineSearch className='w-5 h-5 text-gray-900' />
-                            </div>
-                            <input type="search" className="block input-accent w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50" placeholder="Search Produk" required />
-                            <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-lapak hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
-                            </div>
-                    </form>
+                    {children}
                 </div>
                 <div className="flex">
-                    <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10' />
+                    <div className="tooltip tooltip-bottom tooltip-accent" data-tip="Keranjang">
+                        <div className="indicator">
+                        <span className="indicator-item badge mx-10 ">99+</span> 
+                            <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10 cursor-pointer' onClick={()=> navigate('/cart')}/>
+                        </div>
+                    </div>
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="">
 

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Loading from '../components/Loading'
 import Loading2 from '../components/Loading2'
+import Search from '../components/Search'
 
 const Home = () => {
 
@@ -41,6 +42,7 @@ const Home = () => {
                 name='Paisalll'
                 email='faizaltriasaa@gmail.com'
                 imgUser={FotoProfile}
+                children={<Search/>}
             />
             <div className="flex flex-col w-11/12">
                 <div className="flex mt-10 space-x-10 mx-auto w-3/6">
