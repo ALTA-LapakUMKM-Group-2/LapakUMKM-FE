@@ -34,6 +34,7 @@ const Home = () => {
         getAllList()
     }, [])
     console.log(data);
+
     return (
         <Layout>
             <Navbar
@@ -60,22 +61,22 @@ const Home = () => {
                 <div className="my-4 gap-y-5 gap-x-5 grid grid-cols-5 mx-auto mt-10">
 
                     {
-                       loading ? <Loading /> :
-                       data?.map((item: any) => {
-                      
-                        return (
-                            <ProdukCard
-                                produkName={item.product_name}
-                                location='jakarta'
-                                sell={item.stock_sold}
-                                id={1}
-                                key={1}
-                                image={'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
-                                rating={4}
-                                price={item.price}
-                            />
-                        )
-                    })
+                        loading ? <Loading /> :
+                            data?.map((item: any, index) => {
+
+                                return (
+                                    <ProdukCard
+                                        key={index}
+                                        produkName={item.product_name}
+                                        location='jakarta'
+                                        sell={item.stock_sold}
+                                        id={item.id}
+                                        image={'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
+                                        rating={4}
+                                        price={item.price}
+                                    />
+                                )
+                            })
                     }
 
 
