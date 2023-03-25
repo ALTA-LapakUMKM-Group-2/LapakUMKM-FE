@@ -105,12 +105,15 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     }
 
     return (
-        <div className="navbar w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
+        <div className="navbar py-4 w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
             <div className='flex gap-4 justify-between w-full mx-10'>
                 <div>
                     <button onClick={() => navigate("/home")} className="font-semibold md:flex text-4xl text-white hover:text-accent">
                         <img src={Logo} alt="Lapak_umkm" className='w-24' />
                     </button >
+                </div>
+                <div className="w-full justify-center mx-20">
+                    {children}
                 </div>
                 <div className="flex">
                     <div className="tooltip tooltip-bottom tooltip-accent" data-tip="Keranjang">
