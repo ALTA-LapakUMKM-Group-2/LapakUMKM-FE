@@ -1,1 +1,3 @@
-export interface DataTypes { }
+export interface CartTypes {
+
+}
