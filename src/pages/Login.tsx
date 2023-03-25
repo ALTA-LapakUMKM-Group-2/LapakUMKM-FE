@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
-import { useCookies } from 'react-cookie';
+import { Cookies, useCookies } from 'react-cookie';
 import axios from 'axios';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
@@ -17,7 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const MySwal = withReactContent(Swal);
-  const [cookie, setCookie] = useCookies(["token", "user"]);
+  const [cookie, setCookie] = useCookies(["token", "user", "email"]);
   const [disable, setDisable] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -51,7 +51,8 @@ const Login = () => {
 
         const { message } = res.data
         setCookie("token", res.data.data.token, { path: "/" });
-        setCookie('user', res.data.data.user, {path: '/'} )
+        setCookie('user', res.data.data.user.full_name, { path: '/' })
+        setCookie('email', res.data.data.user.email, { path: '/' })
         dispatch(handleAuth(true))
         MySwal.fire({
           icon: "success",

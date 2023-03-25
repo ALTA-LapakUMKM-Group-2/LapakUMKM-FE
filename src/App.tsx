@@ -31,7 +31,6 @@ function App() {
 
   return (
     <>
-      <button onClick={handleToggleTheme}>Toggle Theme</button>
 
       <BrowserRouter>
         <Routes>
