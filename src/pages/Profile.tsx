@@ -286,7 +286,6 @@ const Profile = () => {
           </div>
 
           <Modal isOpen={modalPassword} isClose={() => setModalPassword(false)}>
-
             <form onSubmit={(e) => changePassword(e)} className=" flex flex-col md:flex-col lg:flex-col py-5" title="Ganti Password">
 
               <CustomInput
