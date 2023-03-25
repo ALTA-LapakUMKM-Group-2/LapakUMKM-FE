@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useDispatch } from "react-redux";
+import { handleAuth } from '../utils/redux/reducer/reducer';
+import Swal from 'sweetalert2';
+
+import Logo from '../assets/LapakUmkm2.png'
 import { HiCog6Tooth } from 'react-icons/hi2'
-import { FaSignOutAlt } from 'react-icons/fa'
+import { FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'
 import { MdOutlineWorkHistory } from 'react-icons/md'
 import { MdOutlineShoppingCart } from 'react-icons/md'
 import { AiOutlineSearch } from 'react-icons/ai'
-import Logo from '../assets/LapakUmkm2.png'
 
-import Swal from 'sweetalert2';
-import axios from 'axios';
+
 
 
 
@@ -25,10 +28,12 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
 
     // handle log out
-    const [cookies, setCookie, removeCookie] = useCookies(['session', 'role','token']);
+    const dispatch = useDispatch()
+    const [cookies, setCookie, removeCookie] = useCookies(['user', 'token', "email"]);
+    const checkToken = cookies.token
+    const checkUser = cookies.user
+    const checkEmail = cookies.email
     const navigate = useNavigate()
-
-
 
     const handleLogout = () => {
         Swal.fire({
@@ -53,8 +58,9 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     showConfirmButton: false,
                     timer: 1500,
                 })
-                removeCookie('session');
-                removeCookie('role');
+                dispatch(handleAuth(false));
+                removeCookie('user');
+                removeCookie('email');
                 removeCookie('token');
                 navigate("/");
             }
@@ -66,20 +72,17 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     return (
         <div className="navbar w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
-            <div className='flex gap-4 flex-between justify-center w-full mx-10'>
+            <div className='flex gap-4 justify-between w-full mx-10'>
                 <div>
                     <button onClick={() => navigate("/home")} className="font-semibold md:flex text-4xl text-white hover:text-accent">
                         <img src={Logo} alt="Lapak_umkm" className='w-24' />
                     </button >
                 </div>
-                <div className="w-full justify-center mx-20">
-                    {children}
-                </div>
                 <div className="flex">
                     <div className="tooltip tooltip-bottom tooltip-accent" data-tip="Keranjang">
                         <div className="indicator">
-                        <span className="indicator-item badge mx-10 ">99+</span> 
-                            <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10 cursor-pointer' onClick={()=> navigate('/cart')}/>
+                            <span className="indicator-item badge mx-10 ">99+</span>
+                            <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10 cursor-pointer' onClick={() => navigate('/cart')} />
                         </div>
                     </div>
                     <div className="dropdown dropdown-end">
@@ -93,24 +96,28 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
                         </label>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold">
-                            <div className="px-4 py-3 text-sm text-gray-900">
-                                <div>{name}</div>
-                                <div className="font-medium truncate">{email}</div>
-                            </div>
-                            <li onClick={() => navigate('/profile')}><a id='link-profile'>
+                            {checkToken ?
+                                <>
+                                    <div className="px-4 py-3 text-sm text-gray-900">
+                                        <div> {checkUser}</div>
+                                        <div className="font-medium truncate">{checkEmail}</div>
+                                    </div>
+                                </>
+                                : <></>}
+                            <li onClick={() => checkToken ? navigate('/profile') : navigate('/')}><a id='link-profile'>
 
                                 <HiCog6Tooth />
                                 Profile
                             </a>
                             </li>
-                            <li onClick={() => navigate('/')}><a>
+                            <li onClick={() => checkToken ? navigate('/historypembeli') : navigate('/')}><a>
                                 <MdOutlineWorkHistory />
                                 Your History
                             </a>
                             </li>
-                            <li onClick={handleLogout}><a>
-                                <FaSignOutAlt />
-                                Sign Out
+                            <li onClick={() => checkToken ? handleLogout() : navigate("/login")}><a>
+                                {checkToken ? <FaSignOutAlt /> : <FaSignInAlt />}
+                                {checkToken ? "Keluar" : "Masuk"}
                             </a>
                             </li>
                         </ul>

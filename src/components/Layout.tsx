@@ -1,18 +1,15 @@
-import React, { FC } from "react";
+import React, { ReactNode } from "react";
 
-interface Props {
-    children: React.ReactNode
-    image?: string | any
+interface LayoutProps {
+    children: ReactNode;
 }
 
-const Layout: FC<Props> = ({ children, image }) => {
-    {
-        return (
-            <div className={`flex flex-col justify-center items-center w-full h-full bg-gray-100  ${image}`}>
-                {children}
-            </div>
-        )
-    }
+const Layout = ({ children }: LayoutProps) => {
+    return (
+        <div className="h-screen w-full overflow-auto ">
+            <div className="h-full w-full overflow-auto bg-gray-100">{children}</div>
+        </div>
+    );
 };
 
 export default Layout;
