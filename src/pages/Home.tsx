@@ -34,16 +34,11 @@ const Home = () => {
     useEffect(() => {
         getAllList()
     }, [])
-    console.log(data);
 
     return (
         <Layout>
-            <Navbar
-            // name='Paisalll'
-            // email='faizaltriasaa@gmail.com'
-            // imgUser={FotoProfile}
-            // children={<Search />}
-            />
+            <Navbar />
+
             <div className="flex flex-col w-11/12">
                 <div className="flex mt-10 space-x-10 mx-auto w-3/6">
                     <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none"

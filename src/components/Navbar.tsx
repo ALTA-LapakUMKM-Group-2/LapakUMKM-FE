@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from "react-redux";
 import { handleAuth } from '../utils/redux/reducer/reducer';
+import axios from 'axios';
+
 import Swal from 'sweetalert2';
 
 import Logo from '../assets/LapakUmkm2.png'
+import Default from '../assets/default.jpg'
+
 import { HiCog6Tooth } from 'react-icons/hi2'
 import { FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'
 import { MdOutlineWorkHistory } from 'react-icons/md'
@@ -26,14 +30,15 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, imgUser }) => {
 
-
     // handle log out
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['user', 'token', "email"]);
+    const [cookies, setCookie, removeCookie] = useCookies(['user', 'token', "email", "photo"]);
     const checkToken = cookies.token
     const checkUser = cookies.user
     const checkEmail = cookies.email
+    const checkFoto = cookies.photo
     const navigate = useNavigate()
+    const [cart, setCart] = useState([])
 
     const handleLogout = () => {
         Swal.fire({
@@ -67,8 +72,37 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         });
     }
 
-    //Handle Profile Picture 
-    const [img, setImg] = React.useState<any>()
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    function fetchData() {
+        axios
+            .get(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/carts`, {
+                headers: {
+                    Authorization: `Bearer ${checkToken}`
+                }
+            })
+            .then((res) => {
+                const { data } = res.data
+                setCart(data)
+            })
+            .catch((err) => {
+                const { statusText } = err.response
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: statusText,
+                    text: "Gagal Download Cart",
+                    iconColor: '#31CFB9',
+                    color: '#353E3C',
+                    background: '#ffffff ',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    timer: 1500,
+                })
+            })
+    }
 
     return (
         <div className="navbar w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
@@ -81,7 +115,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 <div className="flex">
                     <div className="tooltip tooltip-bottom tooltip-accent" data-tip="Keranjang">
                         <div className="indicator">
-                            <span className="indicator-item badge mx-10 ">99+</span>
+                            <span className="indicator-item badge mx-10 ">{cart.length}</span>
                             <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10 cursor-pointer' onClick={() => navigate('/cart')} />
                         </div>
                     </div>
@@ -90,7 +124,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
                             <div className="avatar">
                                 <div className="w-14 rounded-full">
-                                    <img src={imgUser} />
+                                    <img src={checkToken ? checkFoto : Default} />
                                 </div>
                             </div>
 

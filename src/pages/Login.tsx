@@ -18,7 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const MySwal = withReactContent(Swal);
-  const [cookie, setCookie] = useCookies(["token", "user", "email"]);
+  const [cookie, setCookie] = useCookies(["token", "user", "email", "photo"]);
   const [disable, setDisable] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -54,6 +54,7 @@ const Login = () => {
         setCookie("token", res.data.data.token, { path: "/" });
         setCookie('user', res.data.data.user.full_name, { path: '/' })
         setCookie('email', res.data.data.user.email, { path: '/' })
+        setCookie('photo', res.data.data.user.photo_profile, { path: '/' })
         dispatch(handleAuth(true))
         MySwal.fire({
           icon: "success",
