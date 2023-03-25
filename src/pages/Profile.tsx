@@ -62,32 +62,6 @@ const Profile = () => {
     }
   }
 
-  const [oldPassword, setOldPassword] = useState<string>("");
-  const [newPassword, setNewPassword] = useState<string>("");
-  const [verivyPassword, setVerivyPassword] = useState<string>("");
-  const [modalPassword, setModalPassword] = useState<boolean>(false);
-  const [hide, setHide] = useState<boolean>(false)
-  const [hideConfirm, setHideConfirm] = useState<boolean>(false)
-
-
-  const handleVerified = () => {
-    MySwal.fire({
-      icon: "info",
-      title: "Ingin melanjutkan verifikasi ?",
-      text: "pilih lanjutkan",
-      confirmButtonText: "lanjutkan",
-      confirmButtonColor: "#31CFB9",
-      reverseButtons: true,
-      showCancelButton: true,
-      cancelButtonText: "kembali",
-      cancelButtonColor: "#db1f1f"
-    }).then((lanjutkan) => {
-      if (lanjutkan.isConfirmed) {
-        console.log("oke")
-      }
-    })
-  }
-
   const getProfile = async () => {
     setLoading(true)
     try {
@@ -115,7 +89,6 @@ const Profile = () => {
   const [phone, setPhone] = useState('')
   const [cookies, setCookies, removeCookies] = useCookies(['token'])
   const [imageProfile, setImageProfile] = useState<File>()
-  console.log("test token ", cookies.token);
   const id = useParams()
 
 
@@ -194,6 +167,12 @@ const Profile = () => {
 
 
 
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [verivyPassword, setVerivyPassword] = useState<string>("");
+  const [modalPassword, setModalPassword] = useState<boolean>(false);
+  const [hide, setHide] = useState<boolean>(false)
+  const [hideConfirm, setHideConfirm] = useState<boolean>(false)
 
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
@@ -243,11 +222,7 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    if (oldPassword === "" && newPassword === "" && verivyPassword === "") {
-      setDisable(true);
-    } else {
-      setDisable(false);
-    }
+    oldPassword && newPassword && verivyPassword ? setDisable(false) : setDisable(true);
   }, [oldPassword, newPassword, verivyPassword]);
 
   return (
@@ -426,8 +401,6 @@ const Profile = () => {
                     placeholder={data.phone_number}
                     onChange={(e) => setPhone(e.target.value)}
                   />
-
-
 
                   <div className="mt-8">
                     <CustomButton
