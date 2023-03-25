@@ -131,20 +131,20 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     return (
         <div className="navbar py-4 w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
-            <div className='flex gap-4 justify-between w-full mx-10'>
+            <div className='flex gap-4 justify-between w-full md:mx-10'>
                 <div>
                     <button onClick={() => navigate("/home")} className="font-semibold md:flex text-4xl text-white hover:text-accent">
                         <img src={Logo} alt="Lapak_umkm" className='w-24' />
                     </button >
                 </div>
-                <div className="w-full justify-center mx-20">
+                <div className="w-full justify-center md:mx-20">
                     {children}
                 </div>
                 <div className="flex">
                     <div className="tooltip tooltip-bottom tooltip-accent" data-tip="Keranjang">
                         <div className="indicator">
-                            <span className="indicator-item badge mx-10 ">{cart.length}</span>
-                            <MdOutlineShoppingCart className='text-gray-900 w-10 h-10 my-auto mx-10 cursor-pointer' onClick={() => navigate('/cart')} />
+                            <span className="indicator-item badge md:mx-10 ">{cart.length}</span>
+                            <MdOutlineShoppingCart className='text-gray-900 w-8 h-8 md:w-10 md:h-10 my-auto md:mx-10 cursor-pointer' onClick={() => navigate('/cart')} />
                         </div>
                     </div>
                     <div className="dropdown dropdown-end">

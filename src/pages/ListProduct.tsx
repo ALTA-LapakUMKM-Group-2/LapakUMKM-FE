@@ -46,6 +46,7 @@ const ListProduct = () => {
   const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [showAddProduk, setShowAddProduk] = useState(false)
   const [showEditProduk, setShowEditProduk] = useState(false)
+  const [showImage, setShowImage] = useState(false)
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [category, setCategory] = useState<any>([])
   const [dropZoneStyle, setDropZoneStyle] = useState('border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50');
@@ -527,8 +528,8 @@ const ListProduct = () => {
             </div>
           </div>
 
-          <div className="relative overflow-x-auto mt-8 mx-auto">
-            <table className="w-60 sm:w-96 md:w-[700px] lg:w-[900px] text-left text-gray-500 ">
+          <div className="relative overflow-x-auto mt-8 mx-auto w-full">
+            <table className="sm:w-96 md:w-[700px] lg:w-[900px] text-left text-gray-500 overflow-x-auto">
               <thead className="text-[12px] md:text-[16px] text-zinc-800 font-semibold bg-white">
                 <tr className="border-b-2">
                   <th scope="col" className="px-4 py-3">
@@ -558,7 +559,7 @@ const ListProduct = () => {
                   </th>
 
                   <td className="px-8 py-">
-                    <img src={Kaos} alt="produk.jpg" className="float-left w-12 md:w-20 mr-2" />
+                    <img src={Kaos} alt="produk.jpg" className="float-left w-12 md:w-20 mr-2 cursor-pointer" onClick={()=>setShowImage(true)}/>
                     <p>Kaos Lengan Pendek</p>
                     <p className="flex items-end gap-1"><AiFillStar className="text-yellow-400" size={24} /> 4.5</p>
                   </td>
@@ -635,7 +636,76 @@ const ListProduct = () => {
           </div>
         </div>
       </div>
-
+      <Modal
+      isOpen={showImage}
+      isClose={()=>setShowImage(false)}
+      title="Gambar Produk"
+      >
+        <div className="flex">
+          <label htmlFor="dropzone-file" 
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50`}>
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <BiImageAdd
+              aria-hidden='true'
+              className="w-10 h-10 mb-3 text-gray-400"
+              />
+                {
+                  selectedImages.length > 0 ? 
+                    selectedImages.map((item:any, index:any) => {
+                      return(
+                        <div key={index}>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{item.name}</p>
+                        </div>
+                      )
+                    })
+                  :
+                  <>
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                  </>    
+                }
+            </div>
+              <input id="dropzone-file" type="file" className="hidden" 
+              accept="image.png, image.jpeg, image.jpg"
+              multiple
+              onChange={handleImageChange}
+              />
+          </label>
+          <label htmlFor="dropzone-file" 
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50`}>
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <BiImageAdd
+              aria-hidden='true'
+              className="w-10 h-10 mb-3 text-gray-400"
+              />
+                {
+                  selectedImages.length > 0 ? 
+                    selectedImages.map((item:any, index:any) => {
+                      return(
+                        <div key={index}>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{item.name}</p>
+                        </div>
+                      )
+                    })
+                  :
+                  <>
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                  </>    
+                }
+            </div>
+              <input id="dropzone-file" type="file" className="hidden" 
+              accept="image.png, image.jpeg, image.jpg"
+              multiple
+              onChange={handleImageChange}
+              />
+          </label>
+        </div>
+      </Modal>
 
     </Layout >
   )

@@ -34,6 +34,28 @@ const Home = () => {
     useEffect(() => {
         getAllList()
     }, [])
+
+
+    const [category, setCategory] = useState<any>([])
+    const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
+
+    const fetchCategory = async () => {
+        try {
+            const res = await axios.get(categoryEndpoint,{
+                headers:{
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InVzZXIiLCJleHAiOjE2Nzk5MTc2MjN9.K8lerhsq124A_-y4Lf8gNAPIJtLe9xRUMLKjN_tWIZA`
+                }
+            })
+            setCategory(res.data.data)
+        } catch (error) {
+    
+        }
+    }
+    
+    useEffect(() => {
+        fetchCategory()
+    }, [])
+   
    console.log(data);
    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
@@ -42,23 +64,24 @@ const Home = () => {
                 children={<Search onSearch={(e) => setSearch(e.target.value)} />}
             />
 
-            <div className="flex flex-col w-11/12">
-                <div className="flex mt-10 space-x-10 mx-auto w-3/6">
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none"
-                        onClick={() => navigate(`/home/${kategori}`, {
-                            state: {
-                                kategori: setKategori("kaos")
-                            }
-                        })}>
-                        Kaos
-                    </button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Celana</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Sepatu</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Sendal</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Sembako</button>
-                    <button className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none">Kerajinan</button>
+            <div className="flex flex-col w-11/12 mx-auto items-center">
+                <div className="mt-10 mx-auto w-3/6">
+                    <p>Kategori</p>
+                    <div className="flex w-full space-x-10 relative overflow-x-auto">
+                        {category.map((item:any, index:any) => {
+                            return(
+                                <button key={index} id={item.id} className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none"
+                                onClick={() => navigate(`/home/${item.category}`, {
+                                    state: {
+                                        id: item.id
+                                    }
+                                })}>{item.category}</button>
+                                )
+                            })        
+                        } 
+                    </div>
                 </div>
-                <div className="my-4 gap-y-5 gap-x-5 grid grid-cols-5 mx-auto mt-10">
+                <div className="my-4 gap-y-5 gap-x-5 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 mx-auto mt-10">
 
                     {
                         loading ? <Loading /> :

@@ -11,6 +11,9 @@ interface CartProps{
     price: number
     onCheck: React.ChangeEventHandler
     children?: React.ReactNode
+    totalPrice: number
+    handleIncrement: React.MouseEventHandler
+    handleDecrement: React.MouseEventHandler
 }
 
 const CartCard: React.FC<CartProps> = ({
@@ -22,22 +25,24 @@ const CartCard: React.FC<CartProps> = ({
     price,
     onCheck,
     counts,
-    children
+    children,
+    totalPrice,
+    handleIncrement,
+    handleDecrement
 }) => {
 
-    const [totalPrice, setTotalPrice] = React.useState<number>(price)
-    const [count, setCount] = React.useState(counts)
+    // const [count, setCount] = React.useState(counts)
     
     
 
-    const handleIncrement = () => {
-        setCount(count + 1)
-    }
-    const handleDecrement = () => {
-        if(count > 1){
-            setCount(count - 1)
-        } 
-    }
+    // const handleIncrement = () => {
+    //     setCount(count + 1)
+    // }
+    // const handleDecrement = () => {
+    //     if(count > 1){
+    //         setCount(count - 1)
+    //     } 
+    // }
 
     return (
         <div id={id} className="grid gap-y-3 relative items-center bg-white border-y-2 border-gray-200 rounded-lg  p-4 md:flex-row md:max-w-xl">
@@ -54,7 +59,7 @@ const CartCard: React.FC<CartProps> = ({
                 src={produkimg} alt=""/>
                 <div className="flex flex-col p-4 leading-normal w-60">
                     <h5 className="mb-2 text-xl font-semibold tracking-tight text-gray-900 ">{produkName}</h5>
-                    <p className="font-normal text-gray-700 ">{count} pcs</p>
+                    <p className="font-normal text-gray-700 ">{counts} pcs</p>
                     <p className="font-semibold text-gray-700 ">
                         {formatValue({
                         value: JSON.stringify(price),
@@ -64,8 +69,8 @@ const CartCard: React.FC<CartProps> = ({
                         })}
                     </p>
                     <p className="font-semibold text-gray-700 ">
-                        {"Total : "} {count > 1 ? formatValue({
-                        value: JSON.stringify(totalPrice * count),
+                        {"Total : "} {counts > 1 ? formatValue({
+                        value: JSON.stringify(totalPrice),
                         groupSeparator: '.',
                         decimalSeparator: ',',
                         prefix: 'Rp. ',
@@ -73,9 +78,9 @@ const CartCard: React.FC<CartProps> = ({
                     </p>
                 </div>
                     <div className="flex mt-40">
-                        <button onClick={()=>handleDecrement()} className='btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 text-2xl mb-3 mr-5 ml-2'>-</button>
-                        <h1 className=''>{count}</h1>
-                        <button onClick={()=>handleIncrement()} className='btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 text-2xl mb-3 ml-5 mr-2'>+</button>
+                        <button onClick={handleDecrement} className='btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 text-2xl mb-3 mr-5 ml-2'>-</button>
+                        <h1 className=''>{counts}</h1>
+                        <button onClick={handleIncrement} className='btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 text-2xl mb-3 ml-5 mr-2'>+</button>
                     </div>
                 </div>
             </div>
