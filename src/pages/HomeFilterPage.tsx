@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Layout from '../components/Layout'
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
@@ -10,7 +10,9 @@ import CustomInput from '../components/CutomInput'
 import CurrencyInput from 'react-currency-input-field';
 import CustomButton from '../components/CustomButton'
 import ChatModal from '../components/ChatModal'
-
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
+ 
     interface FormValues {
     minprice: number;
     maxprice: number;
@@ -34,7 +36,7 @@ const HomeFilter = () => {
     };
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFormValues({ ...formValues, [e.target.name]: e.target.value})
+        setFormValues({ ...formValues, [e.target.name]: e.target.value })
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,7 +54,28 @@ const HomeFilter = () => {
         inactiveFillColor: '#ffffff',
 
     };
-
+     const productEndpoint = 'https://lapakumkm.mindd.site/products'
+  const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
+    const [category,setCategory] =useState<any>([''])
+    const[cookie,setCookie] = useCookies(['toket'])
+    const fetchCategory = async () => {
+        try {
+          const res = await axios.get(categoryEndpoint,{
+            headers:{
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InVzZXIiLCJleHAiOjE2Nzk5MTc2MjN9.K8lerhsq124A_-y4Lf8gNAPIJtLe9xRUMLKjN_tWIZA`
+            }
+          })
+          setCategory(res.data.data)
+        } catch (error) {
+    
+        }
+      }
+    
+      useEffect(() => {
+        fetchCategory()
+      }, [])
+console.log('test kategori', category);
+const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
             <Navbar
@@ -86,12 +109,13 @@ const HomeFilter = () => {
                                             value={formValues.kategori}
                                             onChange={handleSelectChange}
                                             >
-                                                <option value={'kaos'}>Kaos</option>
-                                                <option value={'sepatu'}>Sepatu</option>
-                                                <option value={'celana'}>Celana</option>
-                                                <option value={'sembako'}>Sembako</option>
-                                                <option value={'sendal'}>Sendal</option>
-                                                <option value={'tas'}>Tas</option>
+                                             { 
+                                                 category?.map((item: any, i:number)=> {
+                                                    return (
+                                                        <option value={item.id}>{item.category}</option>
+                                                    )
+                                                 })  
+                                             }
                                             </select>
                                         </div>
                                         <div className="w-full">

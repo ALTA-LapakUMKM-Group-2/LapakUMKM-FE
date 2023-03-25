@@ -68,7 +68,7 @@ const Toko = () => {
                     </ChatModal>
                     {/*  */}
                     <div className='flex flex-col mx-auto'>
-                        <div className='flex flex-col rounded-md bg-white shadow-xl mt-5 mb-5 p-10 w-[500px] mx-auto'>
+                        <div className='flex flex-col rounded-md bg-white border-lapak border mt-5 mb-5 p-10 w-[500px] mx-auto'>
                             <div className='flex w-fit gap-5 '>
                                 <img src={FotoProfile} className='w-40 rounded-full' />
                                 <div className='font-bold text-lg'>
