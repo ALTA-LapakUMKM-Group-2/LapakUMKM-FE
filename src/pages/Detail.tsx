@@ -17,6 +17,8 @@ import product from '../dummy/prouct.json'
 import Loading from '../components/Loading'
 import { useCookies } from 'react-cookie'
 
+
+
 const Detail = () => {
   const { id } = useParams();
   const MySwal = withReactContent(Swal);
@@ -55,40 +57,8 @@ const Detail = () => {
   useEffect(() => {
     fetchData();
   }, [])
+
   
-  function fetchData() {
-    setLoading(true);
-    axios
-    .get(`https://lapakumkm.mindd.site/products/${id}`)
-      .then((res) => {
-        console.log('detail', res.data.data.user_id);
-        const { full_name, address } = res.data.data.user
-        const { product_name, description, price, stock_remaining, size ,user_id ,id} = res.data.data;
-        setProduct(product_name);
-        setDescription(description);
-        setPrice(price);
-        setStock(stock_remaining);
-        setSize(size)
-        setName(full_name)
-        setAddress(address)
-        setTotalPrice(price);
-        setUserId(user_id)
-        setProductId(id)
-      })
-      .catch((err) => {
-        console.log(err.response.statusText)
-        MySwal.fire({
-          icon: "error",
-          title: err.response.statusText,
-          text: "Gagal mengunduh data",
-          showCancelButton: false,
-          confirmButtonText: "Dibaca",
-          confirmButtonColor: "#31CFB9",
-          showConfirmButton: true
-        })
-      })
-      .finally(() => setLoading(false))
-    }
     console.log("alamat ", address);
     console.log("nama ", name);
 console.log('total price', totalPrice);
@@ -104,7 +74,6 @@ const addToCart =  async () => {
     product_id: parseInt(productId),
     product_pcs: count,
     user_id: userId
-
   };
   console.log(typeof data);
   console.log(typeof count);
@@ -143,7 +112,47 @@ const res = await axios.post('https://lapakumkm.mindd.site/carts', data ,{
 
 }
 
+const [image, setImage] = useState<any>([])
+  function fetchData() {
+    setLoading(true);
+    axios
+    .get(`https://lapakumkm.mindd.site/products/${id}`)
+    .then((res) => {
+      console.log('detail', res.data.data);
+      const { full_name, address } = res.data.data.user
+      const { product_name, description, price, stock_remaining, size ,user_id ,id, product_image } = res.data.data;
+      setProduct(product_name);
+      setDescription(description);
+      setPrice(price);
+      setStock(stock_remaining);
+      setSize(size)
+      setName(full_name)
+      setAddress(address)
+      setTotalPrice(price);
+      setUserId(user_id)
+      setProductId(id)
+      setImage(product_image)
+    })
+    .catch((err) => {
+      console.log(err.response.statusText)
+      MySwal.fire({
+        icon: "error",
+        title: err.response.statusText,
+        text: "Gagal mengunduh data",
+        showCancelButton: false,
+        confirmButtonText: "Dibaca",
+          confirmButtonColor: "#31CFB9",
+          showConfirmButton: true
+        })
+      })
+      .finally(() => setLoading(false))
+    }
+//  console.log('check image', image[0].image);
+//  console.log(JSON.stringify(image[0]?.image));
+ 
+// console.log(image[0].image);
 
+const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
   return (
     <Layout>
       {
@@ -188,12 +197,22 @@ const res = await axios.post('https://lapakumkm.mindd.site/carts', data ,{
                   {/* Card kiri */}
                   <div className="bg-white">
                     <div className="max-w-5xl max-h-96">
-                      <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                      <img src={imgUrl + image[1]?.image} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                      {/* <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" /> */}
                     </div>
                     <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                    {
+                      image.map((item:any) => {
+                        console.log("test image", item);
+                        return (
+                        <>
+                            <img src={imgUrl + item.image} className="w-full h-md rounded-md max-w-xs" alt="" />
+                           
+                        </>
+                        )
+                      })
+                    }
+                    
                     </div>
                   </div>
                   {/* Card kanan */}

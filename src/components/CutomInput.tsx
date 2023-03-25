@@ -14,7 +14,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const CustomInput = ({ id, label, name, type, placeholder, value, onChange, classes, ...props }: InputProps) => {
   return (
     <div>
-      <label className="text-zinc-800 text-[18px] font-semibold" htmlFor={name}>
+      <label className="text-zinc-800 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] font-semibold" htmlFor={name}>
         {label}
       </label>
 

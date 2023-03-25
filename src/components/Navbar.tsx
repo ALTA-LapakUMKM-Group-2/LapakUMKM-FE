@@ -32,13 +32,13 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     // handle log out
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['user', 'token', "email", "photo"]);
+    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
     const checkToken = cookies.token
-    const checkUser = cookies.user
-    const checkEmail = cookies.email
-    const checkFoto = cookies.photo
     const navigate = useNavigate()
     const [cart, setCart] = useState([])
+    const [nama, setNama] = useState<string>("")
+    const [mail, setMail] = useState<string>("")
+    const [photo, setPhoto] = useState<string>("")
 
     const handleLogout = () => {
         Swal.fire({
@@ -64,8 +64,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     timer: 1500,
                 })
                 dispatch(handleAuth(false));
-                removeCookie('user');
-                removeCookie('email');
+                removeCookie('id');
                 removeCookie('token');
                 navigate("/");
             }
@@ -73,7 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     }
 
     useEffect(() => {
-        fetchData()
+        checkToken ? fetchData() : 0
     }, [])
 
     function fetchData() {
@@ -104,6 +103,32 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
             })
     }
 
+    useEffect(() => {
+        checkToken ? ProfileData() : ""
+    }, [])
+
+    function ProfileData() {
+        axios
+            .get(`https://lapakumkm.mindd.site/users`, {
+                headers: {
+                    Authorization: `Bearer ${checkToken}`
+                }
+            })
+            .then((res) => {
+                const { full_name, email, photo_profile } = res.data.data
+                setNama(full_name)
+                setMail(email)
+                setPhoto(photo_profile)
+
+                console.log(res.data.data.photo_profile)
+            })
+            .catch((err) => {
+                const { statusText } = err.response
+                console.log(statusText)
+
+            })
+    }
+
     return (
         <div className="navbar py-4 w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 justify-center">
             <div className='flex gap-4 justify-between w-full md:mx-10'>
@@ -126,8 +151,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                         <label tabIndex={0} className="">
 
                             <div className="avatar">
-                                <div className="w-10 md:w-14 rounded-full">
-                                    <img src={checkToken ? checkFoto : Default} />
+                                <div className="w-14 rounded-full">
+                                    <img src={checkToken || photo ? photo : Default} />
                                 </div>
                             </div>
 
@@ -136,8 +161,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                             {checkToken ?
                                 <>
                                     <div className="px-4 py-3 text-sm text-gray-900">
-                                        <div> {checkUser}</div>
-                                        <div className="font-medium truncate">{checkEmail}</div>
+                                        <div> {nama}</div>
+                                        <div className="font-medium truncate">{mail}</div>
                                     </div>
                                 </>
                                 : <></>}
@@ -152,7 +177,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                                 Your History
                             </a>
                             </li>
-                            <li onClick={() => checkToken ? handleLogout() : navigate("/login")}><a>
+                            <li onClick={() => checkToken ? handleLogout() : navigate("/")}><a>
                                 {checkToken ? <FaSignOutAlt /> : <FaSignInAlt />}
                                 {checkToken ? "Keluar" : "Masuk"}
                             </a>
