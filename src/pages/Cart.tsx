@@ -6,15 +6,54 @@ import { formatValue } from 'react-currency-input-field'
 import CustomButton from '../components/CustomButton'
 import CartCard from '../components/CartCard'
 import { useCookies } from 'react-cookie'
-import produk from '../dummy/prouct.json'
 import axios from 'axios'
 
-const Cart = () => {
+interface Product {
+    id: number
+    lapak_address: string 
+    lapak_name: string
+    product_id: number
+    product_name: string
+    product_pcs: number
+    product_price: number
+    user_id: number
+}
+interface CartData{
+    products: Product
+}
+
+
+// const initalCartValues: CartData = {
+//     products: []
+// }
+
+const Cart: React.FC<CartData> = ({products}) => {
 
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<any>([])
     const [cookies, setCookies,removeCookies] = useCookies(['token'])
+    const [checked, setChecked] = useState(false);
+    // const [cartData, setCartData] = useState<CartData>(initalCartValues)
+    const [selectedItems, setSelectedItems] = useState<Product[]>([]);
 
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Product) => {
+        const isChecked = e.target.checked;
+        setSelectedItems((prevState) => {
+            const updatedItems = isChecked
+                ? [...prevState, product]
+                : prevState.filter((selectedItem) => selectedItem.id !== product.id);
+        console.log(updatedItems);
+        return updatedItems;
+    });
+        console.log("selectedItems", selectedItems);
+    };
+
+
+    // const handleDeleteClick = () =>{
+    //     const updateProducts = products.filter((product:any)=> !selectedItems.some((selectedItems) => selectedItems.id === product.id))
+    //     setSelectedItems([])
+    //     console.log(selectedItems)
+    // }
     const getProfile = async () => {
         setLoading(true)
         try {
@@ -38,44 +77,54 @@ const Cart = () => {
     const [price, setPrice] = useState<number>(0)
     const [totalPrice, setTotalPrice] = useState<number>(price)
     const [count, setCount] = useState(1)
-    const [checked, setChecked] = useState(false);
-    const [cart, setCart] = useState([])
+    interface CartItem {
+        product_price: number;
+
+    }
+
+    const [cart, setCart] = useState<CartItem[]>([])
 
     const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
         setChecked(e.target.checked);
-        const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
         allCheckboxes.forEach((checkbox) => {
-            (checkbox as HTMLInputElement).checked = e.target.checked;
+            checkbox.checked = e.target.checked;
         });
+        setPrice(e.target.checked ? totalPrice + cart.reduce((prev, item) => prev + item.product_price, 0) : 0);
     };
 
     const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, productPrice: number) => {
-        const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
         const allCheckboxesChecked = Array.from(allCheckboxes).every(
-            (checkbox) => (checkbox as HTMLInputElement).checked
+            (checkbox) => checkbox.checked
         );
-        const newPrice = allCheckboxesChecked ? price - productPrice : price + productPrice;
-        setPrice(newPrice);
         setChecked(allCheckboxesChecked);
+        if (e.target.checked) {
+            setPrice(totalPrice + productPrice);
+        } else {
+            setPrice(Math.max(totalPrice - productPrice, 0));
+        }
     };
 
     const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
     const fetchDataCart = async () => {
         try {
-            const response = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/carts',{
+            const response = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/carts', {
                 headers: {
-                    Authorization: `Bearer ${cookies.token}`
+                Authorization: `Bearer ${cookies.token}`
                 }
-            })
-            setCart(response.data.data)
-            console.log(response.data.data)
-        } catch (error) {
-            console.log(error)
-        } finally {
+            });
+            const data = response.data.data
+            setCart(data);
+            setCount(response.data.data.product_pcs)
+            console.log(data);
+            } catch (error) {
+            console.log(error) ;
+            } finally {
 
-        }
-    }
+            }
+        };
 
 
     useEffect(() => {
@@ -127,14 +176,14 @@ const Cart = () => {
                                         <tr>
                                             <th>
                                                 <label>
-                                                    <input 
-                                                    type="checkbox" 
+                                                    <input
+                                                    type="checkbox"
                                                     className="checkbox"
-                                                    onChange={(e:any) => handleCheck(e, item.product_price)}
+                                                    onChange={(e) => handleCheckboxChange(e, item)}
                                                     />
                                                 </label>
                                             </th>
-                                                    <th>
+                                            <th>
                                                 <CartCard
                                                 key={item.id}
                                                 id={item.id}
@@ -145,6 +194,9 @@ const Cart = () => {
                                                 counts={item.product_pcs}
                                                 price={item.product_price}
                                                 onCheck={(e:any) => handleCheck(e, item.product_price)}
+                                                totalPrice={item.price * item.product}
+                                                handleDecrement={()=>handleDecrement()}
+                                                handleIncrement={()=>handleIncrement()}
                                                 />
                                             </th>
 
