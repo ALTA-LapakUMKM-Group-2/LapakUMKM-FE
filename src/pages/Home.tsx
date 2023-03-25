@@ -37,7 +37,9 @@ const Home = () => {
 
     return (
         <Layout>
-            <Navbar />
+            <Navbar
+                children={<Search />}
+            />
 
             <div className="flex flex-col w-11/12">
                 <div className="flex mt-10 space-x-10 mx-auto w-3/6">
