@@ -77,26 +77,19 @@ const Login = () => {
       })
       .finally(() => setLoading(false))
   }
-  const bg = {
-    backgroundImage: `linear-gradient(
-          rgba(0, 0, 0, 0.3),
-          rgba(0, 0, 0, 0.3)
-        ), url('${bgregis}')`,
-    backgroundSize: "cover",
-  };
 
   return (
     <Layout>
       {loading ? <Loading /> :
 
         <div className="login relative flex flex-col justify-center min-h-screen overflow-hidden">
-          <div className=" lg:my-16 2xl:my-8 p-4 md:p-6 lg:p-5 2xl:p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak w-9/12 md:w-6/12 lg:w-4/12 2xl:max-w-xl mx-auto">
-            <img src={LapakUmkm} className='flex justify-center mx-auto md:mb-10 lg:mb-10 2xl:mb-20 w-5/12 md:w-6/12 lg:w-6/12 2xl:w-7/12' />
+          <div className="lg:my-16 2xl:my-8 p-4 md:p-6 lg:p-5 2xl:p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak w-9/12 md:w-5/12 lg:w-3/12 2xl:max-w-xl mx-auto">
+            <img src={LapakUmkm} className='flex justify-center mx-auto md:mb-10 lg:mb-10 2xl:mb-20 w-5/12 md:w-5/12 lg:w-6/12 2xl:w-7/12' />
             <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full">
               <div className="mb-5">
                 <label
                   htmlFor="email"
-                  className="block text-sm md:text-[18px] lg:text-[18px] 2xl:text-[20px] font-semibold text-gray-800"
+                  className="block text-sm md:text-[16px] lg:text-[16px] 2xl:text-[18px] font-semibold text-gray-800"
                 >
                   Email
                 </label>
@@ -111,7 +104,7 @@ const Login = () => {
 
                 <label
                   htmlFor="password"
-                  className="block text-sm md:text-[18px] lg:text-[18px] 2xl:text-[20px] font-semibold text-gray-800"
+                  className="block text-sm md:text-[16px] lg:text-[16px] 2xl:text-[18px] font-semibold text-gray-800"
                 >
                   Password
                 </label>
@@ -130,7 +123,7 @@ const Login = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row lg:flex-row 2xl:flex-row items-center justify-between">
+              <div className="flex flex-col md:flex-row lg:flex-row 2xl:flex-row items-start md:items-center lg:items-center 2xl:items-center justify-between">
                 <div className="flex items-center">
                   <input
                     id="remember-me"
@@ -140,20 +133,20 @@ const Login = () => {
                   border-gray-300 rounded cursor-pointer"
                   />
                   <label htmlFor="remember-me" className="ml-2 block text-sm text-black font-medium">
-                    Remember me
+                    Ingat saya
                   </label>
                 </div>
 
                 <div className="text-sm">
                   <a href="#" className="font-medium text-black hover:underline ">
-                    Forgot password?
+                    Lupa password?
                   </a>
                 </div>
               </div>
               <div className="mt-10">
                 <CustomButton
                   id='btn-login'
-                  label='Login'
+                  label='Masuk'
                   loading={disable || loading}
                 />
               </div>
@@ -161,12 +154,12 @@ const Login = () => {
 
             <p className="mt-8 text-sm font-semibold  text-center text-gray-700">
               {" "}
-              Don't have an account?{" "}
+              Belum memiliki akun?{" "}
               <a
                 href="/register"
                 className="font-medium text-indigo-600 hover:underline"
               >
-                Sign up
+                Daftar
               </a>
             </p>
           </div>
