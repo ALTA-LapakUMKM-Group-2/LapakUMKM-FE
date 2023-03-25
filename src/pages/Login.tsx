@@ -12,6 +12,7 @@ import LapakUmkm from '../assets/LapakUmkm2.png'
 import bgregis from '../assets/bgregis.jpg'
 import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
 import CustomButton from '../components/CustomButton';
+import CustomInput from '../components/CutomInput';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -87,29 +88,29 @@ const Login = () => {
     <Layout>
       {loading ? <Loading /> :
 
-        <div className="relative flex flex-col justify-center min-h-screen overflow-hidden " >
-          <div className="w-full p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak lg:max-w-xl mx-auto">
-            <img src={LapakUmkm} width={300} className='flex justify-center mx-auto mb-20' />
+        <div className="login relative flex flex-col justify-center min-h-screen overflow-hidden">
+          <div className=" lg:my-16 2xl:my-8 p-4 md:p-6 lg:p-5 2xl:p-10 m-auto bg-white rounded-md shadow-xl shadow-lapak ring-2 ring-lapak w-9/12 md:w-6/12 lg:w-4/12 2xl:max-w-xl mx-auto">
+            <img src={LapakUmkm} className='flex justify-center mx-auto md:mb-10 lg:mb-10 2xl:mb-20 w-5/12 md:w-6/12 lg:w-6/12 2xl:w-7/12' />
             <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full">
-
               <div className="mb-5">
                 <label
                   htmlFor="email"
-                  className="block text-md font-semibold text-gray-800"
+                  className="block text-sm md:text-[18px] lg:text-[18px] 2xl:text-[20px] font-semibold text-gray-800"
                 >
                   Email
                 </label>
                 <input
                   type="email"
-                  className="input input-bordered input-accent w-96 max-w-lg"
+                  className="input input-bordered input-accent w-full max-w-lg pr-10"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
               <div className="mb-5">
+
                 <label
                   htmlFor="password"
-                  className="block text-md font-semibold text-gray-800"
+                  className="block text-sm md:text-[18px] lg:text-[18px] 2xl:text-[20px] font-semibold text-gray-800"
                 >
                   Password
                 </label>
@@ -121,14 +122,14 @@ const Login = () => {
                   />
                   <button
                     type="button"
-                    className="absolute right-2 top-3 text-black"
+                    className="absolute right-2 top-3 text-zinc-800"
                     onClick={handleTogglePassword}
                   >
                     {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
                   </button>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col md:flex-row lg:flex-row 2xl:flex-row items-center justify-between">
                 <div className="flex items-center">
                   <input
                     id="remember-me"

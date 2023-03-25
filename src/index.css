@@ -9,3 +9,10 @@ body {
 * {
   font-family: 'Poppins', sans-serif;
 }
+
+.login {
+  background-image: linear-gradient(rgba(0 , 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(assets/bgregis.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
