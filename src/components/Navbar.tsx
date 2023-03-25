@@ -152,7 +152,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                                 Your History
                             </a>
                             </li>
-                            <li onClick={() => checkToken ? handleLogout() : navigate("/login")}><a>
+                            <li onClick={() => checkToken ? handleLogout() : navigate("/")}><a>
                                 {checkToken ? <FaSignOutAlt /> : <FaSignInAlt />}
                                 {checkToken ? "Keluar" : "Masuk"}
                             </a>

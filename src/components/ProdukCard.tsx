@@ -60,14 +60,14 @@ const ProdukCard: React.FC<ListingProps> = ({
         inactiveFillColor: '#ffffff',
 
     };
-
+    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
 
     return (
 
 
-        <div className="w-60 h-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg">
+        <div className="w-60 h-full max-w-sm bg-white border border-lapak rounded-lg shadow-lg">
             <a onClick={onClick} href="#">
-                <img className="p-4 rounded-t-lg cover w-screen h-72" src={image} alt="product image" />
+                <img className="p-4 rounded-t-lg cover w-screen h-72" src={imgUrl + image} alt="product image" />
             </a>
             <div className="px-5 pb-5 flex flex-col space-y-1 gap-2">
                 <a href="#">
