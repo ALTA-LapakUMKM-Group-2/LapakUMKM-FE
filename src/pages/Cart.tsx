@@ -236,7 +236,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                         <th>
                                             <CartCard
                                                 key={item.id}
-                                                id={item.id}
+                                                id={"keranjang"}
                                                 img={FotoProfile}
                                                 sellerName={item.lapak_name}
                                                 produkName={item.product_name}
