@@ -44,7 +44,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/home/:kategori" element={<HomeFilter />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/listproduct" element={<ListProduct />} />
+          <Route path="/listproduct/:nama_toko" element={<ListProduct />} />
           <Route path="/historypembeli" element={<HistoryPembeli />} />
           <Route path="/toko/:id" element={<Toko />} />
           <Route path="/notif" element={<NotifikasiCoba />} />

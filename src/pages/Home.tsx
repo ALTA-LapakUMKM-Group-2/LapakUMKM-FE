@@ -55,8 +55,6 @@ const Home = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
-   console.log('categoryyyy', category);
-   
    console.log('data', data);
    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
@@ -110,7 +108,7 @@ const Home = () => {
                             })
                     }
 
-  
+
                 </div>
             </div>
         </Layout>
