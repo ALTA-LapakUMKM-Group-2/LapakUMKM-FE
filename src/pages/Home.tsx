@@ -55,9 +55,9 @@ const Home = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
-   
-   console.log(data);
-   const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+
+    console.log(data);
+    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
             <Navbar
@@ -108,7 +108,7 @@ const Home = () => {
                             })
                     }
 
-  
+
                 </div>
             </div>
         </Layout>

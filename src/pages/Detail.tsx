@@ -13,7 +13,6 @@ import dai from '../assets/dai.jpg'
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsChatText } from 'react-icons/bs'
 import { MdStarRate } from 'react-icons/md'
-import product from '../dummy/prouct.json'
 import Loading from '../components/Loading'
 import { useCookies } from 'react-cookie'
 
@@ -195,24 +194,35 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
-                  <div className="bg-white">
+                  <div className="bg-transparent shadow-lg  rounded-lg h-fit">
                     <div className="max-w-5xl max-h-96">
+                    {
+                      image ? 
                       <img src={imgUrl + image[1]?.image} className="w-full h-full md:col-span-2 rounded-md" alt="" />
-                      {/* <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" /> */}
+                      :
+                      <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                    }
                     </div>
                     <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                    {
+                    { image ?
                       image.map((item:any) => {
                         console.log("test image", item);
                         return (
                         <>
                             <img src={imgUrl + item.image} className="w-full h-md rounded-md max-w-xs" alt="" />
-                           
+
                         </>
                         )
-                      })
+                      }) :
+                      <>
+                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                      </>
+
+
                     }
-                    
+
                     </div>
                   </div>
                   {/* Card kanan */}

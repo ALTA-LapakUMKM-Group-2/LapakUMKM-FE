@@ -19,7 +19,7 @@ interface Product {
     user_id: number
 }
 interface CartData{
-    products: Product
+    products?: Product
 }
 
 
@@ -36,6 +36,42 @@ const Cart: React.FC<CartData> = ({products}) => {
     // const [cartData, setCartData] = useState<CartData>(initalCartValues)
     const [selectedItems, setSelectedItems] = useState<Product[]>([]);
 
+
+    
+    
+    
+    // const handleDeleteClick = () =>{
+        //     const updateProducts = products.filter((product:any)=> !selectedItems.some((selectedItems) => selectedItems.id === product.id))
+        //     setSelectedItems([])
+        //     console.log(selectedItems)
+        // }
+        const getProfile = async () => {
+        setLoading(true)
+        try {
+            const res = await axios.get('https://lapakumkm.mindd.site/users', {
+                headers: {
+                Authorization: `Bearer ${cookies.token}`
+                }
+            })
+            setData(res.data.data)
+            console.log(res.data.data)
+        } catch (error) {
+            
+        }
+        setLoading(false)
+    }
+    
+    useEffect(() => {
+        getProfile()
+    }, [])
+    
+    const [price, setPrice] = useState<number>(0)
+    const [totalPrice, setTotalPrice] = useState<number>(price)
+    const [count, setCount] = useState(1)
+    interface CartItem {
+        product_price: number;
+        
+    }
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Product) => {
         const isChecked = e.target.checked;
         setSelectedItems((prevState) => {
@@ -47,40 +83,6 @@ const Cart: React.FC<CartData> = ({products}) => {
     });
         console.log("selectedItems", selectedItems);
     };
-
-
-    // const handleDeleteClick = () =>{
-    //     const updateProducts = products.filter((product:any)=> !selectedItems.some((selectedItems) => selectedItems.id === product.id))
-    //     setSelectedItems([])
-    //     console.log(selectedItems)
-    // }
-    const getProfile = async () => {
-        setLoading(true)
-        try {
-            const res = await axios.get('https://lapakumkm.mindd.site/users', {
-                headers: {
-                Authorization: `Bearer ${cookies.token}`
-                }
-            })
-            setData(res.data.data)
-            console.log(res.data.data)
-        } catch (error) {
-    
-        }
-        setLoading(false)
-    }
-    
-    useEffect(() => {
-        getProfile()
-    }, [])
-
-    const [price, setPrice] = useState<number>(0)
-    const [totalPrice, setTotalPrice] = useState<number>(price)
-    const [count, setCount] = useState(1)
-    interface CartItem {
-        product_price: number;
-
-    }
 
     const [cart, setCart] = useState<CartItem[]>([])
 
