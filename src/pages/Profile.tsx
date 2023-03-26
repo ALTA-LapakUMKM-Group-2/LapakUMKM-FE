@@ -4,7 +4,6 @@ import axios from "axios"
 import withreactcontent from "sweetalert2-react-content"
 import Swal from "sweetalert2"
 import CustomButton from "../components/CustomButton"
-import ModalProfile from "../components/ModalProfile"
 import CustomInput from "../components/CutomInput"
 import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
@@ -62,6 +61,32 @@ const Profile = () => {
     }
   }
 
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [verivyPassword, setVerivyPassword] = useState<string>("");
+  const [modalPassword, setModalPassword] = useState<boolean>(false);
+  const [hide, setHide] = useState<boolean>(false)
+  const [hideConfirm, setHideConfirm] = useState<boolean>(false)
+
+
+  const handleVerified = () => {
+    MySwal.fire({
+      icon: "info",
+      title: "Ingin melanjutkan verifikasi ?",
+      text: "pilih lanjutkan",
+      confirmButtonText: "lanjutkan",
+      confirmButtonColor: "#31CFB9",
+      reverseButtons: true,
+      showCancelButton: true,
+      cancelButtonText: "kembali",
+      cancelButtonColor: "#db1f1f"
+    }).then((lanjutkan) => {
+      if (lanjutkan.isConfirmed) {
+        console.log("oke")
+      }
+    })
+  }
+
   const getProfile = async () => {
     setLoading(true)
     try {
@@ -89,6 +114,7 @@ const Profile = () => {
   const [phone, setPhone] = useState('')
   const [cookies, setCookies, removeCookies] = useCookies(['token'])
   const [imageProfile, setImageProfile] = useState<File>()
+  console.log("test token ", cookies.token);
   const id = useParams()
 
 
@@ -167,12 +193,6 @@ const Profile = () => {
 
 
 
-  const [oldPassword, setOldPassword] = useState<string>("");
-  const [newPassword, setNewPassword] = useState<string>("");
-  const [verivyPassword, setVerivyPassword] = useState<string>("");
-  const [modalPassword, setModalPassword] = useState<boolean>(false);
-  const [hide, setHide] = useState<boolean>(false)
-  const [hideConfirm, setHideConfirm] = useState<boolean>(false)
 
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
@@ -222,8 +242,43 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    oldPassword && newPassword && verivyPassword ? setDisable(false) : setDisable(true);
+    if (oldPassword === "" && newPassword === "" && verivyPassword === "") {
+      setDisable(true);
+    } else {
+      setDisable(false);
+    }
   }, [oldPassword, newPassword, verivyPassword]);
+
+
+  const [modalImage, setModalImage] = useState(false)
+  const [changeImg, setChangeImg] = useState<File | any>()
+  const udpateImageProfile = async (e: any) => {
+    e.preventDefault()
+    const data = new FormData()
+    data.append('photo_profile', changeImg)
+    try {
+      const res = await axios.post('https://lapakumkm.mindd.site/users/update-photo-profile', data, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      if (res.data) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Suksess Ganti Profile Foto",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+      getProfile()
+    } catch (error) {
+
+    }
+  }
+
+  console.log('test data', data);
 
   return (
     <Layout>
@@ -248,13 +303,49 @@ const Profile = () => {
             </form>
           </Modal>
 
+          <Modal
+            isOpen={modalImage} isClose={() => setModalImage(false)}
+          >
+            <form action="" onSubmit={udpateImageProfile}>
+              <div className="w-11/12 md:w-6/12 lg:w-6/12 flex flex-col items-center justify-center mx-auto">
+                <p className="text-zinc-800 text-[22px] font-semibold mb-8">Tambah Foto Porfile</p>
+                <div
+                  className="w-[10em] h-[10rem] md:w-[12rem] md:h-[12rem] lg:w-[16rem] lg:h-[16rem] overflow-hidden rounded-full"
+                >
+                  {changeImg && (
+                    <img
+                      src={URL.createObjectURL(changeImg)}
+                      alt="porfil.jpg"
+                      className="w-full"
+                    />
+                  )}
+                </div>
+                <input
+                  onChange={(e) => setChangeImg(e.target.files?.[0])}
+                  id="upload_gambar"
+                  type="file"
+                  accept="image.png, image.jpeg, image.jpg"
+                  className="w-full mt-8 text-[18px] text-zinc-800 text-center file:rounded-lg file:bg-lapak file:py-1 file:md:py-2 file:lg:py-2 file:px-4 file:md:px-8 file:lg:px-10   file:text-[18px] file:text-white hover:file:bg-sky-500 hover:file:cursor-pointer"
+                />
+              </div>
+              <div className="mt-8">
+                <CustomButton
+                  id="btn-update"
+                  label="Perbarui Profile Foto"
+
+                />
+              </div>
+            </form>
+          </Modal>
           <div className="w-full px-5 md:px-16 lg:px-28 2xl:px-40">
-            <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider">Detail Profile Saya</h1>
+            <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider">Profile Detail Saya</h1>
 
             <div className="flex flex-col md:flex-row lg:flex-row mt-4 md:mt-10 lg:mt-14">
+
+
               <div className="bg-none md:bg-white lg:bg-white p-6  md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
-                <div className="rounded-full w-9/12 md:w-11/12 lg:w-11/12 overflow-hidden h-4/6 ">
-                  <img src={data.photo_profile} alt="profile.png" className="" />
+                <div className="rounded-full w-9/12 md:w-11/12 lg:w-11/12 overflow-hidden h-4/6" >
+                  <img src={data.photo_profile} alt="profile.png" className="cursor-pointer" onClick={() => setModalImage(true)} />
                 </div>
 
                 <p className="text-[20px] md:text-[20px] lg:text-[20px] 2xl:text-[28px] font-semibold text-zinc-800 mt-8">{data.shop_name ? data.shop_name : data.full_name}</p>

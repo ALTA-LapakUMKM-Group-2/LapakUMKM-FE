@@ -7,7 +7,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
     return (
         <div className="h-screen w-full overflow-auto ">
-            <div className="h-full w-full overflow-auto bg-gray-100">{children}</div>
+            <div className="h-full w-full overflow-auto bg-gray-100 dark:bg-slate-500">{children}</div>
         </div>
     );
 };
