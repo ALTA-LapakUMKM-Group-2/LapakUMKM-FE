@@ -25,7 +25,7 @@ const CustomInput = ({ id, label, name, type, placeholder, value, onChange, clas
         name={name}
         value={value}
         onChange={onChange}
-        className="border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
+        className="border-2 mt-2 overflow-x-scroll border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
         {...props}
       />
     </div>
