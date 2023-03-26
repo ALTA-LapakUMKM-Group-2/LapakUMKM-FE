@@ -1,5 +1,5 @@
 import { formatValue } from 'react-currency-input-field'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import withReactContent from 'sweetalert2-react-content'
@@ -13,9 +13,12 @@ import dai from '../assets/dai.jpg'
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsChatText } from 'react-icons/bs'
 import { MdStarRate } from 'react-icons/md'
-import product from '../dummy/prouct.json'
+import { HiOutlineArrowLongDown, HiOutlineArrowLongUp } from 'react-icons/hi2'
 import Loading from '../components/Loading'
 import { useCookies } from 'react-cookie'
+import { FeedbackTypes } from '../utils/types/DataType'
+import CustomInput from '../components/CutomInput'
+import CustomButton from '../components/CustomButton'
 
 
 
@@ -32,17 +35,20 @@ const Detail = () => {
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
   const [cookie, setCookie] = useCookies(['token'])
+  const [feedback, setFeedback] = useState<FeedbackTypes[]>([])
+  const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
+
   const navigate = useNavigate()
-  
+
   const handleUpdate = (e: any) => {
     e.preventDefault()
   }
-  
+
   const handleIncrement = () => {
     setCount(count + 1);
     setTotalPrice(price * (count + 1));
   };
-  
+
   const handleDecrement = () => {
     if (count > 1) {
       setCount(count - 1);
@@ -51,54 +57,43 @@ const Detail = () => {
       setTotalPrice(price)
     }
   };
-  
+
   const [price, setPrice] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(price)
   useEffect(() => {
     fetchData();
   }, [])
 
-  
-    console.log("alamat ", address);
-    console.log("nama ", name);
-console.log('total price', totalPrice);
 
+  const [productId, setProductId] = useState<any>()
+  const [userId, setUserId] = useState<any>()
 
+  const addToCart = async () => {
 
-const [productId ,setProductId] = useState<any>()
-const [userId, setUserId] =useState<any>()
+    const data = {
+      product_id: parseInt(productId),
+      product_pcs: count,
+      user_id: userId
+    };
 
-const addToCart =  async () => {
-  
-  const data = {
-    product_id: parseInt(productId),
-    product_pcs: count,
-    user_id: userId
-  };
-  console.log(typeof data);
-  console.log(typeof count);
-  
-  console.log("test id ", data);
-  try {
-    
-const res = await axios.post('https://lapakumkm.mindd.site/carts', data ,{
-      headers : {
-        Authorization: `Bearer ${cookie.token}`
-      }
-    })
-    if(res.data) {  
-      console.log('testos add to cart', res.data);
-      MySwal.fire({
-        icon: "success",
-        title: "Produk ditambahkan ke keranjang",
-        showCancelButton: false,
-       
+    try {
+      const res = await axios.post('https://lapakumkm.mindd.site/carts', data, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
       })
-    }
-    navigate('/cart');
-    
-  } catch (err : any) {
-    console.log('Failed add to cart', err.response);
+      if (res.data) {
+        console.log('testos add to cart', res.data);
+        MySwal.fire({
+          icon: "success",
+          title: "Produk ditambahkan ke keranjang",
+          showCancelButton: false,
+
+        })
+      }
+      // navigate('/cart');
+
+    } catch (err: any) {
       MySwal.fire({
         icon: "error",
         title: "Gagal menambahkan produk ke keranjang",
@@ -108,51 +103,170 @@ const res = await axios.post('https://lapakumkm.mindd.site/carts', data ,{
         confirmButtonColor: "#31CFB9",
         showConfirmButton: true
       })
+    }
+
   }
 
-}
-
-const [image, setImage] = useState<any>([])
+  const [image, setImage] = useState<any>([])
   function fetchData() {
     setLoading(true);
     axios
-    .get(`https://lapakumkm.mindd.site/products/${id}`)
-    .then((res) => {
-      console.log('detail', res.data.data);
-      const { full_name, address } = res.data.data.user
-      const { product_name, description, price, stock_remaining, size ,user_id ,id, product_image } = res.data.data;
-      setProduct(product_name);
-      setDescription(description);
-      setPrice(price);
-      setStock(stock_remaining);
-      setSize(size)
-      setName(full_name)
-      setAddress(address)
-      setTotalPrice(price);
-      setUserId(user_id)
-      setProductId(id)
-      setImage(product_image)
-    })
-    .catch((err) => {
-      console.log(err.response.statusText)
-      MySwal.fire({
-        icon: "error",
-        title: err.response.statusText,
-        text: "Gagal mengunduh data",
-        showCancelButton: false,
-        confirmButtonText: "Dibaca",
+      .get(`https://lapakumkm.mindd.site/products/${id}`)
+      .then((res) => {
+        const { full_name, address } = res.data.data.user
+        const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
+        setProduct(product_name);
+        setDescription(description);
+        setPrice(price);
+        setStock(stock_remaining);
+        setSize(size)
+        setName(full_name)
+        setAddress(address)
+        setTotalPrice(price);
+        setUserId(user_id)
+        setProductId(id)
+        setImage(product_image)
+      })
+      .catch((err) => {
+        console.log(err.response.statusText)
+        MySwal.fire({
+          icon: "error",
+          title: err.response.statusText,
+          text: "Gagal mengunduh data",
+          showCancelButton: false,
+          confirmButtonText: "Dibaca",
           confirmButtonColor: "#31CFB9",
           showConfirmButton: true
         })
       })
       .finally(() => setLoading(false))
-    }
-//  console.log('check image', image[0].image);
-//  console.log(JSON.stringify(image[0]?.image));
- 
-// console.log(image[0].image);
+  }
 
-const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+  useEffect(() => {
+    feedbackData()
+  }, [])
+
+  function feedbackData() {
+    setLoading(true);
+    axios
+      .get(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/products/${id}/feedbacks`)
+      .then((res) => {
+        const { data } = res.data
+        setFeedback(data)
+
+      })
+      .catch((err) => {
+
+      })
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    diskusiData()
+  }, [])
+
+  function diskusiData() {
+    setLoading(true);
+    axios
+      .get(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/products/${id}/discussions`)
+      .then((res) => {
+        const { data } = res.data
+        setDiskusi(data)
+
+      })
+      .catch((err) => {
+
+      })
+      .finally(() => setLoading(false))
+  }
+
+  const [balas, setBalas] = useState<string>("")
+  const [newDiskus, setnewDiskus] = useState<string>("")
+  const [disable, setDisable] = useState<boolean>(true)
+  const [disable2, setDisable2] = useState<boolean>(true)
+  const [hidden, setHidden] = useState<string>("hidden")
+
+  useEffect(() => {
+    newDiskus ? setDisable(false) : setDisable(true)
+  }, [newDiskus])
+
+  const handleNewDiskusi = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
+    e.preventDefault()
+    const body = {
+      product_id: id,
+      discussion: newDiskus
+    }
+    axios
+      .post(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/discussions`, body, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        MySwal.fire({
+          icon: "success",
+          iconColor: "#31CFB9",
+          title: res.data.message,
+          text: "Menambahkan diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1200
+        })
+      })
+      .catch((err) => {
+        MySwal.fire({
+          icon: "error",
+          title: err.response.data.message,
+          text: "Gagal menambahkan diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1200
+        })
+      })
+      .finally(() => setLoading(false))
+  }
+
+  const changeDiskus = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBalas(e.target.value);
+  };
+
+  const handleBalas = (id_diskusi: number) => {
+    setLoading(true)
+    const body = {
+      product_id: id,
+      discussion: balas
+    }
+    axios
+      .post(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/discussions`, body, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        MySwal.fire({
+          icon: "success",
+          iconColor: "#31CFB9",
+          title: res.data.message,
+          text: "Menambahkan diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1200
+        })
+      })
+      .catch((err) => {
+        MySwal.fire({
+          icon: "error",
+          title: err.response.data.message,
+          text: "Gagal menambahkan diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1200
+        })
+      })
+      .finally(() => setLoading(false))
+  }
+
   return (
     <Layout>
       {
@@ -197,22 +311,22 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                   {/* Card kiri */}
                   <div className="bg-white">
                     <div className="max-w-5xl max-h-96">
-                      <img src={imgUrl + image[1]?.image} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                      {image === null ?
+                        <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" /> :
+                        <img src={image[1]?.image} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                      }
                       {/* <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" /> */}
                     </div>
                     <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                    {
-                      image.map((item:any) => {
-                        console.log("test image", item);
-                        return (
-                        <>
-                            <img src={imgUrl + item.image} className="w-full h-md rounded-md max-w-xs" alt="" />
-                           
-                        </>
-                        )
-                      })
-                    }
-                    
+                      {
+                        image === null ?
+                          <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" /> :
+                          image.map((item: any) => {
+                            return (
+                              <img src={item.image} className="w-full h-md rounded-md max-w-xs" alt="" />
+                            )
+                          })
+                      }
                     </div>
                   </div>
                   {/* Card kanan */}
@@ -284,14 +398,84 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                 {/* end */}
                 <div className='border-2 mt-20 mb-5'>
                 </div>
-                <div className='flex mt-20 flex-col gap-5'>
-                  <h1 className='text-2xl font-bold'>Ulasan Pembeli :</h1>
-                  <CardFeedback rating={0} image={FotoProfile} comment={'spatu ini sangat bagus'} name={'Faizal Triasa'}
-                  />
-                  <CardFeedback rating={0} image={FotoProfile} comment={'spatu ini sangat bagus'} name={'Faizal Triasa'}
-                  />
-                  <CardFeedback rating={0} image={FotoProfile} comment={'spatu ini sangat bagus'} name={'Faizal Triasa'}
-                  />
+
+                <div className='flex mt-20 flex-col gap-5 w-7/12'>
+                  <div className='flex justify-between'>
+                    <p id='feedback' className='text-2xl text-zinc-800 mb-2 font-semibold '>Ulasan</p>
+                    <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
+                  </div>
+
+                  <div >
+                    {feedback.map((item) => (
+                      <CardFeedback key={item.id} rating={item.rating} image={item.user.map((user) => (user.profile_picture))} comment={item.feedback} name={item.user.map((user) => (user.username))}
+                      />
+                    ))}
+                  </div>
+
+                  <div className='flex justify-between mt-8'>
+                    <p id='diskusi' className='text-2xl text-zinc-800 mb-2 font-semibold'>Diskusi</p>
+                    <a href='#feedback' className='text-[16px] flex items-center hover:cursor-pointer hover:text-lapak text-zinc-800 mb-2 '>Lihat Ulasan <HiOutlineArrowLongUp /></a>
+                  </div>
+
+                  <form onSubmit={(e) => handleNewDiskusi(e)} className='p-4 border-2 border-zinc-300 rounded-md'>
+                    <p>Ada pertanyaan ? Diskusikan dengan penjual disini</p>
+                    <CustomInput
+                      id='input-diskusi'
+                      placeholder='Apa yang ingin anda tanyakan ?'
+                      label=''
+                      type='text'
+                      name='diskusi'
+                      onChange={(e) => setnewDiskus(e.target.value)}
+                    />
+
+                    <div className='flex gap-5 w-3/12 mt-4 ml-auto'>
+                      <CustomButton
+                        id="btn-kirim_diskusi"
+                        label='Kirim'
+                        loading={disable || loading}
+                      />
+                    </div>
+                  </form>
+
+                  {diskusi.map((item) => (
+                    <div key={item.id} className='p-2 mb-4 border-b-2 border-zinc-400'>
+                      {item.user.map((profile) => (
+                        <>
+                          <div key={profile.id} className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
+                            <img src={profile.profile_picture} alt="profil.svg" />
+
+                          </div>
+                          <div className='flex justify-between text-zinc-800 items-center py-3'>
+                            <h1 className='text-lg font-bold'>{profile.username}</h1>
+                          </div>
+                        </>
+                      ))}
+                      <p className='text-gray-700 my-5'>{item.discussion}</p>
+
+                      <p className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak'>Balas diskusi ...</p>
+
+                      <div className={`mb-5`}>
+                        <CustomInput
+                          id='input-balas_diskusi'
+                          placeholder='balas diskusi disini'
+                          label=''
+                          type='text'
+                          name='balas_diskusi'
+                          onChange={changeDiskus}
+                        />
+
+                        <div className='flex gap-5 w-3/12 mt-4 ml-auto'>
+                          <CustomButton
+                            id="btn-balas"
+                            label='Balas'
+                            type='submit'
+                            onClick={() => handleBalas(item.id)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
                 </div>
               </div>
 
@@ -299,7 +483,7 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
           </>
       }
 
-    </Layout>
+    </Layout >
   )
 }
 

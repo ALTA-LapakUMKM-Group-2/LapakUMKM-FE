@@ -119,8 +119,6 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 setNama(full_name)
                 setMail(email)
                 setPhoto(photo_profile)
-
-                console.log(res.data.data.photo_profile)
             })
             .catch((err) => {
                 const { statusText } = err.response
