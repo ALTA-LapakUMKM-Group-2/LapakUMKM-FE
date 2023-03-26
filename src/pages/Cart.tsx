@@ -24,7 +24,7 @@ interface CartData {
 }
 
 interface CartItem {
-    id:number
+    id: number
     product_price: number
     lapak_name: string
     product_pcs: number
@@ -37,6 +37,10 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [checked, setChecked] = useState(false);
     const [selectedItems, setSelectedItems] = useState<Product[]>([]);
     const [newCart, setnewCart] = useState<Product[]>([]);
+    const [price, setPrice] = useState<number>(0)
+    const [count, setCount] = useState<number>(1)
+    const [cart, nsetNewCart] = useState<Product[]>([])
+    const [totalPrice, setTotalPrice] = useState<number>(price)
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Product) => {
         const isChecked = e.target.checked;
@@ -59,54 +63,54 @@ const Cart: React.FC<CartData> = ({ products }) => {
     }, [])
 
 
-  const handleIncrement = (i: CartItem) => {
-    let _cart = newCart.map((item) => {
-      if (item.id === i.id) {
-        item.product_pcs++;
-      }
-      return item;
-    });
-    setnewCart(_cart);
-  };
-  
-  const handleDecrement = (i: CartItem) => {
-    let _cart = newCart.map((item) => {
-      if (item.id === i.id) {
-        if (item.product_pcs === 1) {
-          return item;
-        } else {
-          item.product_pcs--;
-        }
-      }
-      return item;
-    });
-    setnewCart(_cart);
-  };
+    const handleIncrement = (i: CartItem) => {
+        let _cart = newCart.map((item) => {
+            if (item.id === i.id) {
+                item.product_pcs++;
+            }
+            return item;
+        });
+        setnewCart(_cart);
+    };
 
-// const handleIncrement = async (i: CartItem) => {
-//     let _cart = newCart.map((item) => {
-//         return item.id === i.id
-//             ? { ...item, product_pcs: (item.product_pcs = item.product_pcs + 1) }
-//             : item;
-//     });
-//     // nsetNewCart(_cart);
-//     setnewCart(_cart)
-// }
-// const handleDecrement = async (i: CartItem) => {
-//     if (i.product_pcs === 1) {
-//         return (nsetNewCart)
-//     } else {
+    const handleDecrement = (i: CartItem) => {
+        let _cart = newCart.map((item) => {
+            if (item.id === i.id) {
+                if (item.product_pcs === 1) {
+                    return item;
+                } else {
+                    item.product_pcs--;
+                }
+            }
+            return item;
+        });
+        setnewCart(_cart);
+    };
 
-//         let _cart = newCart.map((item) => {
-//             return item.id === i.id
-//                 ? { ...item, product_pcs: (item.product_pcs = item.product_pcs - 1) }
-//                 : item;
-//         });
-//         // nsetNewCart(_cart);
-//         setnewCart(_cart)
-//     }
-// }
-//   const totalCount = newCart.reduce((total, item) => total + item.product_pcs, 0);
+    // const handleIncrement = async (i: CartItem) => {
+    //     let _cart = newCart.map((item) => {
+    //         return item.id === i.id
+    //             ? { ...item, product_pcs: (item.product_pcs = item.product_pcs + 1) }
+    //             : item;
+    //     });
+    //     // nsetNewCart(_cart);
+    //     setnewCart(_cart)
+    // }
+    // const handleDecrement = async (i: CartItem) => {
+    //     if (i.product_pcs === 1) {
+    //         return (nsetNewCart)
+    //     } else {
+
+    //         let _cart = newCart.map((item) => {
+    //             return item.id === i.id
+    //                 ? { ...item, product_pcs: (item.product_pcs = item.product_pcs - 1) }
+    //                 : item;
+    //         });
+    //         // nsetNewCart(_cart);
+    //         setnewCart(_cart)
+    //     }
+    // }
+    //   const totalCount = newCart.reduce((total, item) => total + item.product_pcs, 0);
 
     const getProfile = async () => {
         setLoading(true)
@@ -126,12 +130,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
     useEffect(() => {
         getProfile()
     }, [])
-
-    const [price, setPrice] = useState<number>(0)
-    const [totalPrice, setTotalPrice] = useState<number>(price)
-    const [count, setCount] = useState<number>(0)
-
-    const [cart, nsetNewCart] = useState<CartItem[]>([])
 
     const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
@@ -189,8 +187,8 @@ const Cart: React.FC<CartData> = ({ products }) => {
     useEffect(() => {
         TotalCart()
     }, [TotalCart])
-    console.log('test count' , count);
-    
+    console.log('test count', count);
+
     console.log('cektotal', totalPrice);
     console.log('cekt newCart', newCart);
     console.log('ceck cart', cart);
@@ -224,38 +222,37 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cart.map((item: any) => {
-                                    return (
-                                        <tr>
-                                            <th>
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        className="checkbox"
-                                                        onChange={(e) => handleCheckboxChange(e, item)}
-                                                    />
-                                                </label>
-                                            </th>
-                                            <th>
-                                                <CartCard
-                                                    key={item.id}
-                                                    id={item.id}
-                                                    img={FotoProfile}
-                                                    sellerName={item.lapak_name}
-                                                    produkName={item.product_name}
-                                                    produkimg={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRw37WfMabYiFV2do0nCsvnLfyARz7ePSJwSAOjtqF1w&s'}
-                                                    counts={checked ? count : item.product_pcs}
-                                                    price={item.product_price}
-                                                    onCheck={() => handleCheck}
-                                                    totalPrice={item.product_price * item.product_pcs}
-                                                    handleDecrement={() => handleDecrement(item)}
-                                                    handleIncrement={() => handleIncrement(item)}
+                                {cart.map((item: any) => (
+                                    <tr>
+                                        <th>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    className="checkbox"
+                                                    onChange={(e) => handleCheckboxChange(e, item)}
                                                 />
-                                            </th>
+                                            </label>
+                                        </th>
+                                        <th>
+                                            <CartCard
+                                                key={item.id}
+                                                id={"keranjang"}
+                                                img={FotoProfile}
+                                                sellerName={item.lapak_name}
+                                                produkName={item.product_name}
+                                                produkimg={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRw37WfMabYiFV2do0nCsvnLfyARz7ePSJwSAOjtqF1w&s'}
+                                                counts={checked ? count : item.product_pcs}
+                                                price={item.product_price}
+                                                onCheck={() => handleCheck}
+                                                totalPrice={item.product_price * item.product_pcs}
+                                                handleDecrement={() => handleDecrement(item)}
+                                                handleIncrement={() => handleIncrement(item)}
+                                            />
+                                        </th>
 
-                                        </tr>
-                                    )
-                                })}
+                                    </tr>
+
+                                ))}
                             </tbody>
                         </div>
                     </div>
