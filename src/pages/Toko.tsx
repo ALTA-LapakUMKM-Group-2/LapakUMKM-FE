@@ -15,14 +15,23 @@ const Toko = () => {
     const { id } = useParams()
 
     const [data, setData] = useState([])
-
+    const [getUserToko, setUserToko] = useState('')
+    const [tokoName, setTokoName] = useState('')
+    const [address, setAddress] = useState('')
+    const [foto, setFoto] = useState('')
+    const [fullName, setFullName] = useState('')
     const getPrudukToko = async () => {
         setLoading(true)
         try {
-            const res = await axios.get(`https://lapakumkm.mindd.site/users/${id}/products`)
-            setData(res.data)
+            const res = await axios.get(`https://lapakumkm.mindd.site/products?userId=${id}`)
+            const {address, full_name , photo_profile, shop_name} = res.data.data[0].user
+            setTokoName(shop_name)
+            setAddress(address)
+            setFoto(photo_profile)
+            setFullName(fullName)
+            setData(res.data.data)
         } catch (error) {
-            
+
         }
         setLoading(false)
     }
@@ -30,8 +39,12 @@ const Toko = () => {
         getPrudukToko()
     }, [])
 
-    console.log(data);
+    console.log('test data toko', data);
+    console.log('ambil data toko', getUserToko);
+    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/' + foto
 
+    console.log(imgUrl);
+    
     return (
         <Layout>
             <Navbar />
@@ -66,14 +79,17 @@ const Toko = () => {
                             <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
                         </div>
                     </ChatModal>
+                    {/*test card  */}
+                    {/* from-green-300 via-blue-500 to-purple-600 */}
+                    {/*  */}
                     {/*  */}
                     <div className='flex flex-col mx-auto'>
-                        <div className='flex flex-col rounded-md bg-white border-lapak border mt-5 mb-5 p-10 w-[500px] mx-auto'>
+                        <div className='flex flex-col rounded-md bg-white border-lapak border-b-4 mt-5 mb-5 p-10 w-[500px] mx-auto shadow-lg'>
                             <div className='flex w-fit gap-5 '>
-                                <img src={FotoProfile} className='w-40 rounded-full' />
+                                <img src={imgUrl} className='w-40 rounded-full' />
                                 <div className='font-bold text-lg'>
-                                    <h1 className='mb-5'>toko LapakUMKM</h1>
-                                    <h1 className='flex items-center'><MdOutlineLocationOn /> Jakarta</h1>
+                                    <h1 className='mb-5'>{tokoName}</h1>
+                                    <h1 className='flex items-center'><MdOutlineLocationOn /> {address}</h1>
                                 </div>
                             </div>
                             <div className='flex justify-center mt-7 '>
@@ -82,13 +98,14 @@ const Toko = () => {
                                 </button>
                             </div>
                         </div>
-                        
+
 
                         <div className='mt-10'>
+                           <div className='flex flex-col items-center gap-5 justify-center'>
                             <h1 className='text-2xl font-semibold ml-1'>Produk Penjual</h1>
-                            <div className="my-4 gap-y-5 gap-x-5 grid grid-cols-5 mx-auto ">
+                           <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
                                 {
-                                    data.map((item: any, i: number) => {
+                                    data?.map((item: any, i: number) => {
                                         return (
                                             <ProdukCard
                                                 produkName={item.product_name}
@@ -106,6 +123,7 @@ const Toko = () => {
                                 }
 
                             </div>
+                           </div>
                         </div>
                     </div>
                 </>

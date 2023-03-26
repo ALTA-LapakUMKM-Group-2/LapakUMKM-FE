@@ -3,6 +3,7 @@ module.exports = {
   tailwindConfig: './styles/tailwind.config.js',
   content: [ "./index.html",
   "./src/**/*.{js,ts,jsx,tsx}",],
+  darkMode: "class",
   theme: {
     extend: {
       backgroundImage: {
