@@ -55,20 +55,22 @@ const Home = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
+   console.log('categoryyyy', category);
    
-   console.log(data);
+   console.log('data', data);
    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
             <Navbar
                 children={<Search onSearch={(e) => setSearch(e.target.value)} />}
             />
-
             <div className="flex flex-col w-11/12 mx-auto items-center">
                 <div className="mt-10 mx-auto w-3/6">
-                    <p>Kategori</p>
+                    <p className='dark:text-white'>Kategori</p>
                     <div className="flex w-full space-x-10 relative overflow-x-auto">
                         {category.map((item:any, index:any) => {
+                            console.log("item test", item);
+                            
                             return(
                                 <button key={index} id={item.id} className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none"
                                 onClick={() => navigate(`/home/${item.category}`, {
@@ -90,7 +92,7 @@ const Home = () => {
                                 return search.toLocaleLowerCase() === "" ?
                                 item : item.product_name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
                             }).map((item: any, index) => {
-                                console.log('test', item.product_image);
+                                // console.log('test', item);
                                 
                                 return (
                                     <ProdukCard

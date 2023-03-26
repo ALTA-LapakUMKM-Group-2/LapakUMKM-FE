@@ -13,7 +13,6 @@ import dai from '../assets/dai.jpg'
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsChatText } from 'react-icons/bs'
 import { MdStarRate } from 'react-icons/md'
-import product from '../dummy/prouct.json'
 import Loading from '../components/Loading'
 import { useCookies } from 'react-cookie'
 
@@ -80,7 +79,6 @@ const addToCart =  async () => {
   
   console.log("test id ", data);
   try {
-    
 const res = await axios.post('https://lapakumkm.mindd.site/carts', data ,{
       headers : {
         Authorization: `Bearer ${cookie.token}`
@@ -195,22 +193,33 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
-                  <div className="bg-white">
-                    <div className="max-w-5xl max-h-96">
-                      <img src={imgUrl + image[1]?.image} className="w-full h-full md:col-span-2 rounded-md" alt="" />
-                      {/* <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" /> */}
+                  <div className="bg-transparent shadow-lg  rounded-lg h-fit">
+                    <div className="max-w-5xl max-h-96 ">
+                     {
+                      image ? 
+                      <img src={ image[0]?.image} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                      :
+                      <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                     }
                     </div>
                     <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                    {
+                    { image ?
                       image.map((item:any) => {
                         console.log("test image", item);
                         return (
                         <>
-                            <img src={imgUrl + item.image} className="w-full h-md rounded-md max-w-xs" alt="" />
+                            <img src={item.image} className="w-full h-md rounded-md max-w-xs" alt="" />
                            
                         </>
                         )
-                      })
+                      }) :
+                      <>
+                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                      <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                      </>
+
+
                     }
                     
                     </div>
@@ -263,10 +272,10 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md '>
-                    <img src={FotoProfile} className='w-40 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${id}`)} />
+                    <img src={FotoProfile} className='w-40 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${userId}`)} />
                     <div className='font-bold text-lg'>
-                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${id}`)}>{name}</h1>
-                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${id}`)} ><MdOutlineLocationOn /> {address}</h1>
+                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${userId}`)}>{name}</h1>
+                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${userId}`)} ><MdOutlineLocationOn /> {address}</h1>
                     </div>
                   </div>
                   <h1 className='text-3xl font-bold'>Informasi Produk :</h1>
