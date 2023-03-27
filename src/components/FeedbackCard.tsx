@@ -45,50 +45,49 @@ const FeedbackCard: React.FC<FeedbackProps> = ({
 
     };
     return (
-        <div id={id} className="mt-5 w-[600px] px-8 py-4 bg-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.4)]">
-            <p className="border-b-2 pb-2 font-semibold">{sellerName}</p>
-            <div className="flex flex-col md:flex-row lg:flex-row gap-5 mt-4">
-                <img src={produkImg} alt="produk.jpg" className="h-64 md:h-40 lg:h-44 " />
+        <div id={id} className="mt-5 w-11/12 md:w-10/12 lg:w-[600px] 2xl:w-[43rem] px-8 py-4 bg-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.4)]">
+            <p className="border-b-2 pb-2 font-semibold text-[18px] md:text-[16px] lg:text-[16px] 2xl:text-[22px]">{sellerName}</p>
+            <div className="flex flex-col md:flex-row lg:flex-row gap-5 md:gap-5 lg:gap-5 2xl:gap-8 mt-4">
+                <img src={produkImg} alt="produk.jpg" className="h-64 md:h-40 lg:h-44 2xl:h-52" />
                 <div className="space-y-1">
-                <p>{produkName}</p>
-                <p>Ukuran : {size}</p>
-                <p><span>
+                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px]'>{produkName}</p>
+                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px]'>Ukuran : {size}</p>
+                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px]'><span>
                         {formatValue({
                             value: JSON.stringify(price),
                             groupSeparator: '.',
                             decimalSeparator: ',',
                             prefix: 'Rp. ',
                         })}</span> x {quantity}</p>
-                <p>Total : 
+                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px]'>Total :
                         {formatValue({
                             value: JSON.stringify(price * quantity),
                             groupSeparator: '.',
                             decimalSeparator: ',',
                             prefix: 'Rp. ',
                         })}
-                        </p>
-                <p>Status : {status}</p>
+                    </p>
+                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px]'>Status : {status}</p>
 
-                <div className="flex flex-col-reverse md:flex-row-reverse lg:flex-row-reverse">
-                    <div className="mt-5 md:mt-0 lg:mt-0 md:ml-20 lg:ml-28">
-                    <button 
-                    className={`btn  ${rating === 0 ? "bg-lapak border-none" : "btn-outline btn-accent"}`}
-                    onClick={rating === 0 ? handleFeedback : handleEdit}
-                    >
-                        {rating === 0 ? "Beri Ulasan" : "Edit Ulasan"}
-                    </button>
+                    <div className="flex flex-col-reverse md:flex-row-reverse lg:flex-row-reverse">
+                        <div className="mt-5 md:mt-0 lg:mt-0 md:ml-10 lg:ml-28 2xl:ml-36">
+                            <button
+                                className={`btn  ${rating === 0 ? "bg-lapak border-none" : "btn-outline btn-accent"}`}
+                                onClick={rating === 0 ? handleFeedback : handleEdit}
+                            >
+                                {rating === 0 ? "Beri Ulasan" : "Edit Ulasan"}
+                            </button>
+                        </div>
+
+                        <div className="rating">
+                            <Rating
+                                value={rating}
+                                style={{ maxWidth: 120 }}
+                                itemStyles={customStyles}
+                                readOnly
+                            />
+                        </div>
                     </div>
-
-                    <div className="rating">
-                        <Rating
-                            value={rating}                       
-                            style={{ maxWidth: 120 }}
-                            itemStyles={customStyles}
-                            readOnly
-                        />
-                    </div>
-                </div>
-
                 </div>
             </div>
         </div>

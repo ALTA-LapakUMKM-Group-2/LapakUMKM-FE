@@ -19,6 +19,7 @@ import { VscTrash } from "react-icons/vsc"
 import { FiEdit } from "react-icons/fi"
 import { useCookies } from "react-cookie"
 import Loading from "../components/Loading"
+import Default from "../assets/default.jpg"
 
 
 const Profile = () => {
@@ -68,25 +69,6 @@ const Profile = () => {
   const [hide, setHide] = useState<boolean>(false)
   const [hideConfirm, setHideConfirm] = useState<boolean>(false)
 
-
-  const handleVerified = () => {
-    MySwal.fire({
-      icon: "info",
-      title: "Ingin melanjutkan verifikasi ?",
-      text: "pilih lanjutkan",
-      confirmButtonText: "lanjutkan",
-      confirmButtonColor: "#31CFB9",
-      reverseButtons: true,
-      showCancelButton: true,
-      cancelButtonText: "kembali",
-      cancelButtonColor: "#db1f1f"
-    }).then((lanjutkan) => {
-      if (lanjutkan.isConfirmed) {
-        console.log("oke")
-      }
-    })
-  }
-
   const getProfile = async () => {
     setLoading(true)
     try {
@@ -107,16 +89,14 @@ const Profile = () => {
     getProfile()
   }, [])
 
-
   const [fullName, setFullName] = useState('')
   const [address, setAddress] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [cookies, setCookies, removeCookies] = useCookies(['token'])
   const [imageProfile, setImageProfile] = useState<File>()
+  const [cek, setCek] = useState<string>("hidden")
   console.log("test token ", cookies.token);
-  const id = useParams()
-
 
   const handleEditProfile = async (e: any) => {
     e.preventDefault()
@@ -150,7 +130,6 @@ const Profile = () => {
       console.log(error);
     }
   }
-
 
   const deleteUser = async () => {
     const res = await Swal.fire({
@@ -190,8 +169,6 @@ const Profile = () => {
       }
     }
   };
-
-
 
 
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -242,13 +219,8 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    if (oldPassword === "" && newPassword === "" && verivyPassword === "") {
-      setDisable(true);
-    } else {
-      setDisable(false);
-    }
+    oldPassword && newPassword && verivyPassword ? setDisable(false) : setDisable(true);
   }, [oldPassword, newPassword, verivyPassword]);
-
 
   const [modalImage, setModalImage] = useState(false)
   const [changeImg, setChangeImg] = useState<File | any>()
@@ -274,8 +246,24 @@ const Profile = () => {
       }
       getProfile()
     } catch (error) {
-
     }
+  }
+
+  const upgradePenjual = () => {
+    !data.address ?
+      MySwal.fire({
+        icon: "warning",
+        title: "Belum update alamat dan telepon",
+        text: "lanjutkan mengisi",
+        confirmButtonText: "Isi data",
+        confirmButtonColor: "#31CFB9",
+        showCloseButton: true,
+      }).then((update) => {
+        if (update.isConfirmed) {
+          setShowModal(true)
+        }
+      })
+      : setModalAing(true)
   }
 
   console.log('test data', data);
@@ -293,6 +281,7 @@ const Profile = () => {
                 label="Nama Toko"
                 name="shop_name"
                 placeholder="Masukkan nama toko anda" />
+
               <div className="mt-8">
                 <CustomButton
                   id="btn-update"
@@ -310,7 +299,8 @@ const Profile = () => {
               <div className="w-11/12 md:w-6/12 lg:w-6/12 flex flex-col items-center justify-center mx-auto">
                 <p className="text-zinc-800 text-[22px] font-semibold mb-8">Tambah Foto Porfile</p>
                 <div
-                  className="w-[10em] h-[10rem] md:w-[12rem] md:h-[12rem] lg:w-[16rem] lg:h-[16rem] overflow-hidden rounded-full"
+                  className="w-[10em] h-[10rem] md:w-[12rem] md:h-[12rem] lg:w-[16rem] lg:h-[16rem] overflow-hidden rounded-full bg-cover bg-center"
+                  style={{ backgroundImage: `URL(${Default})` }}
                 >
                   {changeImg && (
                     <img
@@ -332,20 +322,18 @@ const Profile = () => {
                 <CustomButton
                   id="btn-update"
                   label="Perbarui Profile Foto"
-
                 />
               </div>
             </form>
           </Modal>
+
           <div className="w-full px-5 md:px-16 lg:px-28 2xl:px-40">
             <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider">Profile Detail Saya</h1>
 
             <div className="flex flex-col md:flex-row lg:flex-row mt-4 md:mt-10 lg:mt-14">
-
-
               <div className="bg-none md:bg-white lg:bg-white p-6  md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
                 <div className="rounded-full w-9/12 md:w-11/12 lg:w-11/12 overflow-hidden h-4/6" >
-                  <img src={data.photo_profile} alt="profile.png" className="cursor-pointer" onClick={() => setModalImage(true)} />
+                  <img src={data.photo_profile ? data.photo_profile : Default} alt="profile.png" className="cursor-pointer" onClick={() => setModalImage(true)} />
                 </div>
 
                 <p className="text-[20px] md:text-[20px] lg:text-[20px] 2xl:text-[28px] font-semibold text-zinc-800 mt-8">{data.shop_name ? data.shop_name : data.full_name}</p>
@@ -354,11 +342,11 @@ const Profile = () => {
 
               <div className="w-10/12 md:w-7/12 lg:w-7/12 pl-0 md:pl-16 lg:pl-16 pt-0 md:pt-8 lg:pt-8 2xl:pt-12 flex flex-col text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] text-zinc-800">
                 <p className="flex gap-2 font-semibold text-center"><BsHouseDoor className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" /> Alamat :</p>
-                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest"> {data.address}</p>
+                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest"> {data.address ? data.address : "Data Alamat belum ditambahkan"}</p>
                 <p className="flex gap-2 mt-5 md:mt-10 lg:mt-10 2xl:mt-14 font-semibold text-center"><MdOutlineAlternateEmail className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" /> E - mail :</p>
                 <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest">{data.email}</p>
                 <p className="flex gap-2 mt-5 md:mt-10 lg:mt-10 2xl:mt-14 font-semibold text-center"><HiOutlineDevicePhoneMobile className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" />Telepon :</p>
-                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest"> {data.phone_number}</p>
+                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest"> {data.phone_number ? data.phone_number : "Data Telepon belum ditambahkan"}</p>
               </div>
             </div>
 
@@ -368,7 +356,7 @@ const Profile = () => {
 
             <div onClick={() => navigate('/historypembeli')} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500"><MdOutlineWorkHistory className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Lihat history pembelian ?</div>
 
-            <div onClick={() => setModalAing(true)} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Ingin menjadi penjual ?</div>
+            <div onClick={() => upgradePenjual()} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Ingin menjadi penjual ?</div>
 
             <div onClick={() => navigate(`/listproduct/${data.shop_name}`, {
               state: {
@@ -437,7 +425,7 @@ const Profile = () => {
           <Modal isOpen={showModal} isClose={() => setShowModal(false)} title='Edit Profile'>
             <form action="" onSubmit={handleEditProfile}>
               <div className=" flex flex-col md:flex-row lg:flex-row py-5">
-                <div className="w-11/12 md:w-6/12 lg:w-6/12 flex flex-col items-center justify-center">
+                {/* <div className="w-11/12 md:w-6/12 lg:w-6/12 flex flex-col items-center justify-center">
                   <p className="text-zinc-800 text-[22px] font-semibold mb-8">Tambah Foto Porfile</p>
                   <div
                     className="w-[10em] h-[10rem] md:w-[12rem] md:h-[12rem] lg:w-[16rem] lg:h-[16rem] overflow-hidden rounded-full"
@@ -454,16 +442,17 @@ const Profile = () => {
                     accept="image.png, image.jpeg, image.jpg"
                     className="w-full mt-8 text-[18px] text-zinc-800 text-center file:rounded-lg file:bg-lapak file:py-1 file:md:py-2 file:lg:py-2 file:px-4 file:md:px-8 file:lg:px-10   file:text-[18px] file:text-white hover:file:bg-sky-500 hover:file:cursor-pointer"
                   />
-                </div>
+                </div> */}
 
-                <div className="w-11/12 md:w-6/12 lg:w-6/12 items-center mx-2 md:mx-24 lg:mx-24 mt-8 md:mt-0 lg:mt-0">
+                <div className="w-11/12 md:w-6/12 lg:w-10/12 space-y-4 items-center mx-2 md:mx-24 lg:mx-24 mt-8 md:mt-0 lg:mt-0">
 
                   <CustomInput
                     id="full_name"
                     label="Nama Lengkap :"
                     name="full_name"
                     type="text"
-                    placeholder={data.fullname}
+                    placeholder="Masukkan nama lengkap anda"
+                    defaultValue={data.shop_name ? data.shop_name : data.full_name}
                     onChange={(e) => setFullName(e.target.value)}
                   />
 
@@ -472,7 +461,8 @@ const Profile = () => {
                     label="Alamat Lengkap :"
                     name="address"
                     type="text"
-                    placeholder={data.address}
+                    placeholder="Masukkan alamat anda"
+                    defaultValue={data.address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
 
@@ -480,8 +470,9 @@ const Profile = () => {
                     id="email"
                     label="E-mail :"
                     name="email"
-                    type="text"
-                    placeholder={data.email}
+                    type="email"
+                    placeholder="Masukkan email anda"
+                    defaultValue={data.email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
 
@@ -490,7 +481,8 @@ const Profile = () => {
                     label="Telepon :"
                     name="phone_number"
                     type="text"
-                    placeholder={data.phone_number}
+                    placeholder="Masukkan telepon anda"
+                    defaultValue={data.phone_number}
                     onChange={(e) => setPhone(e.target.value)}
                   />
 
