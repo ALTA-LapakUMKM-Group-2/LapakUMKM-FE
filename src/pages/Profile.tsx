@@ -328,41 +328,41 @@ const Profile = () => {
           </Modal>
 
           <div className="w-full px-5 md:px-16 lg:px-28 2xl:px-40">
-            <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider">Profile Detail Saya</h1>
+            <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider dark:text-white">Profile Detail Saya</h1>
 
             <div className="flex flex-col md:flex-row lg:flex-row mt-4 md:mt-10 lg:mt-14">
-              <div className="bg-none md:bg-white lg:bg-white p-6  md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
+              <div className="bg-none dark:bg-slate-800 dark:border-2 dark:border-lapak md:bg-white lg:bg-white p-6  md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
                 <div className="rounded-full w-9/12 md:w-11/12 lg:w-11/12 overflow-hidden h-4/6" >
                   <img src={data.photo_profile ? data.photo_profile : Default} alt="profile.png" className="cursor-pointer" onClick={() => setModalImage(true)} />
                 </div>
 
-                <p className="text-[20px] md:text-[20px] lg:text-[20px] 2xl:text-[28px] font-semibold text-zinc-800 mt-8">{data.shop_name ? data.shop_name : data.full_name}</p>
-                <p className="text-[20px] md:text-[20px] lg:text-[20px] 2xl:text-[28px] font-semibold text-zinc-800">{data.role}</p>
+                <p className="text-[20px] md:text-[20px] lg:text-[20px] 2xl:text-[28px] font-semibold text-zinc-800 mt-8 dark:text-white">{data.shop_name ? data.shop_name : data.full_name}</p>
+                <p className="text-[20px] md:text-[20px] lg:text-[20px] 2xl:text-[28px] font-semibold text-zinc-800 dark:text-white">{data.role}</p>
               </div>
 
               <div className="w-10/12 md:w-7/12 lg:w-7/12 pl-0 md:pl-16 lg:pl-16 pt-0 md:pt-8 lg:pt-8 2xl:pt-12 flex flex-col text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] text-zinc-800">
-                <p className="flex gap-2 font-semibold text-center"><BsHouseDoor className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" /> Alamat :</p>
-                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest"> {data.address ? data.address : "Data Alamat belum ditambahkan"}</p>
-                <p className="flex gap-2 mt-5 md:mt-10 lg:mt-10 2xl:mt-14 font-semibold text-center"><MdOutlineAlternateEmail className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" /> E - mail :</p>
-                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest">{data.email}</p>
-                <p className="flex gap-2 mt-5 md:mt-10 lg:mt-10 2xl:mt-14 font-semibold text-center"><HiOutlineDevicePhoneMobile className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" />Telepon :</p>
-                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest"> {data.phone_number ? data.phone_number : "Data Telepon belum ditambahkan"}</p>
+                <p className="flex gap-2 font-semibold text-center dark:text-white"><BsHouseDoor className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8 dark:text-white" /> Alamat :</p>
+                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest dark:text-white"> {data.address ? data.address : "Data Alamat belum ditambahkan"}</p>
+                <p className="flex gap-2 mt-5 md:mt-10 lg:mt-10 2xl:mt-14 font-semibold text-center dark:text-white"><MdOutlineAlternateEmail className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8 dark:text-white" /> E - mail :</p>
+                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest dark:text-white">{data.email}</p>
+                <p className="flex gap-2 mt-5 md:mt-10 lg:mt-10 2xl:mt-14 font-semibold text-center dark:text-white"><HiOutlineDevicePhoneMobile className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8 dark:text-white" />Telepon :</p>
+                <p className="tracking-wide md:tracking-wide lg:tracking-wide 2xl:tracking-widest dark:text-white"> {data.phone_number ? data.phone_number : "Data Telepon belum ditambahkan"}</p>
               </div>
             </div>
 
-            <div onClick={() => setShowModal(true)} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-2/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-10 text-center hover:cursor-pointer hover:text-zinc-500"><FiEdit className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" />Perbarui Profile</div>
+            <div onClick={() => setShowModal(true)} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-2/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-10 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white"><FiEdit className="w-6 md:w-6 lg:w-6 2xl:w-8 h-6 md:h-6 lg:h-6 2xl:h-8" />Perbarui Profile</div>
 
-            <div onClick={() => setModalPassword(true)} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500"><MdLockReset className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Perbarui Password</div>
+            <div onClick={() => setModalPassword(true)} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white"><MdLockReset className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Perbarui Password</div>
 
-            <div onClick={() => navigate('/historypembeli')} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500"><MdOutlineWorkHistory className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Lihat history pembelian ?</div>
+            <div onClick={() => navigate('/historypembeli')} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white"><MdOutlineWorkHistory className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Lihat history pembelian ?</div>
 
-            <div onClick={() => upgradePenjual()} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500"><SlHandbag className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Ingin menjadi penjual ?</div>
+            <div onClick={() => upgradePenjual()} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white"><SlHandbag className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Ingin menjadi penjual ?</div>
 
             <div onClick={() => navigate(`/listproduct/${data.shop_name}`, {
               state: {
                 id: data.id
               }
-            })} className={`${data.role === 'seller' ? "inline-block" : "hidden"} flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500`}><GoPackage className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Lihat product anda</div>
+            })} className={`${data.role === 'seller' ? "inline-block" : "hidden"} flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white`}><GoPackage className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Lihat product anda</div>
 
 
             <div onClick={deleteUser} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-red-400"><VscTrash className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Hapus akun </div>

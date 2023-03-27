@@ -92,7 +92,7 @@ const HistoryPembeli = () => {
         <>
           <Navbar />
           <div className="px-8 md:px-28 lg:px-52 2xl:px-80 mb-28">
-            <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold">History Pembelian</h1>
+            <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
 
             <FeedbackCard
               id={1}
@@ -123,7 +123,7 @@ const HistoryPembeli = () => {
 
           <Modal isOpen={showFeedback} size='w-96' isClose={() => setShowFeedback(false)} title="Review" >
             <form onSubmit={(e) => handleSubmit(e)}>
-              <p className="text-[18px] font-semibold text-zinc-800 border-t-2 border-zinc-600 pt-4">Ulasan anda :</p>
+              <p className="text-[18px] font-semibold text-zinc-800 border-t-2 border-zinc-600 pt-4 ">Ulasan anda :</p>
               <textarea
                 id="input-ulasan"
                 name="Feedback"

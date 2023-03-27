@@ -18,8 +18,8 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, isClose, img, children, s
             className={`transition-opacity ${isOpen ? "fixed opacity-100" : "opacity-0 hidden"
                 } bottom-10 right-10 h-3/6 flex items-center justify-center z-50`}
         >
-            <div className={`w-96 h-full block bg-white rounded-lg overflow-auto`}>
-                <div className="flex justify-between border-b-2 sticky p-3 bg-white top-0 z-40">
+            <div className={`w-96 h-full block bg-white rounded-lg overflow-auto dark:bg-sl`}>
+                <div className="flex justify-between border-b-2 sticky p-3 bg-white top-0 z-40 ">
                     <div className="flex top-0 justify-center items-center mb-2">
                         <div className="avatar">
                             <div className="w-12 rounded-full">

@@ -65,28 +65,29 @@ const ProdukCard: React.FC<ListingProps> = ({
     return (
 
 
-        <div className="w-60 h-full max-w-sm bg-white border border-lapak rounded-lg shadow-lg bg-black">
+        <div className="w-60 h-full max-w-sm bg-white border border-lapak rounded-lg shadow-lg dark:bg-slate-600 dark:border-4">
             <a onClick={onClick} href="#">
                 <img className="p-4 rounded-t-lg cover w-screen h-72" src={ image} alt="product image" />
             </a>
-            <div className="px-5 pb-5 flex flex-col space-y-1 gap-2">
+            <div className="px-5 pb-5 flex flex-col space-y-1 gap-2 dark:text-white">
                 <a href="#">
-                    <h5 className="text-l font-semibold tracking-tight text-gray-900">{produkName}</h5>
-                    <h5 className="text-l font-medium tracking-tight text-gray-900">Ukuran : {size }</h5>
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2">{produkName}</h5>
+                    <h5 className="text-l font-medium tracking-tight text-gray-900 dark:text-white">Ukuran : {size }</h5>
                 </a>
-                <h5 className="text-l font-semibold tracking-tight text-gray-900 flex"><MdLocationOn className=' w-6 h-6 mr-2' />{location}</h5>
-                <div className="rating">
+                <h5 className="text-l font-semibold tracking-tight text-gray-900 flex dark:text-white"><MdLocationOn className=' w-6 h-6 mr-2 dark:text-lapak' />{location}</h5>
+                <div className="rating ">
                     <Rating
                         value={rating}
                         style={{ maxWidth: 100 }}
                         itemStyles={customStyles}
                         readOnly
+                        className='dark:text-lapak'
                     />
-                    <span className="bg-teal-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">{rating}</span>
+                    <span className="bg-teal-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3 dark:text-black dark:bg-white">{rating}</span>
                 </div>
                 <p>Terjual {sell}</p>
                 <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-gray-900 ">{formatValue({
+                    <span className="text-lg font-semibold text-gray-900 dark:text-white">{formatValue({
                         prefix: 'Rp. ',
                         value: JSON.stringify(price),
                         groupSeparator: '.',

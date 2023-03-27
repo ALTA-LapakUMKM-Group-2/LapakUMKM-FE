@@ -517,7 +517,7 @@ const ListProduct = () => {
                     </select>
                     <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minprice">Harga</label>
                     <CurrencyInput
-                      className='input border-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                      className='input border-2 border-lapak  input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
                       id="price"
                       name="price"
                       prefix='Rp. '
@@ -605,7 +605,7 @@ const ListProduct = () => {
                     </select>
                     <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minprice">Harga</label>
                     <CurrencyInput
-                      className='input border-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                      className='input border-2 border-lapak  input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
                       id="price"
                       name="price"
                       prefix='Rp. '

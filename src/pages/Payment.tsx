@@ -7,6 +7,7 @@ import Modal from '../components/Modal'
 import CustomInput from '../components/CutomInput'
 import CustomButton from '../components/CustomButton'
 import axios from 'axios'
+import Layout from '../components/Layout'
 
 const Payment = () => {
     const [showModal, setShowModal] = useState(false)
@@ -20,7 +21,8 @@ const Payment = () => {
     }
 
     return (
-        <div className='w-full h-full'>
+        <Layout>
+            <div className='w-full h-full'>
             <Modal isOpen={showModal} size='w-96' isClose={() => setShowModal(false)} title='Tambah Alamat'>
                 <form action="" onSubmit={handleAddAlamat}>
                     <div className='space-y-5 mt-10'>
@@ -33,9 +35,9 @@ const Payment = () => {
             </Modal>
             <Navbar />
             <div className="flex flex-col bg-gradient-to-r px-10 min-h-screen ">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:cols-row-2 w-full md:mx-auto mt-20 md:mt-24 gap-5 pb-32 md:px-32">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:cols-row-2 w-full md:mx-auto mt-20 md:mt-24 gap-5 pb-32 md:px-32 ">
                     {/* Card 1 */}
-                    <div className="grid grid-rows-2 bg-base-100 shadow-xl border mb-5 h-full">
+                    <div className="grid grid-rows-2 bg-base-100 shadow-xl border mb-5 h-full rounded-xl">
                         <div className="card-body">
                             <div>
                                 <button className='btn w-full bg-lapak hover:bg-lapak border-none mb-5' onClick={() => setShowModal(true)}>
@@ -135,6 +137,7 @@ const Payment = () => {
                 </div>
             </div>
         </div>
+        </Layout>
     )
 }
 

@@ -118,7 +118,7 @@ const Home = () => {
                             console.log("item test", item);
 
                             return (
-                                <button key={index} id={item.id} className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none"
+                                <button key={index} id={item.id} className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none dark:border-lapak dark:border-2"
                                     onClick={() => navigate(`/home/${item.category}`, {
                                         state: {
                                             id: item.id
@@ -147,7 +147,7 @@ const Home = () => {
                                         location='jakarta'
                                         sell={item.stock_sold}
                                         id={item.id}
-                                        image={item.product_image ? item.product_image[0].image : item.product_image}
+                                        image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
                                         rating={4}
                                         price={item.price}
                                     />

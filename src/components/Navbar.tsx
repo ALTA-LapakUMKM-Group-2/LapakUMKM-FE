@@ -125,22 +125,39 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         checkToken ? ProfileData() : ""
     }, [ProfileData])
 
-    const [theme, setTheme] = useState("light");
+    // const [theme, setTheme] = useState("light");
+    // useEffect(() => {
+    //     if (theme === "dark") {
+    //         document.documentElement.classList.add("dark");
+    //     } else {
+    //         document.documentElement.classList.remove("dark");
+    //     }
+    // }, [theme]);
+
+    // const handleThemeSwitch = () => {
+    //     setTheme(theme === "dark" ? "light" : "dark");
+    //     console.log('test',theme);
+
+    // };
+
+
+    const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
     useEffect(() => {
         if (theme === "dark") {
             document.documentElement.classList.add("dark");
         } else {
             document.documentElement.classList.remove("dark");
         }
+        localStorage.setItem("theme", theme);
     }, [theme]);
 
     const handleThemeSwitch = () => {
         setTheme(theme === "dark" ? "light" : "dark");
-        console.log('test', theme);
     };
 
+
     return (
-        <div className="navbar py-4 w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 dark:border-b-2 dark:border-lapak justify-center dark:bg-slate-500 ">
+        <div className="navbar py-4 w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 dark:border-b-2 dark:border-lapak justify-center dark:bg-slate-800 ">
             <div className='flex gap-4 justify-between w-full md:mx-10'>
                 <div>
                     <button onClick={() => navigate("/home")} className="font-semibold md:flex text-4xl text-white hover:text-accent">

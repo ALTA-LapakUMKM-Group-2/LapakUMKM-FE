@@ -55,7 +55,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             return updatedItems;
         });
     };
-
+    
     console.log("new", newCart)
 
     useEffect(() => {
@@ -67,6 +67,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
         let _cart = newCart.map((item) => {
             if (item.id === i.id) {
                 item.product_pcs++;
+                
             }
             return item;
         });
@@ -87,30 +88,36 @@ const Cart: React.FC<CartData> = ({ products }) => {
         setnewCart(_cart);
     };
 
-    // const handleIncrement = async (i: CartItem) => {
-    //     let _cart = newCart.map((item) => {
-    //         return item.id === i.id
-    //             ? { ...item, product_pcs: (item.product_pcs = item.product_pcs + 1) }
-    //             : item;
-    //     });
-    //     // nsetNewCart(_cart);
-    //     setnewCart(_cart)
-    // }
-    // const handleDecrement = async (i: CartItem) => {
-    //     if (i.product_pcs === 1) {
-    //         return (nsetNewCart)
-    //     } else {
 
-    //         let _cart = newCart.map((item) => {
-    //             return item.id === i.id
-    //                 ? { ...item, product_pcs: (item.product_pcs = item.product_pcs - 1) }
-    //                 : item;
-    //         });
-    //         // nsetNewCart(_cart);
-    //         setnewCart(_cart)
-    //     }
-    // }
-    //   const totalCount = newCart.reduce((total, item) => total + item.product_pcs, 0);
+    const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+        setChecked(e.target.checked);
+        allCheckboxes.forEach((checkbox) => {
+          checkbox.checked = e.target.checked;
+        });
+        const totalPrice = selectedItems.reduce((total, item) => total + (item.product_price * item.product_pcs), 0);
+        setPrice(e.target.checked ? totalPrice : 0);
+        console.log('test selectItem', selectedItems);
+        
+      };
+
+    const test = newCart
+    console.log('tesss newcar', test);
+    
+    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, productPrice: number) => {
+        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+        const allCheckboxesChecked = Array.from(allCheckboxes).every(
+            (checkbox) => checkbox.checked
+        );
+        setChecked(allCheckboxesChecked);
+        if (e.target.checked) {
+            setPrice(totalPrice + productPrice);
+        } else {
+            setPrice(Math.max(totalPrice - productPrice, 0));
+        }
+    };
+
+
 
     const getProfile = async () => {
         setLoading(true)
@@ -128,30 +135,9 @@ const Cart: React.FC<CartData> = ({ products }) => {
     }
 
     useEffect(() => {
-        getProfile()
+                getProfile()
     }, [])
 
-    const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
-        setChecked(e.target.checked);
-        allCheckboxes.forEach((checkbox) => {
-            checkbox.checked = e.target.checked;
-        });
-        setPrice(e.target.checked ? totalPrice + newCart.reduce((prev, item) => prev + item.product_price, 0) : 0);
-    };
-
-    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, productPrice: number) => {
-        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
-        const allCheckboxesChecked = Array.from(allCheckboxes).every(
-            (checkbox) => checkbox.checked
-        );
-        setChecked(allCheckboxesChecked);
-        if (e.target.checked) {
-            setPrice(totalPrice + productPrice);
-        } else {
-            setPrice(Math.max(totalPrice - productPrice, 0));
-        }
-    };
 
     const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
@@ -244,6 +230,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                 counts={checked ? count : item.product_pcs}
                                                 price={item.product_price}
                                                 onCheck={() => handleCheck}
+                                                
                                                 totalPrice={item.product_price * item.product_pcs}
                                                 handleDecrement={() => handleDecrement(item)}
                                                 handleIncrement={() => handleIncrement(item)}

@@ -95,7 +95,7 @@ const Detail = () => {
 
         })
       }
-      // navigate('/cart');
+      navigate('/cart');
 
     } catch (err: any) {
       MySwal.fire({
@@ -112,24 +112,33 @@ const Detail = () => {
   }
 
   const [image, setImage] = useState<any>([])
+  const [photoToko, setPhotoToko] = useState('')
+  const [category, setCategory] = useState<any>('')
   function fetchData() {
     setLoading(true);
     axios
       .get(`https://lapakumkm.mindd.site/products/${id}`)
       .then((res) => {
-        const { full_name, address } = res.data.data.user
+        const { full_name, address , shop_name , photo_profile} = res.data.data.user
+        console.log('test user', res.data.data.user);
+        console.log('test data', res.data.data.category.category);
+        console.log('test dataaaaa', res.data.data);
+        
+        const category  =  res.data.data.category.category
         const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
         setProduct(product_name);
         setDescription(description);
         setPrice(price);
         setStock(stock_remaining);
         setSize(size)
-        setName(full_name)
+        setName(shop_name)
         setAddress(address)
         setTotalPrice(price);
         setUserId(user_id)
         setProductId(id)
         setImage(product_image)
+        setPhotoToko(photo_profile)
+        setCategory(category)
       })
       .catch((err) => {
         console.log(err.response.statusText)
@@ -145,7 +154,8 @@ const Detail = () => {
       })
       .finally(() => setLoading(false))
   }
-
+  console.log('cek user id' , userId);
+  
   useEffect(() => {
     feedbackData()
   }, [])
@@ -270,7 +280,8 @@ const Detail = () => {
       })
       .finally(() => setLoading(false))
   }
-
+  console.log('cek kategor', category);
+  
   return (
     <Layout>
       {
@@ -309,26 +320,28 @@ const Detail = () => {
               </div>
             </ChatModal>
             {/* card for image */}
-            <div className='w-full mt-10 mx-auto px-5 py-10  border rounded-lg'>
+            <div className='w-full mt-10 mx-auto px-5 py-10  border dark:border-none rounded-lg'>
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
-                  <div className="bg-transparent shadow-lg  rounded-lg h-fit">
+                  <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-white dark:border-2">
                     <div className="max-w-5xl max-h-96 ">
-                      {
+                      { loading ? <Loading /> :
                         image ?
-                          <img src={image[0]?.image} className="w-full h-full md:col-span-2 rounded-md" alt="" />
+                          <img src={image[0]?.image} className="max-w-fit max-h-72 md:col-span-2 rounded-md mx-auto" alt="" />
                           :
                           <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" />
                       }
                     </div>
                     <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                      {image ?
+                      {
+                        loading ? <Loading /> :
+                      image ?
                         image.map((item: any) => {
                           console.log("test image", item);
                           return (
                             <>
-                              <img src={item.image} className="w-full h-md rounded-md max-w-xs" alt="" />
+                              <img src={item.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
 
                             </>
                           )
@@ -345,33 +358,33 @@ const Detail = () => {
                   {/* Card kanan */}
                   <div className="p-5 rounded-md max-w-3xl w-full h-fit border-2 border-gray-200 shadow-lg mx-auto">
                     <div className="w-full h-full">
-                      <div className="flex justify-between items-center mb-5">
-                        <h1 className="font-bold text-2xl">{product}</h1>
+                      <div className="flex justify-between items-center mb-5 ">
+                        <h1 className="font-bold text-2xl dark:text-white">{product} </h1>
                         <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={() => setShowChat(true)}>
                           <BsChatText size={20} />
                         </button>
                       </div>
-                      <h1 className="font-bold text-2xl">Stock Tersedia : <span className='ml-3 font-medium'>{stock}</span></h1>
-                      <h1 className="font-bold text-2xl">Ukuran : <span className='ml-3 font-medium'>{size}</span></h1>
-                      <h1 className="font-bold text-2xl flex items-center gap-2">
-                        Rating: <span className=" font-medium flex gap-1"> <MdStarRate size={25} className='ml-3 text-yellow-500' />4.5</span>
+                      <h1 className="font-bold text-2xl dark:text-white">Stock Tersedia <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{stock}</span></h1>
+                      <h1 className="font-bold text-2xl dark:text-white">Ukuran <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{size}</span></h1>
+                      <h1 className="font-bold text-2xl flex items-center gap-2 dark:text-white">
+                        Rating <span className='dark:text-lapak'>:</span>  <span className=" font-medium flex gap-1"> <MdStarRate size={25} className='ml-3 text-yellow-500 dark:text-lapak' />4.5</span>
                       </h1>
-                      <h1 className="font-bold text-2xl mt-2">Price : <span className='ml-3 font-medium'>{formatValue({
+                      <h1 className="font-bold text-2xl mt-2 dark:text-white">Price <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{formatValue({
                         prefix: 'Rp. ',
                         value: JSON.stringify(price),
                         groupSeparator: '.',
                         decimalSeparator: ',',
                       })}</span></h1>
-                      <h1 className="font-bold text-2xl mt-2">total price : <span className='ml-3 font-medium'> {formatValue({
+                      <h1 className="font-bold text-2xl mt-2 dark:text-white">total price <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'> {formatValue({
                         prefix: 'Rp. ',
                         value: JSON.stringify(totalPrice),
                         groupSeparator: '.',
                         decimalSeparator: ',',
                       })}</span></h1>
                       <div className="flex gap-2 border w-fit mt-10 items-center overflow-hidden">
-                        <button onClick={handleDecrement} className="btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 text-2xl mb-3 mr-5 ml-2">-</button>
-                        <h1 className="">{count}</h1>
-                        <button onClick={handleIncrement} className="btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 text-2xl mb-3 ml-5 mr-2">+</button>
+                        <button onClick={handleDecrement} className="btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 mr-5 ml-2">-</button>
+                        <h1 className="font-bold dark:text-white">{count}</h1>
+                        <button onClick={handleIncrement} className="btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
                       </div>
                       <div className="border-2 mt-5"></div>
                       <div className="flex justify-center gap-5 mt-10 w-fit mx-auto ">
@@ -390,18 +403,30 @@ const Detail = () => {
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md '>
-                    <img src={FotoProfile} className='w-40 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${userId}`)} />
-                    <div className='font-bold text-lg'>
-                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${userId}`)}>{name}</h1>
-                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${userId}`)} ><MdOutlineLocationOn /> {address}</h1>
+                    <img src={photoToko} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}` ,{
+                                    state: {
+                                        id: userId
+                                    }
+                                })} />
+                    <div className='font-bold text-lg dark:text-white'>
+                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${name}` ,{
+                                    state: {
+                                        id: userId
+                                    }
+                                })}>{name}</h1>
+                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${name}`,{
+                                    state: {
+                                        id: userId
+                                    }
+                                } )} ><MdOutlineLocationOn className='dark:text-lapak mr-2' /> {address}</h1>
                     </div>
                   </div>
-                  <h1 className='text-3xl font-bold'>Informasi Produk :</h1>
-                  <div className='w-full shadow-xl p-5 rounded-xl border text-lg font-semibold'>
-                    <h1>stock : {stock}</h1>
-                    <h1>Kategori : {`spatu lari`}</h1>
-                    <h1>Brand : {product}</h1>
-                    <h1>Ukuran : {size}</h1>
+                  <h1 className='text-3xl font-bold dark:text-white'>Informasi Produk :</h1>
+                  <div className='w-full shadow-xl p-5 rounded-xl border text-lg font-semibold dark:text-white'>
+                    <h1>stock : <span className='ml-4'>{stock}</span> </h1>
+                    <h1>Kategori : <span className='ml-4'>{category}</span></h1>
+                    <h1>Brand : <span className='ml-4'>{product}</span></h1>
+                    <h1>Ukuran : <span className='ml-4'>{size}</span></h1>
                     <div className='border-2 mt-5 mb-5'>
                     </div>
                     <h1 >Deskripsi : </h1>
@@ -414,8 +439,8 @@ const Detail = () => {
 
                 <div className='flex mt-20 flex-col gap-5 w-7/12'>
                   <div className='flex justify-between'>
-                    <p id='feedback' className='text-2xl text-zinc-800 mb-2 font-semibold '>Ulasan</p>
-                    <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
+                    <p id='feedback' className='text-2xl text-zinc-800 mb-2 font-semibold dark:text-white'>Ulasan</p>
+                    <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak dark:text-white dark:hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
                   </div>
 
                   <div >
@@ -425,13 +450,13 @@ const Detail = () => {
                     ))}
                   </div>
 
-                  <div className='flex justify-between mt-8'>
-                    <p id='diskusi' className='text-2xl text-zinc-800 mb-2 font-semibold'>Diskusi</p>
-                    <a href='#feedback' className='text-[16px] flex items-center hover:cursor-pointer hover:text-lapak text-zinc-800 mb-2 '>Lihat Ulasan <HiOutlineArrowLongUp /></a>
+                  <div className='flex justify-between mt-8 '>
+                    <p id='diskusi' className='text-2xl text-zinc-800 mb-2 font-semibold dark:text-white'>Diskusi</p>
+                    <a href='#feedback' className='text-[16px] flex items-center hover:cursor-pointer hover:text-lapak text-zinc-800 mb-2 dark:text-white dark:hover:text-lapak'>Lihat Ulasan <HiOutlineArrowLongUp /></a>
                   </div>
 
                   <form onSubmit={(e) => handleNewDiskusi(e)} className='p-4 border-2 border-zinc-300 rounded-md'>
-                    <p>Ada pertanyaan ? Diskusikan dengan penjual disini</p>
+                    <p className='dark:text-white'>Ada pertanyaan ? Diskusikan dengan penjual disini</p>
                     <CustomInput
                       id='input-diskusi'
                       placeholder='Apa yang ingin anda tanyakan ?'
@@ -459,13 +484,13 @@ const Detail = () => {
 
                           </div>
                           <div className='flex justify-between text-zinc-800 items-center py-3'>
-                            <h1 className='text-lg font-bold'>{profile.username}</h1>
+                            <h1 className='text-lg font-bold dark:text-white'>{profile.username}</h1>
                           </div>
                         </>
                       ))}
-                      <p className='text-gray-700 my-5'>{item.discussion}</p>
+                      <p className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
 
-                      <p className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak'>Balas diskusi ...</p>
+                      <p className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white'>Balas diskusi ...</p>
 
                       <div className={`mb-5`}>
                         <CustomInput
