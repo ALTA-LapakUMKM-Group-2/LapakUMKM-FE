@@ -17,15 +17,15 @@ const CardFeedback: FC<Props> = ({ rating, image, comment, name }) => {
             </div>
 
             <div className='flex justify-between text-zinc-800 items-center py-3'>
-                <h1 className='text-lg font-bold'>{name}</h1>
+                <h1 className='text-lg font-bold dark:text-white'>{name}</h1>
                 <div className='flex items-center'>
-                    <MdStarRate className='text-yellow-400 mr-1' size={30} />
-                    <h2 className='text-lg font-bold'>{rating}</h2>
+                    <MdStarRate className='text-yellow-400 mr-1 dark:text-lapak' size={30} />
+                    <h2 className='text-lg font-bold dark:text-white'>{rating}</h2>
                 </div>
             </div>
 
 
-            <p className='text-gray-700 my-5'>{comment}</p>
+            <p className='text-gray-700 my-5 dark:text-white'>{comment}</p>
         </div>
     )
 }

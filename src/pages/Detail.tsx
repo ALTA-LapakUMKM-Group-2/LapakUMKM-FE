@@ -326,7 +326,7 @@ const Detail = () => {
                   {/* Card kiri */}
                   <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-white dark:border-2">
                     <div className="max-w-5xl max-h-96 ">
-                      {
+                      { loading ? <Loading /> :
                         image ?
                           <img src={image[0]?.image} className="max-w-fit max-h-72 md:col-span-2 rounded-md mx-auto" alt="" />
                           :
@@ -334,7 +334,9 @@ const Detail = () => {
                       }
                     </div>
                     <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                      {image ?
+                      {
+                        loading ? <Loading /> :
+                      image ?
                         image.map((item: any) => {
                           console.log("test image", item);
                           return (
@@ -349,8 +351,6 @@ const Detail = () => {
                           <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
                           <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
                         </>
-
-
                       }
 
                     </div>
@@ -439,8 +439,8 @@ const Detail = () => {
 
                 <div className='flex mt-20 flex-col gap-5 w-7/12'>
                   <div className='flex justify-between'>
-                    <p id='feedback' className='text-2xl text-zinc-800 mb-2 font-semibold '>Ulasan</p>
-                    <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
+                    <p id='feedback' className='text-2xl text-zinc-800 mb-2 font-semibold dark:text-white'>Ulasan</p>
+                    <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak dark:text-white dark:hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
                   </div>
 
                   <div >
@@ -450,13 +450,13 @@ const Detail = () => {
                     ))}
                   </div>
 
-                  <div className='flex justify-between mt-8'>
-                    <p id='diskusi' className='text-2xl text-zinc-800 mb-2 font-semibold'>Diskusi</p>
-                    <a href='#feedback' className='text-[16px] flex items-center hover:cursor-pointer hover:text-lapak text-zinc-800 mb-2 '>Lihat Ulasan <HiOutlineArrowLongUp /></a>
+                  <div className='flex justify-between mt-8 '>
+                    <p id='diskusi' className='text-2xl text-zinc-800 mb-2 font-semibold dark:text-white'>Diskusi</p>
+                    <a href='#feedback' className='text-[16px] flex items-center hover:cursor-pointer hover:text-lapak text-zinc-800 mb-2 dark:text-white dark:hover:text-lapak'>Lihat Ulasan <HiOutlineArrowLongUp /></a>
                   </div>
 
                   <form onSubmit={(e) => handleNewDiskusi(e)} className='p-4 border-2 border-zinc-300 rounded-md'>
-                    <p>Ada pertanyaan ? Diskusikan dengan penjual disini</p>
+                    <p className='dark:text-white'>Ada pertanyaan ? Diskusikan dengan penjual disini</p>
                     <CustomInput
                       id='input-diskusi'
                       placeholder='Apa yang ingin anda tanyakan ?'
@@ -484,13 +484,13 @@ const Detail = () => {
 
                           </div>
                           <div className='flex justify-between text-zinc-800 items-center py-3'>
-                            <h1 className='text-lg font-bold'>{profile.username}</h1>
+                            <h1 className='text-lg font-bold dark:text-white'>{profile.username}</h1>
                           </div>
                         </>
                       ))}
-                      <p className='text-gray-700 my-5'>{item.discussion}</p>
+                      <p className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
 
-                      <p className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak'>Balas diskusi ...</p>
+                      <p className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white'>Balas diskusi ...</p>
 
                       <div className={`mb-5`}>
                         <CustomInput

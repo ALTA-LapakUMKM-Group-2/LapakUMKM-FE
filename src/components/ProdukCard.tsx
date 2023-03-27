@@ -71,7 +71,7 @@ const ProdukCard: React.FC<ListingProps> = ({
             </a>
             <div className="px-5 pb-5 flex flex-col space-y-1 gap-2 dark:text-white">
                 <a href="#">
-                    <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">{produkName}</h5>
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2">{produkName}</h5>
                     <h5 className="text-l font-medium tracking-tight text-gray-900 dark:text-white">Ukuran : {size }</h5>
                 </a>
                 <h5 className="text-l font-semibold tracking-tight text-gray-900 flex dark:text-white"><MdLocationOn className=' w-6 h-6 mr-2 dark:text-lapak' />{location}</h5>
