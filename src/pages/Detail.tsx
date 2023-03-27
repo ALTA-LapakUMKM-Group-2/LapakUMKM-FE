@@ -338,8 +338,6 @@ const Detail = () => {
                           <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
                           <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
                         </>
-
-
                       }
 
                     </div>

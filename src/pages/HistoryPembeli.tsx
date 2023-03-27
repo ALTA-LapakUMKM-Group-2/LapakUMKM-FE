@@ -39,9 +39,7 @@ const HistoryPembeli = () => {
   const MySwal = withReactContent(Swal)
   const [showFeedback, setShowFeedback] = useState<boolean>(false)
   const [value, setValue] = useState<FormValues>(initialFormValues)
-
   const [feedback, setFeedback] = useState<string>("")
-
   const [loading, setLoading] = useState<boolean>(false)
   const [disable, setDisable] = useState<boolean>(true)
 
@@ -93,8 +91,8 @@ const HistoryPembeli = () => {
       {loading ? <Loading /> :
         <>
           <Navbar />
-          <div className="w-full h-full px-8 md:px-28 lg:px-52 mb-28">
-            <h1 className="mt-12 mb-14 text-[24px] font-semibold">History Pembelian</h1>
+          <div className="px-8 md:px-28 lg:px-52 2xl:px-80 mb-28">
+            <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold">History Pembelian</h1>
 
             <FeedbackCard
               id={1}
