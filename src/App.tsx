@@ -47,7 +47,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/listproduct/:nama_toko" element={<ListProduct />} />
           <Route path="/historypembeli" element={<HistoryPembeli />} />
-          <Route path="/toko/:id" element={<Toko />} />
+          <Route path="/toko/:name" element={<Toko />} />
           <Route path="/notif" element={<NotifikasiCoba />} />
           {/* <Route path="/auth/sso-response-callback" element={<GoogleAuth/>}/> */}
         </Routes >

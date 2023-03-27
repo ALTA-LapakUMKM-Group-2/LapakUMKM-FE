@@ -122,7 +122,9 @@ const Detail = () => {
         const { full_name, address , shop_name , photo_profile} = res.data.data.user
         console.log('test user', res.data.data.user);
         console.log('test data', res.data.data.category.category);
-        const  category  =  res.data.data.category.category
+        console.log('test dataaaaa', res.data.data);
+        
+        const category  =  res.data.data.category.category
         const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
         setProduct(product_name);
         setDescription(description);
@@ -152,7 +154,8 @@ const Detail = () => {
       })
       .finally(() => setLoading(false))
   }
-
+  console.log('cek user id' , userId);
+  
   useEffect(() => {
     feedbackData()
   }, [])
@@ -400,10 +403,22 @@ const Detail = () => {
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md '>
-                    <img src={photoToko} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${userId}`)} />
+                    <img src={photoToko} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}` ,{
+                                    state: {
+                                        id: userId
+                                    }
+                                })} />
                     <div className='font-bold text-lg dark:text-white'>
-                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${userId}`)}>{name}</h1>
-                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${userId}`)} ><MdOutlineLocationOn className='dark:text-lapak mr-2' /> {address}</h1>
+                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${name}` ,{
+                                    state: {
+                                        id: userId
+                                    }
+                                })}>{name}</h1>
+                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${name}`,{
+                                    state: {
+                                        id: userId
+                                    }
+                                } )} ><MdOutlineLocationOn className='dark:text-lapak mr-2' /> {address}</h1>
                     </div>
                   </div>
                   <h1 className='text-3xl font-bold dark:text-white'>Informasi Produk :</h1>

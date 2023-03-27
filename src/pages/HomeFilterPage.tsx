@@ -144,9 +144,9 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                     :
             <div className="flex flex-col lg:flex-row w-11/12">
                 <div className="flex mt-10 mx-auto lg:ml-auto">
-                    <div className="w-80 h-fit bg-white border rounded-xl shadow-xl flex flex-col ">
+                    <div className="w-80 h-fit bg-white border rounded-xl shadow-xl flex flex-col dark:bg-slate-800 dark:border-lapak">
                         <div className="flex flex-col">
-                            <div className="flex flex-row justify-between border-b-2 mx-3 mt-2 pb-2">
+                            <div className="flex flex-row justify-between border-b-2 mx-3 mt-2 pb-2 dark:text-white">
                                 <p className='my-auto text-xl font-semibold'>Filter</p>
                                     <label className="swap swap-rotate">
                                         <input type="checkbox" />
@@ -155,13 +155,13 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                     </label>
                             </div>
                             <div className={`text-lapak font-semibold w-80 transition-all duration-300 ${ showFilter ? 'block' : 'hidden' }`}>
-                                <div className="px-4 py-3 text-sm text-gray-900"> 
+                                <div className="px-4 py-3 text-sm text-gray-900 "> 
                                     <form onSubmit={handleSubmit} className="space-y-5">
                                         <div className='w-full'>
-                                            <label className="text-zinc-800 text-[18px] font-semibold" htmlFor='kategori'>
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor='kategori'>
                                                 Kategori
                                             </label>
-                                            <select className=" border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
+                                            <select className=" border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px] "
                                             defaultValue={''}
                                             id='kategori'
                                             name='kategori'
@@ -172,16 +172,16 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                             { 
                                                 category?.map((item: any, i:number)=> {
                                                     return (
-                                                        <option value={item.id}>{item.category}</option>
+                                                        <option className='' value={item.id}>{item.category}</option>
                                                     )
                                                 })  
                                             }
                                             </select>
                                         </div>
                                         <div className="w-full">
-                                            <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minprice">Minimum Price</label>
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minprice">Minimum Price</label>
                                                 <CurrencyInput
-                                                    className='input border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                                                    className='input border-2 mt-2 border-lapak input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
                                                     id="minprice"
                                                     name="minprice"
                                                     prefix='Rp. '
@@ -194,9 +194,9 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                                 />
                                         </div>
                                         <div className="">
-                                            <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="maxprice">Maximum Price</label>
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="maxprice">Maximum Price</label>
                                                 <CurrencyInput
-                                                    className='input border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                                                    className='input border-2 mt-2 border-lapak input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
                                                     id="maxprice"
                                                     name="maxprice"
                                                     prefix='Rp. '
@@ -209,7 +209,7 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                                 />
                                         </div>
                                         <div className="">
-                                            <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minrating" id='minrating'>Minimum Ratings</label>
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minrating" id='minrating'>Minimum Ratings</label>
                                             <Rating
                                                 itemStyles={customStyles}
                                                 isRequired

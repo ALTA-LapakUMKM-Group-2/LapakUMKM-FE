@@ -8,22 +8,24 @@ import ProdukCard from '../components/ProdukCard'
 import ChatModal from '../components/ChatModal'
 import axios from 'axios'
 import Loading from '../components/Loading'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 const Toko = () => {
     const [showChat, setShowChat] = useState(false)
     const [loading, setLoading] = useState(false)
     const { id } = useParams()
-
+    const location = useLocation()
     const [data, setData] = useState([])
     const [getUserToko, setUserToko] = useState('')
     const [tokoName, setTokoName] = useState('')
     const [address, setAddress] = useState('')
     const [foto, setFoto] = useState('')
     const [fullName, setFullName] = useState('')
+    const [userId, setUserId] = useState(location.state.id)
+
     const getPrudukToko = async () => {
         setLoading(true)
         try {
-            const res = await axios.get(`https://lapakumkm.mindd.site/products?userId=${id}`)
+            const res = await axios.get(`https://lapakumkm.mindd.site/products?user_id=${userId}`)
             const {address, full_name , photo_profile, shop_name} = res.data.data[0].user
             setTokoName(shop_name)
             setAddress(address)
