@@ -51,9 +51,10 @@ const ListProduct = () => {
   const [showEditProduk, setShowEditProduk] = useState(false)
   const [showImage, setShowImage] = useState(false)
   const [category, setCategory] = useState<any>([])
-  const [productId, setProductId] = useState<number>()
+  const [productId, setProductId] = useState<number>(0)
   const [picture, setPicture] = useState<any>([])
   const [loading, setLoading] = useState(false)
+  const [imageLoading, setImageLoading] = useState(false)
   const [product, setProduct] = useState<any>([])
   const [selectedImage, setSelectedImage] = useState<File[] | []>([])
   const location = useLocation()
@@ -125,7 +126,7 @@ const ListProduct = () => {
   const fetchProduct = async () => {
     setLoading(true)
     try {
-      const res = await axios.get(`${productEndpoint}?userId=${user_id}`,{
+      const res = await axios.get(`${productEndpoint}?user_id=${user_id}`,{
         headers:{
           Authorization: `Bearer ${cookie.token}`
         }
@@ -143,39 +144,46 @@ const ListProduct = () => {
   }, [])
   console.log(product)
 
-  const fetchImage = async () => {
+  const fetchImage = async (id: number) => {
+    setLoading(true)
     try {
-      const res = await axios.get(`${productEndpoint}/${productId}/images`,{
+      const res = await axios.get(`${productEndpoint}/${id}/images`,{
         headers:{
           Authorization: `Bearer ${cookie.token}`
         }
       })
-      setPicture(res.data.data)
+      setPicture(res.data)
+      console.log(res.data)
     } catch (error) {
-
+      
     }
+    setLoading(false)
   }
-
+  
   useEffect(() => {
-    fetchImage()
+    fetchImage(productId)
   }, [])
+  console.log("product Id", productId)
+  console.log("gambaer",picture)
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      setLoading(true)
       e.preventDefault();
       setFormValues(initialFormValues);
-      await axios.post(productEndpoint, {
-        category_id : parseInt(formValues.categoriId),
-        product_name : formValues.produkName,
-        description : formValues.deskripsi,
-        price : formValues.price,
-        stock_remaining : parseInt(formValues.stockRemaining),
-        size : formValues.ukuran
-      },
+      const formData = new FormData()
+      formData.append("photo_product", formValues.image[0].name)
+      formData.append("category_id", formValues.categoriId)
+      formData.append("product_name", formValues.produkName)
+      formData.append("description", formValues.deskripsi)
+      formData.append("price", formValues.price)
+      formData.append("stock_remaining", formValues.stockRemaining)
+      formData.append("size", formValues.ukuran)
+      await axios.post(productEndpoint, formData,
       {
         headers:{
           Authorization: `Bearer ${cookie.token}`,
-          "Content-Type": 'application/json',
+          "Content-Type": 'multipart/form-data',
           Accept: 'application/json'
         }
       }
@@ -203,9 +211,10 @@ const ListProduct = () => {
           showCancelButton: false,
           timer: 1500,
         })
-      })
+      }).finally(()=> setLoading(false))
   }
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     e.preventDefault();
     setFormValues(initialFormValues);
     const formData = new FormData()
@@ -219,7 +228,7 @@ const ListProduct = () => {
     }
     )
     .then((response)=> {
-      fetchImage()
+      fetchProduct()
       setShowImage(false)
       Swal.fire({
         position: "center",
@@ -241,10 +250,11 @@ const ListProduct = () => {
         showCancelButton: false,
         timer: 1500,
       })
-    })
+    }).finally(()=> setLoading(false))
   }
 
   const handleDeleteImage = async (id:any) =>{
+    setLoading(true)
     Swal.fire({
       icon: "warning",
       title: "Anda yakin Ingin menghapus Foto ini?",
@@ -270,9 +280,7 @@ const ListProduct = () => {
             showConfirmButton: false,
             timer: 2000,
           })
-          setLoading(true)
           fetchProduct()
-          fetchImage()
           setShowImage(false)
         })
         .catch((error)=> {
@@ -328,6 +336,7 @@ const ListProduct = () => {
   }, [editValues, editMode]);
 
   const handleEditProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     e.preventDefault();
     setFormValues(initialFormValues);
     await axios.put(`${productEndpoint}/${productId}`, {
@@ -357,7 +366,6 @@ const ListProduct = () => {
         timer: 2000,
       })
       fetchProduct()
-      setLoading(true)
       setShowEditProduk(false)
     })
     .catch((error)=> {
@@ -385,13 +393,13 @@ const ListProduct = () => {
       cancelButtonColor: "#db1f1f"
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
+        setLoading(true)
         axios.delete(`${productEndpoint}/${id}`,{
           headers:{
             Authorization: `Bearer ${cookie.token}`
           }
         })
         .then((response)=>{
-          setLoading(false)
           Swal.fire({
             position: "center",
             icon: "success",
@@ -412,11 +420,10 @@ const ListProduct = () => {
             showCancelButton: false,
             timer: 1500,
           })
-        }).finally(()=> setLoading(true))
+        }).finally(()=> setLoading(false))
       }
     })
   }
-  console.log("product Id", productId)
   const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
   return (
     <Layout>
@@ -589,12 +596,12 @@ const ListProduct = () => {
                       value={formValues.categoriId}
                       onChange={handleSelectChange}
                       >
-                        <option value={'kaos'}>Kaos</option>
-                        <option value={'sepatu'}>Sepatu</option>
-                        <option value={'celana'}>Celana</option>
-                        <option value={'sembako'}>Sembako</option>
-                        <option value={'sendal'}>Sendal</option>
-                        <option value={'tas'}>Tas</option>
+                        {category.map((item:any, index:any) => {
+                            return(
+                              <option value={item.id}>{item.category}</option>
+                            )
+                          })        
+                        } 
                     </select>
                     <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minprice">Harga</label>
                     <CurrencyInput
@@ -702,55 +709,61 @@ const ListProduct = () => {
                     </tr>
                   </thead>
                   <tbody className="text-[15px]">
-                    { loading ? <Loading/> : product.map((item:any, index:any)=>{
-                      return(
-                      <tr className="bg-white border-b ">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                          {index + 1}
-                        </th>
-                        <td className="px-8 py-">
-                          {item.product_image === null ? (
-                            <BiImageAdd
-                            aria-hidden='true'
-                            className="float-left w-12 h-12 md:w-20 mr-2 cursor-pointer"
-                            onClick={()=>{setShowImage(true), setProductId(item.id)}}
+                    { !product  ? (
+                      <>
+                      </>
+                    ) : (
+                      product.map((item:any, index:any)=>{
+                        return(
+                        <tr className="bg-white border-b ">
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                            {index + 1}
+                          </th>
+                          <td className="px-8 py-">
+                            {item.product_image === null ? (
+                              <BiImageAdd
+                              aria-hidden='true'
+                              className="float-left w-12 h-12 md:w-20 mr-2 cursor-pointer"
+                              onClick={()=>{setShowImage(true), setProductId(item.id), fetchImage(item.id)}}
+                              />
+                            ):(
+                              <img src={item.product_image[0].image} alt="produk.jpg" className="float-left w-12 h-12 md:w-20 mr-2 cursor-pointer" onClick={()=>{setShowImage(true), setProductId(item.id), fetchImage(item.id)}}/>
+                            )}
+                            <p>{item.product_name}</p>
+                            <p className="flex items-end gap-1"><AiFillStar className="text-yellow-400" size={24} />{item.rating}</p>
+                          </td>
+                          <td className="px-4 py-4">
+                            Rp {item.price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.")}
+                          </td>
+  
+                          <td className="py-4 text-center">
+                            {item.stock_remaining}
+                          </td>
+  
+                          <td className="py-4 text-center">
+                            {item.stock_sold}
+                          </td>
+  
+                          <td className="flex flex-col gap-2 px-6 py-16 md:py-14 lg:py-4">
+                            <CustomButton
+                              id="btn-perbarui"
+                              label="Perbarui"
+                              className="rounded-xl bg-lapak px-2 md:px-2 lg:px-0 py-1 text-[18px] font-semibold capitalize text-zinc-50 hover:bg-sky-500"
+                              onClick={()=> {setShowEditProduk(true), setProductId(item.id), handleEditValue(item.id)}}
                             />
-                            // <p className="float-left w-12 md:w-20 mr-2 cursor-pointer">Tamah Gambar Produk ??</p>
-                          ):(
-                            <img src={item.product_image[0].image} alt="produk.jpg" className="float-left w-12 h-12 md:w-20 mr-2 cursor-pointer" onClick={()=>setShowImage(true)}/>
-                          )}
-                          <p>{item.product_name}</p>
-                          <p className="flex items-end gap-1"><AiFillStar className="text-yellow-400" size={24} />{item.rating}</p>
-                        </td>
-                        <td className="px-4 py-4">
-                          Rp {item.price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.")}
-                        </td>
-
-                        <td className="py-4 text-center">
-                          {item.stock_remaining}
-                        </td>
-
-                        <td className="py-4 text-center">
-                          {item.stock_sold}
-                        </td>
-
-                        <td className="flex flex-col gap-2 px-6 py-16 md:py-14 lg:py-4">
-                          <CustomButton
-                            id="btn-perbarui"
-                            label="Perbarui"
-                            className="rounded-xl bg-lapak px-2 md:px-2 lg:px-0 py-1 text-[18px] font-semibold capitalize text-zinc-50 hover:bg-sky-500"
-                            onClick={()=> {setShowEditProduk(true), setProductId(item.id), handleEditValue(item.id)}}
-                          />
-                          <CustomButton
-                            id="btn-hapus"
-                            label="Hapus"
-                            className="rounded-xl bg-red-500 py-1 text-[18px] font-semibold capitalize text-zinc-50 hover:bg-orange-500"
-                            onClick={()=> handleDelete(item.id)}
-                          />
-                        </td>
-                    </tr>
-                      )
-                    })}
+                            <CustomButton
+                              id="btn-hapus"
+                              label="Hapus"
+                              className="rounded-xl bg-red-500 py-1 text-[18px] font-semibold capitalize text-zinc-50 hover:bg-orange-500"
+                              onClick={()=> handleDelete(item.id)}
+                            />
+                          </td>
+                      </tr>
+                        
+                        )
+                      })
+                    ) 
+                    }
                   </tbody>
                 </table>
               </div>
@@ -761,10 +774,9 @@ const ListProduct = () => {
           isClose={()=>setShowImage(false)}
           title="Gambar Produk"
           >
-            <div className="grid grid-cols-3 gap-3">
-                    {
-                      picture.length > 0 ? 
-                        picture.map((item:any, index:any) => {
+          <div className="grid grid-cols-3 gap-3">
+                    { picture.data !== null ? 
+                        picture?.data?.map((item:any, index:any) => {
                           return(
                             <label
                               className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50`}>
@@ -773,16 +785,13 @@ const ListProduct = () => {
                                   <img src={item.image} className="w-20 h-20" alt="" />
                                 </div>
                               </div>
-                              <button className="btn btn-sm btn-outline btn-error mt-2" onClick={()=> handleDeleteImage(item.id)}>delete</button>
+                              <button className="btn btn-sm btn-outline btn-error mt-2" onClick={()=> handleDeleteImage(item.id)}>Hapus</button>
                             </label>
                           )
                         })
                       :
                       <>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Klik untuk Upload</span> Atau Seret</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                      </>    
-                    }
+                      </> }
               <form onSubmit={handleUpload}>
                 <label htmlFor="dropzone-file" 
                   onDrop={handleDrop}

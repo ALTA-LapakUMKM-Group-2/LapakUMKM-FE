@@ -9,6 +9,7 @@ import axios from 'axios'
 import Loading from '../components/Loading'
 import Loading2 from '../components/Loading2'
 import Search from '../components/Search'
+import { useCookies } from 'react-cookie'
 
 const Home = () => {
 
@@ -16,6 +17,7 @@ const Home = () => {
     const [kategori, setKategori] = useState('')
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
+    const [cookie, setCookie] = useCookies(["token"]);
     const [search, setSearch] = useState('')
 
     const getAllList = async () => {
@@ -23,8 +25,6 @@ const Home = () => {
         try {
             const res = await axios.get('https://lapakumkm.mindd.site/products')
             setData(res.data.data)
-
-
         } catch (error) {
 
         }
@@ -55,8 +55,8 @@ const Home = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
-   console.log('data', data);
-   const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+    console.log('data', data);
+    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
             <Navbar
@@ -64,8 +64,8 @@ const Home = () => {
             />
             <div className="flex flex-col w-11/12 mx-auto items-center">
                 <div className="mt-10 mx-auto w-3/6">
-                    <p className='dark:text-white'>Kategori</p>
-                    <div className="flex w-full space-x-10 relative overflow-x-auto">
+                    <p className='dark:text-white text-xl font-semibold'>Cari Berdasarkan Kategori</p>
+                    <div className="flex w-full space-x-10 relative overflow-x-auto p-5">
                         {category.map((item:any, index:any) => {
                             console.log("item test", item);
                             
