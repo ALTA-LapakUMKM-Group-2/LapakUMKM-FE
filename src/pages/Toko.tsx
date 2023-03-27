@@ -84,12 +84,12 @@ const Toko = () => {
                     {/*  */}
                     {/*  */}
                     <div className='flex flex-col mx-auto'>
-                        <div className='flex flex-col rounded-md bg-white border-lapak border-b-4 mt-5 mb-5 p-10 w-[500px] mx-auto shadow-lg'>
+                        <div className='flex flex-col rounded-md bg-white dark:border-lapak dark:border-4 border-b-8 border-lapak mt-5 mb-5 p-10 max-w-fit min-w-[500px] mx-auto shadow-lg dark:bg-slate-600  '>
                             <div className='flex w-fit gap-5 '>
-                                <img src={imgUrl} className='w-40 rounded-full' />
-                                <div className='font-bold text-lg'>
-                                    <h1 className='mb-5'>{tokoName}</h1>
-                                    <h1 className='flex items-center'><MdOutlineLocationOn /> {address}</h1>
+                                <img src={foto} className='w-32 rounded-full' />
+                                <div className=' text-lg'>
+                                    <h1 className='mb-5 text-3xl dark:text-white font-bold'>{tokoName}</h1>
+                                    <h1 className='flex items-center gap-2 dark:text-white font-semibold'><MdOutlineLocationOn className='flex items-center' /> <span className='flex items-center'>{address}</span></h1>
                                 </div>
                             </div>
                             <div className='flex justify-center mt-7 '>
@@ -102,10 +102,11 @@ const Toko = () => {
 
                         <div className='mt-10'>
                            <div className='flex flex-col items-center gap-5 justify-center'>
-                            <h1 className='text-2xl font-semibold ml-1'>Produk Penjual</h1>
+                            <h1 className='text-4xl font-semibold ml-1 dark:text-white mb-5'>Produk Penjual</h1>
                            <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
                                 {
                                     data?.map((item: any, i: number) => {
+                                      
                                         return (
                                             <ProdukCard
                                                 produkName={item.product_name}
@@ -113,7 +114,7 @@ const Toko = () => {
                                                 sell={item.stock_sold}
                                                 id={i}
                                                 key={i}
-                                                image={'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
+                                                image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
                                                 rating={4}
                                                 price={item.price}
                                             />
