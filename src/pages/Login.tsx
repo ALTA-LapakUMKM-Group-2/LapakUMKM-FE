@@ -37,6 +37,10 @@ const Login = () => {
     }
   }, [email, password]);
 
+  const handleLoginWithGoogle = async () => {
+    
+  }
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
@@ -147,6 +151,13 @@ const Login = () => {
                   id='btn-login'
                   label='Masuk'
                   loading={disable || loading}
+                />
+              </div>
+              <div className="mt-3">
+                <CustomButton
+                  id='btn-login'
+                  label='Masuk Dengan Google'
+                  onClick={()=> handleLoginWithGoogle()}
                 />
               </div>
             </form>

@@ -18,6 +18,7 @@ import NotifikasiCoba from "./pages/NotifikasiCoba";
 import { getDark } from "./utils/redux/reducer/reducer";
 import { useState, useEffect, useMemo } from "react";
 
+
 function App() {
   const dispatch = useDispatch();
   const [cookie, setCookie] = useCookies(["token"]);
@@ -48,6 +49,7 @@ function App() {
           <Route path="/historypembeli" element={<HistoryPembeli />} />
           <Route path="/toko/:id" element={<Toko />} />
           <Route path="/notif" element={<NotifikasiCoba />} />
+          {/* <Route path="/auth/sso-response-callback" element={<GoogleAuth/>}/> */}
         </Routes >
       </BrowserRouter >
     </>
