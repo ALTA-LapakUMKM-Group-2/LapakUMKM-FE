@@ -38,7 +38,7 @@ const Login = () => {
   }, [email, password]);
 
   const handleLoginWithGoogle = async () => {
-    
+
   }
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,7 +57,7 @@ const Login = () => {
         const { message, data } = res.data
         console.log(data.token)
         setCookie("token", data.token, { path: "/" });
-        setCookie('id', data.user.full_name, { path: '/' })
+        setCookie('id', data.user.id, { path: '/' })
         dispatch(handleAuth(true))
         MySwal.fire({
           icon: "success",
@@ -157,7 +157,7 @@ const Login = () => {
                 <CustomButton
                   id='btn-login'
                   label='Masuk Dengan Google'
-                  onClick={()=> handleLoginWithGoogle()}
+                  onClick={() => handleLoginWithGoogle()}
                 />
               </div>
             </form>

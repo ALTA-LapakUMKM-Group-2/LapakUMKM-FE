@@ -11,6 +11,7 @@ import Loading2 from '../components/Loading2'
 import Search from '../components/Search'
 import { useCookies } from 'react-cookie'
 import { DataType } from '../utils/types/DataType'
+import InfiniteScroll from "react-infinite-scroll-component"
 
 const Home = () => {
     const navigate = useNavigate()
