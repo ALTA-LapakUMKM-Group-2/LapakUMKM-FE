@@ -114,7 +114,7 @@ const Home = () => {
                 <div className="mt-10 mx-auto w-3/6">
                     <p className='dark:text-white text-xl font-semibold'>Cari Berdasarkan Kategori</p>
                     <div className="flex w-full space-x-10 relative overflow-x-auto p-5">
-                        {category.map((item: any, index: any) => {
+                        {category?.map((item: any, index: any) => {
                             console.log("item test", item);
 
                             return (
@@ -144,7 +144,7 @@ const Home = () => {
                                         size={item.size}
                                         key={index}
                                         produkName={item.product_name}
-                                        location='jakarta'
+                                        location={item.user.address}
                                         sell={item.stock_sold}
                                         id={item.id}
                                         image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}

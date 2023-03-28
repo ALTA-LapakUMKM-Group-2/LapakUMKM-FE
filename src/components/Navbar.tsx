@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     // handle log out
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
+    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile']);
     const checkToken = cookies.token
     const navigate = useNavigate()
     const [cart, setCart] = useState([])
@@ -65,6 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 dispatch(handleAuth(false));
                 removeCookie('id');
                 removeCookie('token');
+                removeCookie('photo_profile');
                 navigate("/");
             }
         });
@@ -155,6 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         setTheme(theme === "dark" ? "light" : "dark");
     };
 
+    console.log('poto', cookies.photo_profile)
 
     return (
         <div className="navbar py-4 w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 dark:border-b-2 dark:border-lapak justify-center dark:bg-slate-800 ">
@@ -205,7 +207,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
                             <div className="avatar">
                                 <div className="w-14 rounded-full">
-                                    <img src={checkToken && photo ? photo : Default} />
+                                    <img src={checkToken && photo ? photo : cookies.photo_profile ? cookies.photo_profile : Default } />
                                 </div>
                             </div>
 
