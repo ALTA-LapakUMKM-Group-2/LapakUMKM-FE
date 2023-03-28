@@ -20,7 +20,7 @@ const Login = () => {
 
   const [ user, setUser ] = useState<any>({});
   const [ profile, setProfile ] = useState<any>({});
-  const [cookie, setCookie] = useCookies(["token", "id"]);
+  const [cookie, setCookie] = useCookies(["token", "id", "photo_profile"]);
   
   const login = useGoogleLogin({
     onSuccess: tokenResponse => {console.log("buat ngambil token",tokenResponse), setUser(tokenResponse)},
@@ -50,11 +50,12 @@ const Login = () => {
       const response = await axios.post(`https://lapakumkm.mindd.site/auth/sso-response-callback`, {
         email: profile.email,
         verified_email: profile.verified_email,
-        photo: profile.photo
+        photo: profile.picture
       });
       const { message, data } = response.data;
       setCookie("token", data.token, { path: "/" });
       setCookie('id', data.user.full_name, { path: '/' })
+      setCookie('photo_profile', profile.picture, { path: '/' })
       MySwal.fire({
         icon: "success",
         title: message,
@@ -78,6 +79,9 @@ const Login = () => {
       handleGetAccessToken();
     }
   }, [user]);
+
+
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const MySwal = withReactContent(Swal);

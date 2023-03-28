@@ -65,6 +65,7 @@ const HomeFilter = () => {
     };
     const [defaultValue, setDefaultValue] = useState('')
     const productEndpoint = 'https://lapakumkm.mindd.site/products?'
+    
     const filter = `price_min=${formValues.minprice}&price_max=${formValues.maxprice}&rating=${formValues.minrating}&category_id=${formValues.kategori ? formValues.kategori : categoryId}`
     const fetchProduct = async (minPrice: any, maxPrice:any, rating: any, categori_id:any) => {
         setLoading(true)
