@@ -8,9 +8,15 @@ import CustomInput from '../components/CutomInput'
 import CustomButton from '../components/CustomButton'
 import axios from 'axios'
 import Layout from '../components/Layout'
+import { useLocation } from 'react-router'
 
 const Payment = () => {
     const [showModal, setShowModal] = useState(false)
+    const location = useLocation()
+
+    const cart = location.state.forPayment 
+
+    console.log("test cart", cart)
 
     const handleAddAlamat = async () => {
         try {

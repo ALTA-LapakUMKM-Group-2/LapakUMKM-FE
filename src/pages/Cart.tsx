@@ -7,8 +7,10 @@ import CustomButton from '../components/CustomButton'
 import CartCard from '../components/CartCard'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
+import { useNavigate } from 'react-router'
 
 interface Product {
+    selected: unknown
     id: number
     lapak_address: string
     lapak_name: string
@@ -38,10 +40,11 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [selectedItems, setSelectedItems] = useState<Product[]>([]);
     const [newCart, setnewCart] = useState<Product[]>([]);
     const [price, setPrice] = useState<number>(0)
-    const [count, setCount] = useState<number>(1)
+    const [count, setCount] = useState<number>()
     const [cart, nsetNewCart] = useState<Product[]>([])
     const [totalPrice, setTotalPrice] = useState<number>(price)
-
+    const navigate = useNavigate()
+    
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Product) => {
         const isChecked = e.target.checked;
 
@@ -52,17 +55,19 @@ const Cart: React.FC<CartData> = ({ products }) => {
                 : prevState.filter((selectedItem) => selectedItem.id !== product.id);
             product.total_price = 0
             setnewCart(updatedItems)
+            TotalCart();
             return updatedItems;
         });
     };
-    
+    console.log('updatedItems');
     console.log("new", newCart)
 
     useEffect(() => {
         newCart
     }, [])
 
-
+    console.log('test cart 2', cart);
+    
     const handleIncrement = (i: CartItem) => {
         let _cart = newCart.map((item) => {
             if (item.id === i.id) {
@@ -71,6 +76,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             }
             return item;
         });
+        
         setnewCart(_cart);
     };
 
@@ -87,20 +93,75 @@ const Cart: React.FC<CartData> = ({ products }) => {
         });
         setnewCart(_cart);
     };
-
-
+    console.log('teattt', cart);
+    
+    const test1 = [...cart]
     const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
-        setChecked(e.target.checked);
-        allCheckboxes.forEach((checkbox) => {
-          checkbox.checked = e.target.checked;
-        });
-        const totalPrice = selectedItems.reduce((total, item) => total + (item.product_price * item.product_pcs), 0);
-        setPrice(e.target.checked ? totalPrice : 0);
-        console.log('test selectItem', selectedItems);
+        const allCheckboxesChecked = e.target.checked;
+        setChecked(allCheckboxesChecked);
         
-      };
+            const updatedCart = cart.map((item) => {
+            const selected = allCheckboxesChecked;
+            return { ...item, selected };
+            });
+        
+            setnewCart(updatedCart);
+        
+            const selectedItems = updatedCart.filter((item) => item.selected);
+        
+            let totalPrice = 0;
+            let totalCount = 0;
+        
+            if (selectedItems.length > 0) {
+            totalPrice = selectedItems.reduce((total, item) => {
+                return total + item.product_price * item.product_pcs;
+            }, 0);
+        
+            totalCount = selectedItems.reduce((total, item) => {
+                return total + item.product_pcs;
+            }, 0);
+            }
+        
+            setPrice(allCheckboxesChecked ? totalPrice : 0);
+            setCount(totalCount);
+        
+            const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
+            'input[type="checkbox"]'
+            );
+            allCheckboxes.forEach((checkbox) => {
+            checkbox.checked = allCheckboxesChecked;
+            });
+        
+            TotalCart(); // Call TotalCart after updating the selected property
+        };
+        
+        
+        const TotalCart = () => {
+            let Total = 0;
+            newCart.forEach((item) => {
+            if (item.selected) {
+                Total += item.product_price * item.product_pcs;
+            }
+            });
+        
+            setPrice(Total);
+        };
+        useEffect(() => {
+            TotalCart()
+        }, [TotalCart])
+    
+    // const TotalCart2 = () => {
+    //     let Total = 0
+    //     newCart.map((i) => {
+    //         Total += i.product_price * i.product_pcs
+    //     })
+    //     setPrice(Total)
+    // }
 
+    // useEffect(() => {
+    //     TotalCart2()
+    // }, [TotalCart2])
+    
     const test = newCart
     console.log('tesss newcar', test);
     
@@ -117,7 +178,13 @@ const Cart: React.FC<CartData> = ({ products }) => {
         }
     };
 
+    console.log('test count', count);
 
+    console.log('cektotal', totalPrice);
+    console.log('cekt newCart', newCart);
+    console.log('ceck cart', cart);
+    console.log(price)
+    console.log('ceck count', count)
 
     const getProfile = async () => {
         setLoading(true)
@@ -143,7 +210,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
 
     const fetchDataCart = async () => {
         try {
-            const response = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/carts', {
+            const response = await axios.get(cartEndPoint, {
                 headers: {
                     Authorization: `Bearer ${cookies.token}`
                 }
@@ -161,25 +228,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
     useEffect(() => {
         fetchDataCart()
     }, [])
-
-    const TotalCart = () => {
-        let Total = 0
-        newCart.map((i) => {
-            Total += i.product_price * i.product_pcs
-        })
-        setPrice(Total)
-    }
-
-    useEffect(() => {
-        TotalCart()
-    }, [TotalCart])
-    console.log('test count', count);
-
-    console.log('cektotal', totalPrice);
-    console.log('cekt newCart', newCart);
-    console.log('ceck cart', cart);
-    console.log(price)
-    console.log('ceck count', count)
+    const imgURL = "https://storage.googleapis.com/images_lapak_umkm/product/"
     return (
         <Layout>
             <Navbar
@@ -226,10 +275,10 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                 img={FotoProfile}
                                                 sellerName={item.lapak_name}
                                                 produkName={item.product_name}
-                                                produkimg={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRw37WfMabYiFV2do0nCsvnLfyARz7ePSJwSAOjtqF1w&s'}
-                                                counts={checked ? count : item.product_pcs}
+                                                produkimg={item.product_image}
+                                                counts={ item.product_pcs}
                                                 price={item.product_price}
-                                                onCheck={() => handleCheck}
+                                                onCheck={handleCheckAll}
                                                 
                                                 totalPrice={item.product_price * item.product_pcs}
                                                 handleDecrement={() => handleDecrement(item)}
@@ -259,6 +308,11 @@ const Cart: React.FC<CartData> = ({ products }) => {
                             <CustomButton
                                 id='submit'
                                 label='Beli'
+                                onClick={()=> navigate(`/payment/${data.full_name}`, {
+                                    state:{
+                                        forPayment: newCart,
+                                    }
+                                })}
                             />
                         </div>
 
