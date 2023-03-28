@@ -13,12 +13,74 @@ import bgregis from '../assets/bgregis.jpg'
 import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CutomInput';
+import { useGoogleLogin } from '@react-oauth/google';
+var test = ""
 
 const Login = () => {
+
+  const [ user, setUser ] = useState<any>({});
+  const [ profile, setProfile ] = useState<any>({});
+  const [cookie, setCookie] = useCookies(["token", "id"]);
+  
+  const login = useGoogleLogin({
+    onSuccess: tokenResponse => {console.log("buat ngambil token",tokenResponse), setUser(tokenResponse)},
+  });
+  
+  const handleGetAccessToken = async () => {
+    try {
+      const response = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+          Accept: 'application/json'
+        }
+      });
+      setProfile(response.data);
+      console.log(response.data);
+      if (response.data) {
+        handleLoginWithGoogle(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const handleLoginWithGoogle = async (profile: any) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`https://lapakumkm.mindd.site/auth/sso-response-callback`, {
+        email: profile.email,
+        verified_email: profile.verified_email,
+        photo: profile.photo
+      });
+      const { message, data } = response.data;
+      setCookie("token", data.token, { path: "/" });
+      setCookie('id', data.user.full_name, { path: '/' })
+      MySwal.fire({
+        icon: "success",
+        title: message,
+        text: "Berhasil Melakukan Login",
+        showConfirmButton: false,
+        showCancelButton: false,
+        timer: 1500,
+      });
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+      // handle errors here
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    console.log("ini token", user.access_token);
+    if (user) {
+      handleGetAccessToken();
+    }
+  }, [user]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const MySwal = withReactContent(Swal);
-  const [cookie, setCookie] = useCookies(["token", "id"]);
   const [disable, setDisable] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -37,9 +99,6 @@ const Login = () => {
     }
   }, [email, password]);
 
-  const handleLoginWithGoogle = async () => {
-    
-  }
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
@@ -88,7 +147,7 @@ const Login = () => {
         <div className="login relative flex flex-col justify-center min-h-screen overflow-hidden">
           <div className="lg:my-16 2xl:my-8 p-4 md:p-6 lg:p-5 2xl:p-10 m-auto bg-white rounded-md shadow-xl  ring-2 ring-lapak w-9/12 md:w-5/12 lg:w-3/12 2xl:max-w-xl mx-auto">
             <img src={LapakUmkm} className='flex justify-center mx-auto md:mb-10 lg:mb-10 2xl:mb-20 w-5/12 md:w-5/12 lg:w-6/12 2xl:w-7/12' />
-            <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full">
+            <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full border-b-4 pb-4">
               <div className="mb-5">
                 <label
                   htmlFor="email"
@@ -153,14 +212,14 @@ const Login = () => {
                   loading={disable || loading}
                 />
               </div>
+            </form>
               <div className="mt-3">
                 <CustomButton
                   id='btn-login'
                   label='Masuk Dengan Google'
-                  onClick={()=> handleLoginWithGoogle()}
+                  onClick={()=> login()}
                 />
               </div>
-            </form>
 
             <p className="mt-8 text-sm font-semibold  text-center text-gray-700">
               {" "}

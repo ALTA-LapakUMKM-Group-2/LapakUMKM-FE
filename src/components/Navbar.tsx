@@ -113,6 +113,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 const { full_name, email, photo_profile } = res.data.data
                 setNama(full_name)
                 setMail(email)
+                console.log('res.data.data' , res.data.data);
+                
                 setPhoto(photo_profile)
             })
             .catch((err) => {

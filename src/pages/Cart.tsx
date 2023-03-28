@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie'
 import axios from 'axios'
 
 interface Product {
+    selected: unknown
     id: number
     lapak_address: string
     lapak_name: string
@@ -52,8 +53,10 @@ const Cart: React.FC<CartData> = ({ products }) => {
                 : prevState.filter((selectedItem) => selectedItem.id !== product.id);
             product.total_price = 0
             setnewCart(updatedItems)
+            TotalCart();
             return updatedItems;
         });
+      
     };
     console.log('updatedItems');
     console.log("new", newCart)
@@ -72,6 +75,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             }
             return item;
         });
+        
         setnewCart(_cart);
     };
 
@@ -92,33 +96,71 @@ const Cart: React.FC<CartData> = ({ products }) => {
     
     const test1 = [...cart]
     const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
         const allCheckboxesChecked = e.target.checked;
         setChecked(allCheckboxesChecked);
+      
+        const updatedCart = cart.map((item) => {
+          const selected = allCheckboxesChecked;
+          return { ...item, selected };
+        });
+      
+        setnewCart(updatedCart);
+      
+        const selectedItems = updatedCart.filter((item) => item.selected);
+      
+        let totalPrice = 0;
+        let totalCount = 0;
+      
+        if (selectedItems.length > 0) {
+          totalPrice = selectedItems.reduce((total, item) => {
+            return total + item.product_price * item.product_pcs;
+          }, 0);
+      
+          totalCount = selectedItems.reduce((total, item) => {
+            return total + item.product_pcs;
+          }, 0);
+        }
+      
+        setPrice(allCheckboxesChecked ? totalPrice : 0);
+        setCount(totalCount);
+      
+        const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
+          'input[type="checkbox"]'
+        );
         allCheckboxes.forEach((checkbox) => {
           checkbox.checked = allCheckboxesChecked;
         });
-        const updatedCart = newCart.map((item) => {
-            const selected = allCheckboxesChecked;
-            console.log('selected', selected);
-            return { ...item, selected };
-          }); 
-        setnewCart(updatedCart);
-        
-        console.log('updatedCart', updatedCart);
-        
-        const selectedItems = updatedCart.filter((item) => item.selected);
-        setSelectedItems(selectedItems);
-        console.log('selectedItems', selectedItems);
-        
-        const totalPrice = selectedItems.reduce((total, item) => total + (item.product_price * item.product_pcs), 1);
-        setPrice(totalPrice);
       
-        const totalCount = selectedItems.reduce((total, item) => total + item.product_pcs, 1);
-        setCount(totalCount);;
+        TotalCart(); // Call TotalCart after updating the selected property
       };
       
+      
+      const TotalCart = () => {
+        let Total = 0;
+        newCart.forEach((item) => {
+          if (item.selected) {
+            Total += item.product_price * item.product_pcs;
+          }
+        });
+      
+        setPrice(Total);
+      };
+    useEffect(() => {
+        TotalCart()
+    }, [TotalCart])
+   
+    // const TotalCart2 = () => {
+    //     let Total = 0
+    //     newCart.map((i) => {
+    //         Total += i.product_price * i.product_pcs
+    //     })
+    //     setPrice(Total)
+    // }
 
+    // useEffect(() => {
+    //     TotalCart2()
+    // }, [TotalCart2])
+      
     const test = newCart
     // console.log('tesss newcar', test);
     
@@ -135,7 +177,13 @@ const Cart: React.FC<CartData> = ({ products }) => {
         }
     };
 
+    console.log('test count', count);
 
+    console.log('cektotal', totalPrice);
+    console.log('cekt newCart', newCart);
+    console.log('ceck cart', cart);
+    console.log(price)
+    console.log('ceck count', count)
 
     const getProfile = async () => {
         setLoading(true)
@@ -180,24 +228,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
         fetchDataCart()
     }, [])
 
-    const TotalCart = () => {
-        let Total = 0
-        newCart.map((i) => {
-            Total += i.product_price * i.product_pcs
-        })
-        setPrice(Total)
-    }
-
-    useEffect(() => {
-        TotalCart()
-    }, [TotalCart])
-    console.log('test count', count);
-
-    console.log('cektotal', totalPrice);
-    console.log('cekt newCart', newCart);
-    console.log('ceck cart', cart);
-    console.log(price)
-    console.log('ceck count', count)
     return (
         <Layout>
             <Navbar
@@ -245,9 +275,9 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                 sellerName={item.lapak_name}
                                                 produkName={item.product_name}
                                                 produkimg={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRw37WfMabYiFV2do0nCsvnLfyARz7ePSJwSAOjtqF1w&s'}
-                                                counts={checked ? count : item.product_pcs}
+                                                counts={ item.product_pcs}
                                                 price={item.product_price}
-                                                onCheck={() => handleCheckAll(item)}
+                                                onCheck={handleCheckAll}
                                                 
                                                 totalPrice={item.product_price * item.product_pcs}
                                                 handleDecrement={() => handleDecrement(item)}
