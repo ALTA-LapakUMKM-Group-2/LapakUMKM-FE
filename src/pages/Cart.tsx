@@ -38,7 +38,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [selectedItems, setSelectedItems] = useState<Product[]>([]);
     const [newCart, setnewCart] = useState<Product[]>([]);
     const [price, setPrice] = useState<number>(0)
-    const [count, setCount] = useState<number>(1)
+    const [count, setCount] = useState<number>()
     const [cart, nsetNewCart] = useState<Product[]>([])
     const [totalPrice, setTotalPrice] = useState<number>(price)
 
@@ -55,14 +55,15 @@ const Cart: React.FC<CartData> = ({ products }) => {
             return updatedItems;
         });
     };
-    
+    console.log('updatedItems');
     console.log("new", newCart)
 
     useEffect(() => {
         newCart
     }, [])
 
-
+    console.log('test cart 2', cart);
+    
     const handleIncrement = (i: CartItem) => {
         let _cart = newCart.map((item) => {
             if (item.id === i.id) {
@@ -87,22 +88,39 @@ const Cart: React.FC<CartData> = ({ products }) => {
         });
         setnewCart(_cart);
     };
-
-
+    console.log('teattt', cart);
+    
+    const test1 = [...cart]
     const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
-        setChecked(e.target.checked);
+        const allCheckboxesChecked = e.target.checked;
+        setChecked(allCheckboxesChecked);
         allCheckboxes.forEach((checkbox) => {
-          checkbox.checked = e.target.checked;
+          checkbox.checked = allCheckboxesChecked;
         });
-        const totalPrice = selectedItems.reduce((total, item) => total + (item.product_price * item.product_pcs), 0);
-        setPrice(e.target.checked ? totalPrice : 0);
-        console.log('test selectItem', selectedItems);
+        const updatedCart = newCart.map((item) => {
+            const selected = allCheckboxesChecked;
+            console.log('selected', selected);
+            return { ...item, selected };
+          }); 
+        setnewCart(updatedCart);
         
+        console.log('updatedCart', updatedCart);
+        
+        const selectedItems = updatedCart.filter((item) => item.selected);
+        setSelectedItems(selectedItems);
+        console.log('selectedItems', selectedItems);
+        
+        const totalPrice = selectedItems.reduce((total, item) => total + (item.product_price * item.product_pcs), 1);
+        setPrice(totalPrice);
+      
+        const totalCount = selectedItems.reduce((total, item) => total + item.product_pcs, 1);
+        setCount(totalCount);;
       };
+      
 
     const test = newCart
-    console.log('tesss newcar', test);
+    // console.log('tesss newcar', test);
     
     const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, productPrice: number) => {
         const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
@@ -229,7 +247,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                 produkimg={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRw37WfMabYiFV2do0nCsvnLfyARz7ePSJwSAOjtqF1w&s'}
                                                 counts={checked ? count : item.product_pcs}
                                                 price={item.product_price}
-                                                onCheck={() => handleCheck}
+                                                onCheck={() => handleCheckAll(item)}
                                                 
                                                 totalPrice={item.product_price * item.product_pcs}
                                                 handleDecrement={() => handleDecrement(item)}

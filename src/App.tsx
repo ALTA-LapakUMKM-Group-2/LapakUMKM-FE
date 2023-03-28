@@ -17,6 +17,8 @@ import NotifikasiCoba from "./pages/NotifikasiCoba";
 
 import { getDark } from "./utils/redux/reducer/reducer";
 import { useState, useEffect, useMemo } from "react";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 
 function App() {
@@ -32,7 +34,7 @@ function App() {
 
   return (
     <>
-
+<GoogleOAuthProvider clientId="753409996346-gnuv4ksqbtdjgarlr43fbjpu5v5ijfgn.apps.googleusercontent.com">
       <BrowserRouter>
         <Routes>
           {/* <Route path="/" element={checkToken ? <Home /> : <Login />} /> */}
@@ -52,6 +54,7 @@ function App() {
           {/* <Route path="/auth/sso-response-callback" element={<GoogleAuth/>}/> */}
         </Routes >
       </BrowserRouter >
+      </GoogleOAuthProvider>;
     </>
   )
 }
