@@ -25,7 +25,7 @@ const Login = () => {
   const login = useGoogleLogin({
     onSuccess: tokenResponse => {console.log("buat ngambil token",tokenResponse), setUser(tokenResponse)},
   });
-  
+
   const handleGetAccessToken = async () => {
     try {
       const response = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
@@ -43,7 +43,7 @@ const Login = () => {
       console.log(error);
     }
   };
-  
+
   const handleLoginWithGoogle = async (profile: any) => {
     setLoading(true);
     try {
@@ -71,7 +71,7 @@ const Login = () => {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     console.log("ini token", user.access_token);
     if (user) {
@@ -99,7 +99,6 @@ const Login = () => {
     }
   }, [email, password]);
 
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
@@ -116,7 +115,7 @@ const Login = () => {
         const { message, data } = res.data
         console.log(data.token)
         setCookie("token", data.token, { path: "/" });
-        setCookie('id', data.user.full_name, { path: '/' })
+        setCookie('id', data.user.id, { path: '/' })
         dispatch(handleAuth(true))
         MySwal.fire({
           icon: "success",
@@ -213,6 +212,7 @@ const Login = () => {
                 />
               </div>
             </form>
+            
               <div className="mt-3">
                 <CustomButton
                   id='btn-login'
