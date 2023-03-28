@@ -18,12 +18,12 @@ var test = ""
 
 const Login = () => {
 
-  const [user, setUser] = useState<any>({});
-  const [profile, setProfile] = useState<any>({});
+  const [ user, setUser ] = useState<any>({});
+  const [ profile, setProfile ] = useState<any>({});
   const [cookie, setCookie] = useCookies(["token", "id"]);
-
+  
   const login = useGoogleLogin({
-    onSuccess: tokenResponse => { console.log("buat ngambil token", tokenResponse), setUser(tokenResponse) },
+    onSuccess: tokenResponse => {console.log("buat ngambil token",tokenResponse), setUser(tokenResponse)},
   });
 
   const handleGetAccessToken = async () => {
@@ -212,13 +212,14 @@ const Login = () => {
                 />
               </div>
             </form>
-            <div className="mt-3">
-              <CustomButton
-                id='btn-login'
-                label='Masuk Dengan Google'
-                onClick={() => login()}
-              />
-            </div>
+            
+              <div className="mt-3">
+                <CustomButton
+                  id='btn-login'
+                  label='Masuk Dengan Google'
+                  onClick={()=> login()}
+                />
+              </div>
 
             <p className="mt-8 text-sm font-semibold  text-center text-gray-700">
               {" "}
