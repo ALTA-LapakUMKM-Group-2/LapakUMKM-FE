@@ -72,36 +72,30 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     }
 
     useEffect(() => {
-        checkToken ? fetchData() : 0
+        checkToken ? fetchDataCart() : 0
     }, [])
 
-    function fetchData() {
-        axios
-            .get(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/carts`, {
+    const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
+
+    const fetchDataCart = async () => {
+        try {
+            const response = await axios.get(cartEndPoint, {
                 headers: {
-                    Authorization: `Bearer ${checkToken}`
+                    Authorization: `Bearer ${cookies.token}`
                 }
-            })
-            .then((res) => {
-                const { data } = res.data
-                setCart(data)
-            })
-            .catch((err) => {
-                const { statusText } = err.response
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: statusText,
-                    text: "Gagal Download Cart",
-                    iconColor: '#31CFB9',
-                    color: '#353E3C',
-                    background: '#ffffff ',
-                    showConfirmButton: false,
-                    showCancelButton: false,
-                    timer: 1500,
-                })
-            })
-    }
+            });
+            const data = response.data.data
+            setCart(data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+
+        }
+    };
+
+    useEffect(() => {
+        fetchDataCart()
+    }, [])
 
     function ProfileData() {
         axios
