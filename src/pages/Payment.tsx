@@ -14,9 +14,11 @@ const Payment = () => {
     const [showModal, setShowModal] = useState(false)
     const location = useLocation()
 
+
     const cart = location.state.forPayment
 
     console.log("test cart", cart)
+    console.log("total Price", totalPrice)
 
     const handleAddAlamat = async () => {
         try {
