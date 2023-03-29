@@ -30,7 +30,7 @@ const CartCard: React.FC<CartProps> = ({
     handleIncrement,
     handleDecrement
 }) => {
-
+    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <div id={id} className="grid gap-y-3 relative items-center bg-white border-y-2 border-gray-200 rounded-lg  p-4 md:flex-row md:max-w-xl">
             <div className="flex space-x-5">
@@ -43,7 +43,7 @@ const CartCard: React.FC<CartProps> = ({
             </div>
             <div className="flex flex-row">
                 <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-                    src={produkimg} alt="" />
+                    src={imgUrl + produkimg} alt="" />
 
                 <div className="flex flex-col p-4 leading-normal w-60">
                     <h5 className="mb-2 text-xl font-semibold tracking-tight text-gray-900 ">{produkName}</h5>

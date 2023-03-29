@@ -126,7 +126,6 @@ const Detail = () => {
         res.data.data.product_pcs = count
         SetTestCount(res.data.data.total_price)
         setTestPrice(res.data.data.product_pcs)
-   
       })
       .catch((err) => {
         console.log(err.response.statusText)
@@ -171,9 +170,9 @@ const Detail = () => {
 
     try {
       const res = await axios.post('https://lapakumkm.mindd.site/carts', data, {
-        headers: {
-          Authorization: `Bearer ${cookie.token}`
-        }
+          headers: {
+            Authorization: `Bearer ${cookie.token}`
+          }
       })
       if (res.data) {
         // console.log('testos add to cart', res.data);
@@ -493,7 +492,7 @@ const Detail = () => {
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md '>
-                    <img src={photoToko} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
+                    <img src={photoToko ? photoToko : Default} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
                       state: {
                         id: userId
                       }

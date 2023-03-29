@@ -140,7 +140,7 @@ const Register = () => {
                             {" "}
                             Already have an account?{" "}
                             <a
-                                href="/"
+                                onClick={()=> navigate('/register')}
                                 className="font-medium text-indigo-600 hover:underline"
                             >
                                 Sign in

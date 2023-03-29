@@ -7,6 +7,9 @@ import CustomButton from '../components/CustomButton'
 import CartCard from '../components/CartCard'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
+import { useNavigate } from 'react-router'
+import Swal from 'sweetalert2'
+import Loading from '../components/Loading'
 
 interface Product {
     selected: unknown
@@ -40,151 +43,73 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [newCart, setnewCart] = useState<Product[]>([]);
     const [price, setPrice] = useState<number>(0)
     const [count, setCount] = useState<number>()
-    const [cart, nsetNewCart] = useState<Product[]>([])
+    const [cart, setNewCart] = useState<Product[]>([])
     const [totalPrice, setTotalPrice] = useState<number>(price)
+    const navigate = useNavigate()
 
+    
+    
+    console.log("test tokped",selectedItems);
+    
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Product) => {
         const isChecked = e.target.checked;
-
         setSelectedItems((prevState) => {
             const updatedItems = isChecked
-                ?
-                [...prevState, product]
+                ? [...prevState, product]
                 : prevState.filter((selectedItem) => selectedItem.id !== product.id);
-            product.total_price = 0
-            setnewCart(updatedItems)
-            TotalCart();
             return updatedItems;
         });
-      
     };
-     
-      
-    console.log('updatedItems');
-    console.log("new", newCart)
-
-    useEffect(() => {
-        newCart
-    }, [])
-
-    console.log('test cart 2', cart);
+    console.log("total price", price);
     
+    const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = e.target.checked;
+        if (isChecked) {
+            setSelectedItems(cart);
+        } else {
+            setSelectedItems([]);
+        }
+    };
     const handleIncrement = (i: CartItem) => {
-        let _cart = newCart.map((item) => {
+        let _cart = cart.map((item) => {
             if (item.id === i.id) {
                 item.product_pcs++;
-                
             }
-            return item;
-        });
-        
+        return item;
+        });        
         setnewCart(_cart);
     };
 
     const handleDecrement = (i: CartItem) => {
-        let _cart = newCart.map((item) => {
+        let _cart = cart.map((item) => {
             if (item.id === i.id) {
                 if (item.product_pcs === 1) {
-                    return item;
+                return item;
                 } else {
-                    item.product_pcs--;
-                }
+                item.product_pcs--;
             }
-            return item;
-        });
-        setnewCart(_cart);
-    };
-    console.log('teattt', cart);
-    
-    const test1 = [...cart]
-    const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const allCheckboxesChecked = e.target.checked;
-        setChecked(allCheckboxesChecked);
-      
-        const updatedCart = cart.map((item) => {
-          const selected = allCheckboxesChecked;
-          return { ...item, selected };
-        });
-      
-        setnewCart(updatedCart);
-      
-        const selectedItems = updatedCart.filter((item) => item.selected);
-      
-        let totalPrice = 0;
-        let totalCount = 0;
-      
-        if (selectedItems.length > 0) {
-          totalPrice = selectedItems.reduce((total, item) => {
-            return total + item.product_price * item.product_pcs;
-          }, 0);
-      
-          totalCount = selectedItems.reduce((total, item) => {
-            return total + item.product_pcs;
-          }, 0);
         }
-      
-        setPrice(allCheckboxesChecked ? totalPrice : 0);
-        setCount(totalCount);
-      
-        const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-          'input[type="checkbox"]'
-        );
-        allCheckboxes.forEach((checkbox) => {
-          checkbox.checked = allCheckboxesChecked;
+        return item;
         });
-      
-        TotalCart(); // Call TotalCart after updating the selected property
-      };
-      
-      
-      const TotalCart = () => {
-        let Total = 0;
-        newCart.forEach((item) => {
-          if (item.selected) {
-            Total += item.product_price * item.product_pcs;
-          }
-        });
-      
-        setPrice(Total);
-      };
+    setnewCart(_cart);
+    };
+    
+        
+        
+    
+    const TotalCart2 = () => {
+        let Total = 0
+        selectedItems.map((i) => {
+            Total += i.product_price * i.product_pcs
+        })
+        setPrice(Total)
+    }
+
     useEffect(() => {
-        TotalCart()
-    }, [TotalCart])
-   
-    // const TotalCart2 = () => {
-    //     let Total = 0
-    //     newCart.map((i) => {
-    //         Total += i.product_price * i.product_pcs
-    //     })
-    //     setPrice(Total)
-    // }
-
-    // useEffect(() => {
-    //     TotalCart2()
-    // }, [TotalCart2])
-    const test = newCart
-    // console.log('tesss newcar', test);
-    
-    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, productPrice: number) => {
-        const allCheckboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
-        const allCheckboxesChecked = Array.from(allCheckboxes).every(
-            (checkbox) => checkbox.checked
-        );
-        setChecked(allCheckboxesChecked);
-        if (e.target.checked) {
-            setPrice(totalPrice + productPrice);
-        } else {
-            setPrice(Math.max(totalPrice - productPrice, 0));
-        }
-    };
-
-    console.log('test count', count);
+        TotalCart2()
+    }, [TotalCart2])
 
     console.log('cektotal', totalPrice);
-    console.log('cekt newCart', newCart);
-    console.log('ceck cart', cart);
-    console.log(price)
-    console.log('ceck count', count)
 
     const getProfile = async () => {
         setLoading(true)
@@ -205,18 +130,61 @@ const Cart: React.FC<CartData> = ({ products }) => {
                 getProfile()
     }, [])
 
+    const handleDelete = async (id: number) => {
+        Swal.fire({
+            icon: "warning",
+            title: "Anda yakin Ingin menghapus Barang ini?",
+            confirmButtonText: "Saya Yakin",
+            confirmButtonColor: "#31CFB9",
+            reverseButtons: true,
+            showCancelButton: true,
+            cancelButtonText: "Cancel",
+            cancelButtonColor: "#db1f1f"
+        }).then((willDelete) => {
+            if (willDelete.isConfirmed) {
+                setLoading(true)
+                axios.delete(`${cartEndPoint}/${id}`,{
+                    headers:{
+                    Authorization: `Bearer ${cookies.token}`
+                    }
+                })
+                .then((response)=>{
+                    Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    text: response.data.message,
+                    iconColor: '#31CFB9',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    })
+                    fetchDataCart()
+                })
+                .catch((error)=> {
+                    console.log(error)
+                    Swal.fire({
+                    icon: "error",
+                    title: error.message,
+                    text: "gagal",
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    timer: 1500,
+                    })
+                }).finally(()=> setLoading(false))
+                }
+            })
+    }
 
     const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
     const fetchDataCart = async () => {
         try {
-            const response = await axios.get('https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/carts', {
+            const response = await axios.get(cartEndPoint, {
                 headers: {
                     Authorization: `Bearer ${cookies.token}`
                 }
             });
             const data = response.data.data
-            nsetNewCart(data);
+            setNewCart(data);
             setCount(response.data.data.product_pcs)
         } catch (error) {
             console.log(error);
@@ -228,9 +196,14 @@ const Cart: React.FC<CartData> = ({ products }) => {
     useEffect(() => {
         fetchDataCart()
     }, [])
-
+    console.log("Cart", cart);
+    
+    const imgURL = "https://storage.googleapis.com/images_lapak_umkm/product/"
     return (
         <Layout>
+            { loading ? 
+            <Loading/> : 
+            <>
             <Navbar
                 imgUser={data.photo_profile ? data.photo_profile : FotoProfile}
                 name={data.full_name}
@@ -248,12 +221,17 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                             <input
                                                 type="checkbox"
                                                 className="checkbox"
-                                                checked={checked}
+                                                id='checkcart'
+                                                checked={selectedItems.length === cart.length}
                                                 onChange={handleCheckAll}
                                             />
                                         </label>
                                     </th>
-                                    <th>Check All</th>
+                                    <th>
+                                        <div className="ml-40">
+                                        Pilih Semua    
+                                        </div>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -264,6 +242,8 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                 <input
                                                     type="checkbox"
                                                     className="checkbox"
+                                                    id='checkcart'
+                                                    checked={selectedItems.some((selectedItem) => selectedItem.id === item.id)}
                                                     onChange={(e) => handleCheckboxChange(e, item)}
                                                 />
                                             </label>
@@ -275,10 +255,11 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                 img={FotoProfile}
                                                 sellerName={item.lapak_name}
                                                 produkName={item.product_name}
-                                                produkimg={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRw37WfMabYiFV2do0nCsvnLfyARz7ePSJwSAOjtqF1w&s'}
+                                                produkimg={item.product_image}
                                                 counts={ item.product_pcs}
                                                 price={item.product_price}
                                                 onCheck={handleCheckAll}
+                                                // handleDelete={()=> handleDelete(item.id)}
                                                 totalPrice={item.product_price * item.product_pcs}
                                                 handleDecrement={() => handleDecrement(item)}
                                                 handleIncrement={() => handleIncrement(item)}
@@ -307,12 +288,20 @@ const Cart: React.FC<CartData> = ({ products }) => {
                             <CustomButton
                                 id='submit'
                                 label='Beli'
+                                onClick={()=> navigate(`/payment/${data.full_name}`, {
+                                    state:{
+                                        forPayment: selectedItems,
+                                        totalPrice: price
+                                    }
+                                })}
                             />
                         </div>
 
                     </div>
                 </div>
             </div>
+            </>
+            }
         </Layout>
     )
 }
