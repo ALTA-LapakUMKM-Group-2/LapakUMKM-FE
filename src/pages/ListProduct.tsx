@@ -637,7 +637,7 @@ const ListProduct = () => {
           </Modal>
           <Navbar />
           <div className="w-full h-screen mb-48">
-            <p className="text-center mt-5 font-medium text-[28px] tracking-widest">Laporan Minggu Ini</p>
+            <p className="text-center mt-5 font-medium text-[28px] tracking-widest dark:text-white">Laporan Minggu Ini</p>
 
             <div className="mt-10 flex flex-col md:flex-row lg:flex-row items-center justify-center">
 
@@ -673,7 +673,7 @@ const ListProduct = () => {
 
             <div className="flex flex-col mt-16 mx-auto w-80 sm:w-96 md:w-[700px] lg:w-[900px]">
               <div className="flex justify-between">
-                <p className="text-[16px] md:text-[24px] font-semibold text-zinc-800">{shopName}</p>
+                <p className="text-[16px] md:text-[24px] font-semibold text-zinc-800 dark:text-white">{shopName}</p>
 
                 <div className="text-sm md:w-52 lg:w-56 mt-5">
                   <CustomButton

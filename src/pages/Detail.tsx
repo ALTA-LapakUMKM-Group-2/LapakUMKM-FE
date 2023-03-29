@@ -23,6 +23,18 @@ import CustomButton from '../components/CustomButton'
 import Default from "../assets/default.jpg"
 import { stringify } from 'querystring'
 
+interface Product {
+  selected: unknown
+  id: number
+  lapak_address: string
+  lapak_name: string
+  product_id: number
+  product_name: string
+  product_pcs: number
+  product_price: number
+  user_id: number
+  total_price: number
+}
 
 
 const Detail = () => {
@@ -45,27 +57,97 @@ const Detail = () => {
   const [disable, setDisable] = useState<boolean>(true)
   const [hide, setHide] = useState<boolean>(true)
   const navigate = useNavigate()
+  const [test ,setTest] = useState<Product[]>([])
 
   const handleUpdate = (e: any) => {
     e.preventDefault()
   }
-
+  const [price, setPrice] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(price)
+  const [testCount ,SetTestCount] = useState<any>(count)
+  const [dca ,setDca] = useState<any>({})
+  const [tesPrice ,setTestPrice] = useState<any>(totalPrice)
+  
   const handleIncrement = () => {
-    setCount(count + 1);
-    setTotalPrice(price * (count + 1));
+    const tstCount = count + 1
+    const newTotal = price * tstCount
+    setCount(tstCount);
+    setTotalPrice(newTotal);
+    setTestPrice(newTotal)
+    SetTestCount(tstCount)
+
   };
 
   const handleDecrement = () => {
+    const tstCount = count - 1
+    const newTotal = totalPrice
     if (count > 1) {
-      setCount(count - 1);
-      setTotalPrice(totalPrice - price);
+      SetTestCount(tstCount);
+      setTestPrice(totalPrice - price);
+      setTotalPrice(newTotal - price);
+      setCount(tstCount);
     } else {
       setTotalPrice(price)
     }
+
   };
 
-  const [price, setPrice] = useState<number>(0);
-  const [totalPrice, setTotalPrice] = useState<number>(price)
+  
+  const [image, setImage] = useState<any>([])
+  const [photoToko, setPhotoToko] = useState('')
+  const [category, setCategory] = useState<any>('')
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(`https://lapakumkm.mindd.site/products/${id}`)
+      .then((res) => {
+        const { full_name, address, shop_name, photo_profile } = res.data.data.user
+        // console.log('test user', res.data.data.user);
+        // console.log('test data', res.data.data.category.category);
+        // console.log('test dataaaaa', res.data.data);
+        setDca(res.data.data)
+        const category = res.data.data.category.category
+        const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
+        setProduct(product_name);
+        setDescription(description);
+        setPrice(price);
+        setStock(stock_remaining);
+        setSize(size)
+        setName(shop_name)
+        setAddress(address)
+        setTotalPrice(price);
+        setUserId(user_id)
+        setProductId(id)
+        setImage(product_image)
+        setPhotoToko(photo_profile)
+        setCategory(category)
+        res.data.data.total_price = totalPrice
+        res.data.data.product_pcs = count
+        SetTestCount(res.data.data.total_price)
+        setTestPrice(res.data.data.product_pcs)
+      })
+      .catch((err) => {
+        console.log(err.response.statusText)
+        MySwal.fire({
+          icon: "error",
+          title: err.response.statusText,
+          text: "Gagal mengunduh data",
+          showCancelButton: false,
+          confirmButtonText: "Dibaca",
+          confirmButtonColor: "#31CFB9",
+          showConfirmButton: true
+        })
+      })
+    setLoading(false)
+    // .finally(() => setLoading(false))
+  }
+  // console.log('cek user id', userId);
+  console.log('test abc', testCount);
+  console.log('test asd', tesPrice);
+  console.log('test dca', dca);
+  // console.log('test tesett', test);
+
   useEffect(() => {
     fetchData();
   }, [])
@@ -88,9 +170,9 @@ const Detail = () => {
 
     try {
       const res = await axios.post('https://lapakumkm.mindd.site/carts', data, {
-        headers: {
-          Authorization: `Bearer ${cookie.token}`
-        }
+          headers: {
+            Authorization: `Bearer ${cookie.token}`
+          }
       })
       if (res.data) {
         // console.log('testos add to cart', res.data);
@@ -116,52 +198,7 @@ const Detail = () => {
     }
 
   }
-
-  const [image, setImage] = useState<any>([])
-  const [photoToko, setPhotoToko] = useState('')
-  const [category, setCategory] = useState<any>('')
-  function fetchData() {
-    setLoading(true);
-    axios
-      .get(`https://lapakumkm.mindd.site/products/${id}`)
-      .then((res) => {
-        const { full_name, address, shop_name, photo_profile } = res.data.data.user
-        // console.log('test user', res.data.data.user);
-        // console.log('test data', res.data.data.category.category);
-        // console.log('test dataaaaa', res.data.data);
-
-        const category = res.data.data.category.category
-        const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
-        setProduct(product_name);
-        setDescription(description);
-        setPrice(price);
-        setStock(stock_remaining);
-        setSize(size)
-        setName(shop_name)
-        setAddress(address)
-        setTotalPrice(price);
-        setUserId(user_id)
-        setProductId(id)
-        setImage(product_image)
-        setPhotoToko(photo_profile)
-        setCategory(category)
-      })
-      .catch((err) => {
-        MySwal.fire({
-          icon: "error",
-          title: err.response.statusText,
-          text: "Gagal mengunduh data",
-          showCancelButton: false,
-          confirmButtonText: "Dibaca",
-          confirmButtonColor: "#31CFB9",
-          showConfirmButton: true
-        })
-      })
-    setLoading(false)
-    // .finally(() => setLoading(false))
-  }
-  // console.log('cek user id', userId);
-
+  
   useEffect(() => {
     feedbackData()
   }, [])
@@ -361,6 +398,9 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
+  
+
+
   return (
     <Layout>
       {
@@ -468,7 +508,13 @@ const Detail = () => {
                       <div className="border-2 mt-5"></div>
                       <div className="flex justify-center gap-5 mt-10 w-fit mx-auto ">
                         <button className="btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit" onClick={() => {
-                          navigate('/payment')
+                          navigate(`/payment/${name}` , {
+                            state : {
+                              dca: dca,
+                              testPrice: tesPrice,
+                              testCount: testCount
+                            }
+                          })
                         }}>Bayar Langsung</button>
                         <button className='btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit' onClick={addToCart}>Tambah Keranjang</button>
                       </div>
@@ -482,7 +528,7 @@ const Detail = () => {
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md '>
-                    <img src={photoToko} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
+                    <img src={photoToko ? photoToko : Default} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
                       state: {
                         id: userId
                       }

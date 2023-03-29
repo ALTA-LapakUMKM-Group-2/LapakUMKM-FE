@@ -9,6 +9,8 @@ import ChatModal from '../components/ChatModal'
 import axios from 'axios'
 import Loading from '../components/Loading'
 import { useLocation, useParams } from 'react-router-dom'
+import Default from "../assets/default.jpg"
+
 const Toko = () => {
     const [showChat, setShowChat] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -88,7 +90,7 @@ const Toko = () => {
                     <div className='flex flex-col mx-auto'>
                         <div className='flex flex-col rounded-md bg-white dark:border-lapak dark:border-4 border-b-8 border-lapak mt-5 mb-5 p-10 max-w-fit min-w-[500px] mx-auto shadow-lg dark:bg-slate-600  '>
                             <div className='flex w-fit gap-5 '>
-                                <img src={foto} className='w-32 rounded-full' />
+                                <img src={foto ? foto : Default} className='w-32 rounded-full' />
                                 <div className=' text-lg'>
                                     <h1 className='mb-5 text-3xl dark:text-white font-bold'>{tokoName}</h1>
                                     <h1 className='flex items-center gap-2 dark:text-white font-semibold'><MdOutlineLocationOn className='flex items-center' /> <span className='flex items-center'>{address}</span></h1>

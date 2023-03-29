@@ -108,6 +108,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 const { full_name, email, photo_profile } = res.data.data
                 setNama(full_name)
                 setMail(email)
+                console.log('res.data.data' , res.data.data);
+                
                 setPhoto(photo_profile)
             })
             .catch((err) => {
@@ -164,7 +166,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     {children}
                 </div>
                 <div className="flex">
-                    <label className="swap swap-rotate mr-10  my-auto">
+                    <label className="swap swap-rotate  my-auto">
                         <input type="checkbox" onClick={handleThemeSwitch} />
                         <svg
                             className="swap-on fill-current -mr-5 w-10 h-8 text-black dark:text-white"

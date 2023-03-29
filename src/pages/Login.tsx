@@ -151,6 +151,7 @@ const Login = () => {
           <div className="lg:my-16 2xl:my-8 p-4 md:p-6 lg:p-5 2xl:p-10 m-auto bg-white rounded-md shadow-xl  ring-2 ring-lapak w-9/12 md:w-5/12 lg:w-3/12 2xl:max-w-xl mx-auto">
             <img src={LapakUmkm} className='flex justify-center mx-auto md:mb-10 lg:mb-10 2xl:mb-20 w-5/12 md:w-5/12 lg:w-6/12 2xl:w-7/12' />
             <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full border-b-4 pb-4">
+            <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full border-b-4 pb-4">
               <div className="mb-5">
                 <label
                   htmlFor="email"
@@ -215,6 +216,7 @@ const Login = () => {
                   loading={disable || loading}
                 />
               </div>
+            </form>
             </form>
             
               <div className="mt-3">
