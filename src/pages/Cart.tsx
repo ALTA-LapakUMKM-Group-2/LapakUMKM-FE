@@ -10,6 +10,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2'
 import Loading from '../components/Loading'
+import Search from '../components/Search'
 
 interface Product {
     selected: unknown
@@ -46,8 +47,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [cart, setNewCart] = useState<Product[]>([])
     const [totalPrice, setTotalPrice] = useState<number>(price)
     const navigate = useNavigate()
-
-    
     
     console.log("test tokped",selectedItems);
     
@@ -97,7 +96,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
         
         
     
-    const TotalCart2 = () => {
+    const TotalCart = () => {
         let Total = 0
         selectedItems.map((i) => {
             Total += i.product_price * i.product_pcs
@@ -106,8 +105,8 @@ const Cart: React.FC<CartData> = ({ products }) => {
     }
 
     useEffect(() => {
-        TotalCart2()
-    }, [TotalCart2])
+        TotalCart()
+    }, [TotalCart])
 
     console.log('cektotal', totalPrice);
 
@@ -208,19 +207,20 @@ const Cart: React.FC<CartData> = ({ products }) => {
                 imgUser={data.photo_profile ? data.photo_profile : FotoProfile}
                 name={data.full_name}
                 email={data.email}
+                children={ <Search/> }
             />
-            <div className="flex flex-row mx-auto space-x-20 relative justify-center box-content border shadow-xl mt-20 w-[1200px] bg-white p-10">
+            <div className="flex flex-col lg:flex-row mx-auto md:space-x-5 space-y-5 relative justify-center box-content border border-white shadow-xl mt-20 w-[320px] md:w-[650px] lg:w-[800px] 2xl:w-[1000px] bg-white py-2 md:py-10 px-2 rounded-xl dark:bg-slate-800 dark:border-lapak dark:shadow-lg dark:shadow-slate-600">
                 <div className="flex ">
-                    <div className="block w-sm space-y-5 p-6 w-[700px] bg-white border border-gray-200 rounded-lg shadow">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Keranjang</h5>
-                        <div className="flex flex-col">
+                    <div className="block md:w-[600px] lg:w-[500px] 2xl:w-[600px] mx-auto space-y-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-slate-800 dark:border-lapak dark:shadow-lg dark:shadow-slate-600">
+                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Keranjang</h5>
+                        <div className="flex flex-col dark:text-white">
                             <thead>
                                 <tr>
                                     <th>
                                         <label>
                                             <input
                                                 type="checkbox"
-                                                className="checkbox"
+                                                className="checkbox checkbox-accent"
                                                 id='checkcart'
                                                 checked={selectedItems.length === cart.length}
                                                 onChange={handleCheckAll}
@@ -228,7 +228,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                         </label>
                                     </th>
                                     <th>
-                                        <div className="ml-40">
+                                        <div className="ml-10">
                                         Pilih Semua    
                                         </div>
                                     </th>
@@ -241,7 +241,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                             <label>
                                                 <input
                                                     type="checkbox"
-                                                    className="checkbox"
+                                                    className="checkbox checkbox-accent"
                                                     id='checkcart'
                                                     checked={selectedItems.some((selectedItem) => selectedItem.id === item.id)}
                                                     onChange={(e) => handleCheckboxChange(e, item)}
@@ -249,21 +249,23 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                             </label>
                                         </th>
                                         <th>
-                                            <CartCard
-                                                key={item.id}
-                                                id={"keranjang"}
-                                                img={FotoProfile}
-                                                sellerName={item.lapak_name}
-                                                produkName={item.product_name}
-                                                produkimg={item.product_image}
-                                                counts={ item.product_pcs}
-                                                price={item.product_price}
-                                                onCheck={handleCheckAll}
-                                                // handleDelete={()=> handleDelete(item.id)}
-                                                totalPrice={item.product_price * item.product_pcs}
-                                                handleDecrement={() => handleDecrement(item)}
-                                                handleIncrement={() => handleIncrement(item)}
-                                            />
+                                            <div className="ml-5">
+                                                <CartCard
+                                                    key={item.id}
+                                                    id={"keranjang"}
+                                                    img={FotoProfile}
+                                                    sellerName={item.lapak_name}
+                                                    produkName={item.product_name}
+                                                    produkimg={item.product_image}
+                                                    counts={ item.product_pcs}
+                                                    price={item.product_price}
+                                                    onCheck={handleCheckAll}
+                                                    handleDelete={()=> handleDelete(item.id)}
+                                                    totalPrice={item.product_price * item.product_pcs}
+                                                    handleDecrement={() => handleDecrement(item)}
+                                                    handleIncrement={() => handleIncrement(item)}
+                                                />
+                                            </div>
                                         </th>
 
                                     </tr>
@@ -273,11 +275,11 @@ const Cart: React.FC<CartData> = ({ products }) => {
                         </div>
                     </div>
                 </div>
-                <div className="flex mr-auto h-40 sticky-top">
-                    <div className="block w-96 p-6 bg-white border border-gray-200 rounded-xl shadow hover:bg-gray-100">
-                        <div className="flex justify-between border-b-2">
-                            <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">Total Harga</h5>
-                            <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900"> {formatValue({
+                <div className="flex h-40 md:w-40 2xl:w-80 sticky-top mb-2">
+                    <div className="block w-96 p-6 bg-white border border-gray-200 rounded-xl shadow hover:bg-gray-100 dark:bg-slate-800 dark:border-lapak">
+                        <div className="flex justify-between border-b-2 dark:border-lapak">
+                            <h5 className="mb-2 font-bold 2xl:text-md tracking-tight text-gray-900 dark:text-white">Total Harga</h5>
+                            <h5 className="mb-2 2xl:text-md font-bold tracking-tight text-gray-900 dark:text-white"> {formatValue({
                                 value: JSON.stringify(price),
                                 groupSeparator: '.',
                                 decimalSeparator: ',',
