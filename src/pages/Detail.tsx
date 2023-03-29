@@ -147,7 +147,6 @@ const Detail = () => {
         setCategory(category)
       })
       .catch((err) => {
-        console.log(err.response.statusText)
         MySwal.fire({
           icon: "error",
           title: err.response.statusText,
@@ -200,16 +199,52 @@ const Detail = () => {
     diskusiData()
   }, [])
 
-  const handleHide = (id: number) => {
-    console.log("id", id)
+  const handleDisplayEdit = (id: number) => {
+    const element = document.getElementById("input-edit_diskusi " + id)
+    const element2 = document.getElementById("edit_diskusi " + id)
+    const element3 = document.getElementById("btn-balas " + id)
 
-    diskusi.map((i) => {
-      console.log("id_mapping", i.id)
-      if (i.id === id) {
-        setHide(false)
-      }
-    })
+    if (element) {
+      element.style.display = "block"
+    }
+
+    if (element2) {
+      element2.style.display = "none"
+    }
+
+    if (element3) {
+      element3.style.display = "none"
+    }
   }
+
+  const handleDisplay = (id: number) => {
+    const element = document.getElementById("input-balas_diskusi " + id)
+
+    if (element) {
+      element.style.display = "block"
+    }
+  }
+
+  const handleHide = (id: number) => {
+    const element = document.getElementById("input-balas_diskusi " + id)
+    const element2 = document.getElementById("input-edit_diskusi " + id)
+    const element3 = document.getElementById("edit_diskusi " + id)
+    const element4 = document.getElementById("btn-balas " + id)
+
+    if (element) {
+      element.style.display = "none"
+    }
+    if (element2) {
+      element2.style.display = "none"
+    }
+    if (element3) {
+      element3.style.display = "block"
+    }
+    if (element4) {
+      element4.style.display = "block"
+    }
+  }
+
 
   useEffect(() => {
     newDiskus ? setDisable(false) : setDisable(true)
@@ -525,18 +560,18 @@ const Detail = () => {
 
                   {diskusi === null ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
 
-                    diskusi.map((item) => (
+                    diskusi.map((item, index) => (
                       <div key={item.id} className="p-2 mb-4 border-b-2 border-zinc-400 relative">
                         <div className='dropdown dropdown-bottom dropdown-end absolute top-2 right-0'>
                           <label tabIndex={0} className={`${parseInt(cookie.id) === item.user_id ? "flex" : "hidden"} btn-ghost btn-circle btn`}>
-                            <GoKebabVertical size={20} />
+                            <GoKebabVertical className='text-zinc-800 dark:text-zinc-50' size={20} />
                           </label>
 
                           <ul
                             tabIndex={0}
                             className="dropdown-content menu rounded-box menu-compact mt-3 bg-zinc-50 text-zinc-800 px-10 py-4 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.3)] space-y-4 text-[16px] hover:cursor-pointer"
                           >
-                            <li className='hover:text-zinc-500  text-zinc-800'>perbarui</li>
+                            <li onClick={() => handleDisplayEdit(item.id)} className='hover:text-zinc-500  text-zinc-800'>perbarui</li>
                             <li onClick={() => DeleteDiskusi(item.id)} className='hover:text-red-400 text-red-500'>hapus</li>
                           </ul>
                         </div>
@@ -549,41 +584,71 @@ const Detail = () => {
                           <h1 className='text-lg font-bold dark:text-white'>{item.user.full_name}</h1>
                         </div>
 
-                        <p className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
+                        <p id={`edit_diskusi ${item.id}`} className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
 
-                        <p onClick={() => handleHide(item.id)} className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white'>Balas diskusi ...</p>
+                        <div id={`input-edit_diskusi ${item.id}`} className="relative hidden my-5">
+                          <form>
+                            <CustomInput
+                              id={`input-edit_diskusi`}
+                              placeholder=''
+                              label=''
+                              defaultValue={item.discussion}
+                              type='text'
+                              name='edit_diskusi'
+                            />
+                            <div className='w-3/12 mt-4 ml-auto'>
+                              <CustomButton
+                                id="btn-balas"
+                                label='Balas'
+                                type='submit'
+                                onClick={() => handleBalas(item.id)}
+                              />
+                            </div>
+                          </form>
 
-                        <div className={` ${hide === true ? "hidden" : "block"} mb-5`}>
-                          <CustomInput
-                            id='input-balas_diskusi'
-                            placeholder='balas diskusi disini'
-                            label=''
-                            type='text'
-                            name='balas_diskusi'
-                            onChange={changeDiskus}
-                          />
-
-                          <div className='flex gap-5 w-3/12 mt-4 ml-auto bg-green-300'>
+                          <div className='absolute bottom-0 right-48 w-3/12'>
                             <CustomButton
                               id="btn-balas"
                               label='Kembali'
-                              onClick={() => setHide(true)}
+                              onClick={() => handleHide(item.id)}
+                            />
+                          </div>
+                        </div>
+
+                        <p id={`btn-balas ${item.id}`} onClick={() => handleDisplay(item.id)} className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white'>Balas diskusi ...</p>
+                        <div id={`input-balas_diskusi ${item.id}`} className="relative mb-5 hidden">
+                          <form>
+                            <CustomInput
+                              id={`input-balas_diskusi`}
+                              placeholder='balas diskusi disini'
+                              label=''
+                              type='text'
+                              name='balas_diskusi'
+                              onChange={changeDiskus}
                             />
 
+                            <div className='w-3/12 mt-4 ml-auto'>
+                              <CustomButton
+                                id="btn-balas"
+                                label='Balas'
+                                type='submit'
+                                onClick={() => handleBalas(item.id)}
+                              />
+                            </div>
+                          </form>
+
+                          <div className='absolute bottom-0 right-48 w-3/12'>
                             <CustomButton
                               id="btn-balas"
-                              label='Balas'
-                              type='submit'
-                              onClick={() => handleBalas(item.id)}
+                              label='Kembali'
+                              onClick={() => handleHide(item.id)}
                             />
                           </div>
                         </div>
                       </div>
                     ))}
-
                 </div>
               </div>
-
             </div >
           </>
       }
