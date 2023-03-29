@@ -15,8 +15,10 @@ const Payment = () => {
     const location = useLocation()
 
     const cart = location.state.forPayment 
+    const totalPrice = location.state.totalPrice
 
     console.log("test cart", cart)
+    console.log("total Price", totalPrice)
 
     const handleAddAlamat = async () => {
         try {
