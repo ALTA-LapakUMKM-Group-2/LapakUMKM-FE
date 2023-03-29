@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     // handle log out
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
+    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile']);
     const checkToken = cookies.token
     const navigate = useNavigate()
     const [cart, setCart] = useState([])
@@ -65,6 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 dispatch(handleAuth(false));
                 removeCookie('id');
                 removeCookie('token');
+                removeCookie('photo_profile');
                 navigate("/");
             }
         });
@@ -125,7 +126,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     useEffect(() => {
         checkToken ? ProfileData() : ""
-    }, [ProfileData])
+    }, [])
 
     // const [theme, setTheme] = useState("light");
     // useEffect(() => {
@@ -157,6 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         setTheme(theme === "dark" ? "light" : "dark");
     };
 
+    console.log('poto', cookies.photo_profile)
 
     return (
         <div className="navbar py-4 w-full bg-base-100 shadow-md z-10 sticky top-0 text-white border-b-2 dark:border-b-2 dark:border-lapak justify-center dark:bg-slate-800 ">
@@ -173,7 +175,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     <label className="swap swap-rotate mr-10  my-auto">
                         <input type="checkbox" onClick={handleThemeSwitch} />
                         <svg
-                            className="swap-on fill-current w-10 h-8 text-black dark:text-white"
+                            className="swap-on fill-current -mr-5 w-10 h-8 text-black dark:text-white"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                         >
@@ -189,12 +191,6 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                         </svg>
                     </label>
 
-                    <div className='tooltip tooltip-bottom tooltip-accent' data-tip="Buka Toko">
-                        <div className="indicator">
-                            <BsShop className='text-gray-900 dark:text-white w-8 h-8 md:w-10 md:h-10 my-auto md:mx-10 cursor-pointer mt-3' onClick={() => navigate('/cart')} />
-                        </div>
-                    </div>
-
                     <div className="tooltip tooltip-bottom tooltip-accent" data-tip="Keranjang">
                         <div className="indicator ">
                             <span className="indicator-item badge md:mx-10 mt-3 bg-lapak border-none">{cart.length}</span>
@@ -207,7 +203,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
                             <div className="avatar">
                                 <div className="w-14 rounded-full">
-                                    <img src={checkToken && photo ? photo : Default} />
+                                    <img src={checkToken && photo ? photo : cookies.photo_profile ? cookies.photo_profile : Default } />
                                 </div>
                             </div>
 

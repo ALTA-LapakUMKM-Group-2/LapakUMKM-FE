@@ -25,10 +25,10 @@ import Loading from "../components/Loading"
 
 interface FormValues {
   produkName: string
-  stockRemaining: string
+  stockRemaining: number | string | any
   ukuran: string
   price: number | any
-  categoriId: string
+  categoriId: number | any
   deskripsi: string
   image: File[] | []
 }
@@ -172,7 +172,7 @@ const ListProduct = () => {
       e.preventDefault();
       setFormValues(initialFormValues);
       const formData = new FormData()
-      formData.append("photo_product", formValues.image[0].name)
+      formData.append("photo_product", selectedImage[0])
       formData.append("category_id", formValues.categoriId)
       formData.append("product_name", formValues.produkName)
       formData.append("description", formValues.deskripsi)
@@ -505,10 +505,10 @@ const ListProduct = () => {
                       defaultValue={''}
                       id='categoriId'
                       name='categoriId'
-                      value={formValues.categoriId}
                       onChange={handleSelectChange}
                       >
-                        {category.map((item:any, index:any) => {
+                        <option>Pilih Kategori</option>
+                        {category?.map((item:any, index:any) => {
                             return(
                               <option value={item.id}>{item.category}</option>
                             )
@@ -596,7 +596,7 @@ const ListProduct = () => {
                       value={formValues.categoriId}
                       onChange={handleSelectChange}
                       >
-                        {category.map((item:any, index:any) => {
+                        {category?.map((item:any, index:any) => {
                             return(
                               <option value={item.id}>{item.category}</option>
                             )

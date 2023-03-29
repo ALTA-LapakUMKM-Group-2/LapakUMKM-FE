@@ -14,7 +14,6 @@ import Detail from "./pages/Detail";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import NotifikasiCoba from "./pages/NotifikasiCoba";
-import CallbackSSO from "./pages/CallbackSSO";
 import { getDark } from "./utils/redux/reducer/reducer";
 import { useState, useEffect, useMemo } from "react";
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -41,7 +40,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/payment" element={<Payment />} />
+          <Route path="/payment/:name" element={<Payment />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/home" element={<Home />} />
           <Route path="/home/:kategori" element={<HomeFilter />} />
@@ -50,7 +49,6 @@ function App() {
           <Route path="/historypembeli" element={<HistoryPembeli />} />
           <Route path="/toko/:name" element={<Toko />} />
           <Route path="/notif" element={<NotifikasiCoba />} />
-          {/* <Route path="/auth/sso-response-callback" element={<CallbackSSO/>}/> */}
         </Routes >
       </BrowserRouter >
     </GoogleOAuthProvider>

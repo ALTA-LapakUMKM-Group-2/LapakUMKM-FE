@@ -20,12 +20,12 @@ const Login = () => {
 
   const [ user, setUser ] = useState<any>({});
   const [ profile, setProfile ] = useState<any>({});
-  const [cookie, setCookie] = useCookies(["token", "id"]);
+  const [cookie, setCookie] = useCookies(["token", "id", "photo_profile"]);
   
   const login = useGoogleLogin({
     onSuccess: tokenResponse => {console.log("buat ngambil token",tokenResponse), setUser(tokenResponse)},
   });
-  
+
   const handleGetAccessToken = async () => {
     try {
       const response = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
@@ -43,18 +43,19 @@ const Login = () => {
       console.log(error);
     }
   };
-  
+
   const handleLoginWithGoogle = async (profile: any) => {
     setLoading(true);
     try {
       const response = await axios.post(`https://lapakumkm.mindd.site/auth/sso-response-callback`, {
         email: profile.email,
         verified_email: profile.verified_email,
-        photo: profile.photo
+        photo: profile.picture
       });
       const { message, data } = response.data;
       setCookie("token", data.token, { path: "/" });
       setCookie('id', data.user.full_name, { path: '/' })
+      setCookie('photo_profile', profile.picture, { path: '/' })
       MySwal.fire({
         icon: "success",
         title: message,
@@ -71,13 +72,16 @@ const Login = () => {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     console.log("ini token", user.access_token);
     if (user) {
       handleGetAccessToken();
     }
   }, [user]);
+
+
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const MySwal = withReactContent(Swal);
@@ -99,7 +103,6 @@ const Login = () => {
     }
   }, [email, password]);
 
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
@@ -116,7 +119,7 @@ const Login = () => {
         const { message, data } = res.data
         console.log(data.token)
         setCookie("token", data.token, { path: "/" });
-        setCookie('id', data.user.full_name, { path: '/' })
+        setCookie('id', data.user.id, { path: '/' })
         dispatch(handleAuth(true))
         MySwal.fire({
           icon: "success",
@@ -147,6 +150,7 @@ const Login = () => {
         <div className="login relative flex flex-col justify-center min-h-screen overflow-hidden">
           <div className="lg:my-16 2xl:my-8 p-4 md:p-6 lg:p-5 2xl:p-10 m-auto bg-white rounded-md shadow-xl  ring-2 ring-lapak w-9/12 md:w-5/12 lg:w-3/12 2xl:max-w-xl mx-auto">
             <img src={LapakUmkm} className='flex justify-center mx-auto md:mb-10 lg:mb-10 2xl:mb-20 w-5/12 md:w-5/12 lg:w-6/12 2xl:w-7/12' />
+            <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full border-b-4 pb-4">
             <form onSubmit={(e) => handleLogin(e)} className="mt-6 w-full border-b-4 pb-4">
               <div className="mb-5">
                 <label
@@ -213,6 +217,8 @@ const Login = () => {
                 />
               </div>
             </form>
+            </form>
+            
               <div className="mt-3">
                 <CustomButton
                   id='btn-login'

@@ -14,12 +14,27 @@ import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsChatText } from 'react-icons/bs'
 import { MdStarRate } from 'react-icons/md'
 import { HiOutlineArrowLongDown, HiOutlineArrowLongUp } from 'react-icons/hi2'
+import { GoKebabVertical } from 'react-icons/go'
 import Loading from '../components/Loading'
 import { useCookies } from 'react-cookie'
 import { FeedbackTypes } from '../utils/types/DataType'
 import CustomInput from '../components/CutomInput'
 import CustomButton from '../components/CustomButton'
+import Default from "../assets/default.jpg"
+import { stringify } from 'querystring'
 
+interface Product {
+  selected: unknown
+  id: number
+  lapak_address: string
+  lapak_name: string
+  product_id: number
+  product_name: string
+  product_pcs: number
+  product_price: number
+  user_id: number
+  total_price: number
+}
 
 
 const Detail = () => {
@@ -34,32 +49,106 @@ const Detail = () => {
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
-  const [cookie, setCookie] = useCookies(['token'])
+  const [cookie, setCookie] = useCookies(['token', "id"])
   const [feedback, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
-
+  const [balas, setBalas] = useState<string>("")
+  const [newDiskus, setnewDiskus] = useState<string>("")
+  const [disable, setDisable] = useState<boolean>(true)
+  const [hide, setHide] = useState<boolean>(true)
   const navigate = useNavigate()
+  const [test ,setTest] = useState<Product[]>([])
 
   const handleUpdate = (e: any) => {
     e.preventDefault()
   }
-
+  const [price, setPrice] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(price)
+  const [testCount ,SetTestCount] = useState<any>(count)
+  const [dca ,setDca] = useState<any>({})
+  const [tesPrice ,setTestPrice] = useState<any>(totalPrice)
+  
   const handleIncrement = () => {
-    setCount(count + 1);
-    setTotalPrice(price * (count + 1));
+    const tstCount = count + 1
+    const newTotal = price * tstCount
+    setCount(tstCount);
+    setTotalPrice(newTotal);
+    setTestPrice(newTotal)
+    SetTestCount(tstCount)
+
   };
 
   const handleDecrement = () => {
+    const tstCount = count - 1
+    const newTotal = totalPrice
     if (count > 1) {
-      setCount(count - 1);
-      setTotalPrice(totalPrice - price);
+      SetTestCount(tstCount);
+      setTestPrice(totalPrice - price);
+      setTotalPrice(newTotal - price);
+      setCount(tstCount);
     } else {
       setTotalPrice(price)
     }
+
   };
 
-  const [price, setPrice] = useState<number>(0);
-  const [totalPrice, setTotalPrice] = useState<number>(price)
+  
+  const [image, setImage] = useState<any>([])
+  const [photoToko, setPhotoToko] = useState('')
+  const [category, setCategory] = useState<any>('')
+
+  function fetchData() {
+    setLoading(true);
+    axios
+      .get(`https://lapakumkm.mindd.site/products/${id}`)
+      .then((res) => {
+        const { full_name, address, shop_name, photo_profile } = res.data.data.user
+        // console.log('test user', res.data.data.user);
+        // console.log('test data', res.data.data.category.category);
+        // console.log('test dataaaaa', res.data.data);
+        setDca(res.data.data)
+        const category = res.data.data.category.category
+        const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
+        setProduct(product_name);
+        setDescription(description);
+        setPrice(price);
+        setStock(stock_remaining);
+        setSize(size)
+        setName(shop_name)
+        setAddress(address)
+        setTotalPrice(price);
+        setUserId(user_id)
+        setProductId(id)
+        setImage(product_image)
+        setPhotoToko(photo_profile)
+        setCategory(category)
+        res.data.data.total_price = totalPrice
+        res.data.data.product_pcs = count
+        SetTestCount(res.data.data.total_price)
+        setTestPrice(res.data.data.product_pcs)
+   
+      })
+      .catch((err) => {
+        console.log(err.response.statusText)
+        MySwal.fire({
+          icon: "error",
+          title: err.response.statusText,
+          text: "Gagal mengunduh data",
+          showCancelButton: false,
+          confirmButtonText: "Dibaca",
+          confirmButtonColor: "#31CFB9",
+          showConfirmButton: true
+        })
+      })
+    setLoading(false)
+    // .finally(() => setLoading(false))
+  }
+  // console.log('cek user id', userId);
+  console.log('test abc', testCount);
+  console.log('test asd', tesPrice);
+  console.log('test dca', dca);
+  // console.log('test tesett', test);
+
   useEffect(() => {
     fetchData();
   }, [])
@@ -76,9 +165,9 @@ const Detail = () => {
       user_id: userId
     };
 
-    console.log(typeof data);
-    console.log(typeof count);
-    console.log("test id ", data);
+    // console.log(typeof data);
+    // console.log(typeof count);
+    // console.log("test id ", data);
 
     try {
       const res = await axios.post('https://lapakumkm.mindd.site/carts', data, {
@@ -87,7 +176,7 @@ const Detail = () => {
         }
       })
       if (res.data) {
-        console.log('testos add to cart', res.data);
+        // console.log('testos add to cart', res.data);
         MySwal.fire({
           icon: "success",
           title: "Produk ditambahkan ke keranjang",
@@ -110,51 +199,6 @@ const Detail = () => {
     }
 
   }
-
-  const [image, setImage] = useState<any>([])
-  const [photoToko, setPhotoToko] = useState('')
-  const [category, setCategory] = useState<any>('')
-  function fetchData() {
-    setLoading(true);
-    axios
-      .get(`https://lapakumkm.mindd.site/products/${id}`)
-      .then((res) => {
-        const { full_name, address , shop_name , photo_profile} = res.data.data.user
-        console.log('test user', res.data.data.user);
-        console.log('test data', res.data.data.category.category);
-        console.log('test dataaaaa', res.data.data);
-        
-        const category  =  res.data.data.category.category
-        const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
-        setProduct(product_name);
-        setDescription(description);
-        setPrice(price);
-        setStock(stock_remaining);
-        setSize(size)
-        setName(shop_name)
-        setAddress(address)
-        setTotalPrice(price);
-        setUserId(user_id)
-        setProductId(id)
-        setImage(product_image)
-        setPhotoToko(photo_profile)
-        setCategory(category)
-      })
-      .catch((err) => {
-        console.log(err.response.statusText)
-        MySwal.fire({
-          icon: "error",
-          title: err.response.statusText,
-          text: "Gagal mengunduh data",
-          showCancelButton: false,
-          confirmButtonText: "Dibaca",
-          confirmButtonColor: "#31CFB9",
-          showConfirmButton: true
-        })
-      })
-      .finally(() => setLoading(false))
-  }
-  console.log('cek user id' , userId);
   
   useEffect(() => {
     feedbackData()
@@ -163,7 +207,7 @@ const Detail = () => {
   function feedbackData() {
     setLoading(true);
     axios
-      .get(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/products/${id}/feedbacks`)
+      .get(`https://lapakumkm.mindd.site/products/${id}/feedbacks`)
       .then((res) => {
         const { data } = res.data
         setFeedback(data)
@@ -175,18 +219,13 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  useEffect(() => {
-    diskusiData()
-  }, [])
-
   function diskusiData() {
     setLoading(true);
     axios
-      .get(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/products/${id}/discussions`)
+      .get(`https://lapakumkm.mindd.site/products/${id}/discussions`)
       .then((res) => {
         const { data } = res.data
         setDiskusi(data)
-
       })
       .catch((err) => {
 
@@ -194,11 +233,20 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  const [balas, setBalas] = useState<string>("")
-  const [newDiskus, setnewDiskus] = useState<string>("")
-  const [disable, setDisable] = useState<boolean>(true)
-  const [disable2, setDisable2] = useState<boolean>(true)
-  const [hidden, setHidden] = useState<string>("hidden")
+  useEffect(() => {
+    diskusiData()
+  }, [])
+
+  const handleHide = (id: number) => {
+    console.log("id", id)
+
+    diskusi.map((i) => {
+      console.log("id_mapping", i.id)
+      if (i.id === id) {
+        setHide(false)
+      }
+    })
+  }
 
   useEffect(() => {
     newDiskus ? setDisable(false) : setDisable(true)
@@ -208,11 +256,11 @@ const Detail = () => {
     setLoading(true)
     e.preventDefault()
     const body = {
-      product_id: id,
+      product_id: productId,
       discussion: newDiskus
     }
     axios
-      .post(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/discussions`, body, {
+      .post(`https://lapakumkm.mindd.site/discussions`, body, {
         headers: {
           Authorization: `Bearer ${cookie.token}`
         }
@@ -225,7 +273,7 @@ const Detail = () => {
           text: "Menambahkan diskusi",
           showCancelButton: false,
           showConfirmButton: false,
-          timer: 1200
+          timer: 1500
         })
       })
       .catch((err) => {
@@ -235,9 +283,10 @@ const Detail = () => {
           text: "Gagal menambahkan diskusi",
           showCancelButton: false,
           showConfirmButton: false,
-          timer: 1200
+          timer: 1500
         })
       })
+      .finally(() => diskusiData())
       .finally(() => setLoading(false))
   }
 
@@ -280,8 +329,43 @@ const Detail = () => {
       })
       .finally(() => setLoading(false))
   }
-  console.log('cek kategor', category);
+  // console.log('cek kategor', category);
+
+  const DeleteDiskusi = (id: number) => {
+    setLoading(true);
+    axios
+      .delete(`https://lapakumkm.mindd.site/discussions/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        MySwal.fire({
+          icon: "success",
+          title: res.data.message,
+          text: "Berhasil menghapus diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+      .catch((err) => {
+        MySwal.fire({
+          icon: "error",
+          title: err.response.data.message,
+          text: "Gagal menghapus diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+      .finally(() => diskusiData())
+      .finally(() => setLoading(false))
+  }
+
   
+
+
   return (
     <Layout>
       {
@@ -326,7 +410,7 @@ const Detail = () => {
                   {/* Card kiri */}
                   <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-white dark:border-2">
                     <div className="max-w-5xl max-h-96 ">
-                      { loading ? <Loading /> :
+                      {loading ? <Loading /> :
                         image ?
                           <img src={image[0]?.image} className="max-w-fit max-h-72 md:col-span-2 rounded-md mx-auto" alt="" />
                           :
@@ -336,21 +420,21 @@ const Detail = () => {
                     <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
                       {
                         loading ? <Loading /> :
-                      image ?
-                        image.map((item: any) => {
-                          console.log("test image", item);
-                          return (
-                            <>
-                              <img src={item.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                          image ?
+                            image.map((item: any) => {
+                              // console.log("test image", item);
+                              return (
+                                <>
+                                  <img src={item.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
 
+                                </>
+                              )
+                            }) :
+                            <>
+                              <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                              <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
+                              <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
                             </>
-                          )
-                        }) :
-                        <>
-                          <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                          <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                          <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                        </>
                       }
 
                     </div>
@@ -389,7 +473,13 @@ const Detail = () => {
                       <div className="border-2 mt-5"></div>
                       <div className="flex justify-center gap-5 mt-10 w-fit mx-auto ">
                         <button className="btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit" onClick={() => {
-                          navigate('/payment')
+                          navigate(`/payment/${name}` , {
+                            state : {
+                              dca: dca,
+                              testPrice: tesPrice,
+                              testCount: testCount
+                            }
+                          })
                         }}>Bayar Langsung</button>
                         <button className='btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit' onClick={addToCart}>Tambah Keranjang</button>
                       </div>
@@ -403,22 +493,22 @@ const Detail = () => {
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md '>
-                    <img src={photoToko} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}` ,{
-                                    state: {
-                                        id: userId
-                                    }
-                                })} />
+                    <img src={photoToko} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
+                      state: {
+                        id: userId
+                      }
+                    })} />
                     <div className='font-bold text-lg dark:text-white'>
-                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${name}` ,{
-                                    state: {
-                                        id: userId
-                                    }
-                                })}>{name}</h1>
-                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${name}`,{
-                                    state: {
-                                        id: userId
-                                    }
-                                } )} ><MdOutlineLocationOn className='dark:text-lapak mr-2' /> {address}</h1>
+                      <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
+                        state: {
+                          id: userId
+                        }
+                      })}>{name}</h1>
+                      <h1 className='flex items-center cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
+                        state: {
+                          id: userId
+                        }
+                      })} ><MdOutlineLocationOn className='dark:text-lapak mr-2' /> {address}</h1>
                     </div>
                   </div>
                   <h1 className='text-3xl font-bold dark:text-white'>Informasi Produk :</h1>
@@ -443,12 +533,15 @@ const Detail = () => {
                     <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak dark:text-white dark:hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
                   </div>
 
-                  <div >
-                    {feedback.map((item) => (
-                      <CardFeedback key={item.id} rating={item.rating} image={item.user.map((user) => (user.profile_picture))} comment={item.feedback} name={item.user.map((user) => (user.username))}
-                      />
-                    ))}
-                  </div>
+                  {feedback === null ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
+
+                    <div >
+                      {feedback.map((item) => (
+                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile} comment={item.feedback} name={item.user.full_name}
+                        />
+                      ))}
+                    </div>
+                  }
 
                   <div className='flex justify-between mt-8 '>
                     <p id='diskusi' className='text-2xl text-zinc-800 mb-2 font-semibold dark:text-white'>Diskusi</p>
@@ -475,44 +568,64 @@ const Detail = () => {
                     </div>
                   </form>
 
-                  {diskusi.map((item) => (
-                    <div key={item.id} className='p-2 mb-4 border-b-2 border-zinc-400'>
-                      {item.user.map((profile) => (
-                        <>
-                          <div key={profile.id} className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
-                            <img src={profile.profile_picture} alt="profil.svg" />
 
-                          </div>
-                          <div className='flex justify-between text-zinc-800 items-center py-3'>
-                            <h1 className='text-lg font-bold dark:text-white'>{profile.username}</h1>
-                          </div>
-                        </>
-                      ))}
-                      <p className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
+                  {diskusi === null ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
 
-                      <p className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white'>Balas diskusi ...</p>
+                    diskusi.map((item) => (
+                      <div key={item.id} className="p-2 mb-4 border-b-2 border-zinc-400 relative">
+                        <div className='dropdown dropdown-bottom dropdown-end absolute top-2 right-0'>
+                          <label tabIndex={0} className={`${parseInt(cookie.id) === item.user_id ? "flex" : "hidden"} btn-ghost btn-circle btn`}>
+                            <GoKebabVertical size={20} />
+                          </label>
 
-                      <div className={`mb-5`}>
-                        <CustomInput
-                          id='input-balas_diskusi'
-                          placeholder='balas diskusi disini'
-                          label=''
-                          type='text'
-                          name='balas_diskusi'
-                          onChange={changeDiskus}
-                        />
+                          <ul
+                            tabIndex={0}
+                            className="dropdown-content menu rounded-box menu-compact mt-3 bg-zinc-50 text-zinc-800 px-10 py-4 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.3)] space-y-4 text-[16px] hover:cursor-pointer"
+                          >
+                            <li className='hover:text-zinc-500  text-zinc-800'>perbarui</li>
+                            <li onClick={() => DeleteDiskusi(item.id)} className='hover:text-red-400 text-red-500'>hapus</li>
+                          </ul>
+                        </div>
 
-                        <div className='flex gap-5 w-3/12 mt-4 ml-auto'>
-                          <CustomButton
-                            id="btn-balas"
-                            label='Balas'
-                            type='submit'
-                            onClick={() => handleBalas(item.id)}
+                        <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
+                          <img src={item.user.photo_profile ? item.user.photo_profile : Default} alt="profil.svg" />
+
+                        </div>
+                        <div className='flex justify-between text-zinc-800 items-center py-3'>
+                          <h1 className='text-lg font-bold dark:text-white'>{item.user.full_name}</h1>
+                        </div>
+
+                        <p className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
+
+                        <p onClick={() => handleHide(item.id)} className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white'>Balas diskusi ...</p>
+
+                        <div className={` ${hide === true ? "hidden" : "block"} mb-5`}>
+                          <CustomInput
+                            id='input-balas_diskusi'
+                            placeholder='balas diskusi disini'
+                            label=''
+                            type='text'
+                            name='balas_diskusi'
+                            onChange={changeDiskus}
                           />
+
+                          <div className='flex gap-5 w-3/12 mt-4 ml-auto bg-green-300'>
+                            <CustomButton
+                              id="btn-balas"
+                              label='Kembali'
+                              onClick={() => setHide(true)}
+                            />
+
+                            <CustomButton
+                              id="btn-balas"
+                              label='Balas'
+                              type='submit'
+                              onClick={() => handleBalas(item.id)}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
 
                 </div>
               </div>

@@ -58,6 +58,8 @@ const Cart: React.FC<CartData> = ({ products }) => {
         });
       
     };
+     
+      
     console.log('updatedItems');
     console.log("new", newCart)
 
@@ -160,7 +162,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
     // useEffect(() => {
     //     TotalCart2()
     // }, [TotalCart2])
-      
     const test = newCart
     // console.log('tesss newcar', test);
     
@@ -278,7 +279,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                 counts={ item.product_pcs}
                                                 price={item.product_price}
                                                 onCheck={handleCheckAll}
-                                                
                                                 totalPrice={item.product_price * item.product_pcs}
                                                 handleDecrement={() => handleDecrement(item)}
                                                 handleIncrement={() => handleIncrement(item)}
