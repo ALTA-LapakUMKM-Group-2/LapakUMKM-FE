@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 import withreactcontent from "sweetalert2-react-content"
 import Swal from "sweetalert2"
@@ -32,7 +32,11 @@ const Profile = () => {
   const [data, setData] = useState<any>([])
   const [disable, setDisable] = useState<boolean>(true);
   const [shopName, setShopName] = useState('')
+  const location = useLocation()
+  const showFromHome = location.state.showModal
 
+  console.log(showFromHome);
+  
   const handleUpdateStatus = async (e: any) => {
     e.preventDefault()
     try {
@@ -87,6 +91,9 @@ const Profile = () => {
 
   useEffect(() => {
     getProfile()
+    if(showFromHome){
+      setShowModal(showFromHome)
+    }
   }, [])
 
   const [fullName, setFullName] = useState('')
@@ -331,7 +338,7 @@ const Profile = () => {
             <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider dark:text-white">Profile Detail Saya</h1>
 
             <div className="flex flex-col md:flex-row lg:flex-row mt-4 md:mt-10 lg:mt-14">
-              <div className="bg-none dark:bg-slate-800 dark:border-2 dark:border-lapak md:bg-white lg:bg-white p-6  md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
+              <div className="bg-none dark:bg-slate-800 dark:border-2 dark:border-lapak md:bg-white lg:bg-white p-6 avatar md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
                 <div className="rounded-full w-9/12 md:w-11/12 lg:w-11/12 overflow-hidden h-4/6" >
                   <img src={data.photo_profile ? data.photo_profile : Default} alt="profile.png" className="cursor-pointer" onClick={() => setModalImage(true)} />
                 </div>

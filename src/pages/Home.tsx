@@ -12,6 +12,7 @@ import Search from '../components/Search'
 import { useCookies } from 'react-cookie'
 import { DataType } from '../utils/types/DataType'
 import InfiniteScroll from "react-infinite-scroll-component"
+import Swal from 'sweetalert2'
 
 const Home = () => {
     const navigate = useNavigate()
@@ -20,8 +21,45 @@ const Home = () => {
     const [tenData, setTenData] = useState([])
     const [loading, setLoading] = useState(false)
     const [cookie, setCookie] = useCookies(["token"]);
+    const [user, setUser] = useState<any>({})
     const [search, setSearch] = useState('')
-
+    const getProfile = async () => {
+        setLoading(true)
+        try {
+            const res = await axios.get('https://lapakumkm.mindd.site/users', {
+                headers: {
+                Authorization: `Bearer ${cookie.token}`
+                }
+            })
+            setUser(res.data.data)
+            if(res.data.data.address === undefined){
+                Swal.fire({
+                    icon: "warning",
+                    title: "Anda Belum Melengkapi Profile Anda",
+                    confirmButtonText: "Isi Data",
+                    confirmButtonColor: "#31CFB9",
+                    showCancelButton: true,
+                    cancelButtonText: "Nanti Saja",
+                    cancelButtonColor: "#db1f1f"
+                }).then((update) => {
+                    if (update.isConfirmed) {
+                        navigate(`/profile`, {
+                            state:{
+                                showModal: true
+                            }
+                        })
+                    }
+                })
+            }
+        } catch (error) {
+    
+        }
+        setLoading(false)
+    }
+    console.log("user", user)
+    useEffect(() => {
+        getProfile()
+    }, [])
     const getAllData = () => {
         setLoading(true);
 
