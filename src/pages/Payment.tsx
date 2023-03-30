@@ -14,6 +14,7 @@ import { formatValue } from 'react-currency-input-field'
 import { MdLocationOn } from 'react-icons/md'
 import { BsShop } from 'react-icons/bs'
 import Loading from '../components/Loading'
+import Loading2 from '../components/Loading2'
 type Detail = {
     product_id: number
     total_products: number
@@ -311,11 +312,11 @@ const Payment = () => {
                                                 test ?
                                                     <>
                                                         <div>
-                                                            <div className="flex flex-row  justify-between mt-5 text-sm lg:text-lg font-semibold 2xl:font-semibold 2xl:text-2xl">
+                                                            <div className="flex flex-row  justify-between mt-5 text-sm lg:text-lg font-semibold 2xl:font-semibold 2xl:text-2xl dark:text-white">
                                                                 <div>Nama toko :</div>
                                                                 <div>{test.user.shop_name}</div>
                                                             </div>
-                                                            <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl">
+                                                            <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
                                                                 <div>Total Harga 1 Barang :</div>
                                                                 <div className=''>{
                                                                     formatValue({

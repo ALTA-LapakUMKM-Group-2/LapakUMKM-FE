@@ -16,3 +16,18 @@ body {
   background-position: center;
   background-size: cover;
 }
+
+#load {
+  position: absolute;
+  width: 600px;
+  height: 40px;
+  left: 50%;
+  top: 40%;
+  margin-left: -300px;
+  overflow: visible;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
