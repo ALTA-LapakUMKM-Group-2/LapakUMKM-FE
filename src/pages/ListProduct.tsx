@@ -429,7 +429,7 @@ const ListProduct = () => {
     <Layout>
       {loading ? <Loading/> : 
         <>
-        
+          
           <Modal 
           isOpen={showAddProduk}
           isClose={()=>setShowAddProduk(false)}
@@ -441,7 +441,7 @@ const ListProduct = () => {
                       <label htmlFor="dropzone-file" 
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
-                      className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50`}>
+                      className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-800`}>
                           <div className="flex flex-col items-center justify-center pt-5 pb-6">
                               <BiImageAdd
                               aria-hidden='true'
@@ -498,16 +498,18 @@ const ListProduct = () => {
                       value={formValues.stockRemaining}
                       onChange={handleInputChange}
                     />
-                    <label className="text-zinc-800 text-[18px] font-semibold" htmlFor='categoriId'>
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor='categoriId'>
                       Kategori
                     </label>
-                    <select className="border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
+                    <select className="border-2 mt-2 input w-full max-w-full border border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75  
+                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-slate-400 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
                       defaultValue={''}
                       id='categoriId'
                       name='categoriId'
                       onChange={handleSelectChange}
                       >
-                        <option>Pilih Kategori</option>
+                        <option className="">Pilih Kategori</option>
                         {category?.map((item:any, index:any) => {
                             return(
                               <option value={item.id}>{item.category}</option>
@@ -515,9 +517,11 @@ const ListProduct = () => {
                           })        
                         } 
                     </select>
-                    <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minprice">Harga</label>
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minprice">Harga</label>
                     <CurrencyInput
-                      className='input border-2 border-lapak  input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                      className='border-2 mt-2 input w-full max-w-full border border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75  
+                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-slate-400 disabled:bg-slate-400 text-[16px]'
                       id="price"
                       name="price"
                       prefix='Rp. '
@@ -533,7 +537,7 @@ const ListProduct = () => {
                       name='deskripsi'
                       value={formValues.deskripsi}
                       onChange={handleTextAreaChange}
-                      placeholder="lorem ipsdisadfihbdfas fqweEwa"
+                      placeholder="Deskripsi Product Anda"
                     />
 
                   <div className="mt-8">
@@ -586,10 +590,12 @@ const ListProduct = () => {
                     />
                   </div> 
                 <div className="w-11/12 md:w-80 items-center space-y-5">
-                    <label className="text-zinc-800 text-[18px] font-semibold" htmlFor='categori_id'>
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor='categori_id'>
                       Kategori
                     </label>
-                    <select className="border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
+                    <select className="border-2 mt-2 input w-full max-w-full border border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75  
+                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-slate-400 placeholder-slate-400 disabled:bg-slate-400 text-[16px]"
                       defaultValue={''}
                       id='categoriId'
                       name='categoriId'
@@ -603,9 +609,11 @@ const ListProduct = () => {
                           })        
                         } 
                     </select>
-                    <label className="text-zinc-800 text-[18px] font-semibold" htmlFor="minprice">Harga</label>
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minprice">Harga</label>
                     <CurrencyInput
-                      className='input border-2 border-lapak  input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                      className='border-2 mt-2 input w-full max-w-full border border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75  
+                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-slate-400 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
                       id="price"
                       name="price"
                       prefix='Rp. '
@@ -779,7 +787,7 @@ const ListProduct = () => {
                         picture?.data?.map((item:any, index:any) => {
                           return(
                             <label
-                              className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50`}>
+                              className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-800`}>
                               <div className="flex flex-col items-center justify-center ">
                                 <div key={index}>
                                   <img src={item.image} className="w-20 h-20" alt="" />
@@ -796,7 +804,7 @@ const ListProduct = () => {
                 <label htmlFor="dropzone-file" 
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
-                  className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50`}>
+                  className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-800`}>
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <BiImageAdd
                     aria-hidden='true'

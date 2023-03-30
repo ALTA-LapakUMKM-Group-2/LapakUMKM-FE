@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Layout from '../components/Layout'
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
@@ -17,7 +17,8 @@ import Loading from '../components/Loading'
 import Search from '../components/Search'
 import Swal from 'sweetalert2'
 import sowwy from '../assets/photo_2023-03-16_20-34-20.jpg'
-
+import { gsap } from 'gsap'
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
     interface FormValues {
     minprice: number | any
     maxprice: number | any
@@ -40,8 +41,23 @@ const HomeFilter = () => {
     const [cookie, setCookie] = useCookies(["token"])
     const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
     const [categoryId, setCategoryId] = useState(location.state.id)
-    console.log("Id",categoryId)
+    
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
+    const handleToggle = () => {
+        setShowFilter(!showFilter);
+    }
+
+    const handleAnimation = () => {
+        const dropdown = dropdownRef.current;
+
+        if (showFilter) {
+            gsap.fromTo(dropdown, { height: 0, display: 'none' }, { duration: 0.5, height: 450, display: 'block' });
+        } else {
+            gsap.to(dropdown, { duration: 0.5, height: 0, display: 'none' });
+        }
+    }
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value })
@@ -147,17 +163,17 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                 <div className="flex mt-10 mx-auto lg:ml-auto">
                     <div className="w-80 h-fit bg-white border rounded-xl shadow-xl flex flex-col dark:bg-slate-800 dark:border-lapak">
                         <div className="flex flex-col">
-                            <div className="flex flex-row justify-between border-b-2 mx-3 mt-2 pb-2 dark:text-white">
+                            <div className="flex flex-row justify-between border-b-2 mx-3 mt-2 pb-2 dark:text-white dark:border-lapak">
                                 <p className='my-auto text-xl font-semibold'>Filter</p>
                                     <label className="swap swap-rotate">
                                         <input type="checkbox" />
-                                        <IoIosArrowDropup onClick={()=> setShowFilter(true)}  className="swap-on fill-current w-8 h-8"/>
-                                        <IoIosArrowDropdown onClick={()=> setShowFilter(false)} className="swap-off fill-current w-8 h-8"/>
+                                        <IoIosArrowDropup onClick={()=> {setShowFilter(false), handleAnimation()}}  className="swap-on fill-current w-8 h-8"/>
+                                        <IoIosArrowDropdown onClick={()=> {setShowFilter(true), handleAnimation()}} className="swap-off fill-current w-8 h-8"/>
                                     </label>
                             </div>
-                            <div className={`text-lapak font-semibold w-80 transition-all duration-300 ${ showFilter ? 'block' : 'hidden' }`}>
+                            <div ref={dropdownRef} className={`text-lapak font-semibold ${showFilter? 'open' : ''}`}>
                                 <div className="px-4 py-3 text-sm text-gray-900 "> 
-                                    <form onSubmit={handleSubmit} className="space-y-5">
+                                    <form onSubmit={handleSubmit} className={`space-y-5 ${showFilter? 'open' : ''}`} >
                                         <div className='w-full'>
                                             <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor='kategori'>
                                                 Kategori
