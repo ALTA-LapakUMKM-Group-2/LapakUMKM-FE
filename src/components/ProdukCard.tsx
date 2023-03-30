@@ -65,7 +65,7 @@ const ProdukCard: React.FC<ListingProps> = ({
     return (
 
 
-        <div className="w-60 h-full max-w-sm bg-white border border-lapak rounded-lg shadow-lg dark:bg-slate-600 dark:border-4">
+        <div className="w-60 h-full max-w-sm bg-white border border-gray rounded-lg shadow-lg dark:bg-slate-600 dark:border-4 dark:border-lapak">
             <a onClick={onClick} href="#">
                 <img className="p-4 rounded-t-lg cover w-screen h-72" src={ image} alt="product image" />
             </a>
@@ -83,7 +83,7 @@ const ProdukCard: React.FC<ListingProps> = ({
                         readOnly
                         className='dark:text-lapak'
                     />
-                    <span className="bg-teal-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3 dark:text-black dark:bg-white">{rating}</span>
+                    <span className="bg-teal-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3 dark:text-black ">{rating}</span>
                 </div>
                 <p>Terjual {sell}</p>
                 <div className="flex items-center justify-between">
