@@ -62,9 +62,11 @@ const ListProduct = () => {
   const [cookie, setCookie] = useCookies(["token"]);
   const productEndpoint = 'https://lapakumkm.mindd.site/products'
   const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
+  const dashboardEndpoint = 'https://lapakumkm.mindd.site/dashboard'
   const user_id = location.state.id
   const [shopName, setShopName] = useState('')
   const [editMode, setEditMode] = useState(false)
+  const [dashboardData, setDashboardData] = useState<any>()
 
   const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
@@ -138,9 +140,25 @@ const ListProduct = () => {
     }
     setLoading(false)
   }
+  const fetchDashboard = async () => {
+    setLoading(true)
+    try {
+      const res = await axios.get(dashboardEndpoint,{
+        headers:{
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      console.log(res.data)
+      setDashboardData(res.data.data)
+    } catch (error) {
+
+    }
+    setLoading(false)
+  }
 
   useEffect(() => {
     fetchProduct()
+    fetchDashboard()
   }, [])
   console.log(product)
 
@@ -629,7 +647,7 @@ const ListProduct = () => {
                       name='deskripsi'
                       value={formValues.deskripsi}
                       onChange={handleTextAreaChange}
-                      placeholder="lorem ipsdisadfihbdfas fqweEwa"
+                      placeholder="Deskripsi Product Anda"
                     />
                   <div className="mt-8">
                     <CustomButton
@@ -649,15 +667,15 @@ const ListProduct = () => {
 
             <div className="mt-10 flex flex-col md:flex-row lg:flex-row items-center justify-center">
 
-                <div className="stats shadow-xl flex flex-col md:flex-row lg:flex-row">      
-                  <div className="stat p-10">
+                <div className="stats shadow-xl flex flex-col md:flex-row lg:flex-row dark:bg-slate-800 dark:shadow-sm dark:shadow-slate-600">      
+                  <div className="stat p-10 dark:border-r dark:border-slate-600">
                     <div className="stat-figure text-accent">
                       <FiShoppingBag className="inline-block w-8 h-8 stroke-current"/>
                     </div>
-                    <div className="stat-title">Barang Paling Laris</div>
-                    <div className="stat-value text-lapak">200 Item</div>
-                    <div className="stat-desc text-base"> 
-                      <p>200 item terjual dari produk :</p> 
+                    <div className="stat-title dark:text-white">Barang Paling Laris</div>
+                    <div className="stat-value text-lapak"> Item</div>
+                    <div className="stat-desc text-base dark:text-white"> 
+                      <p>item terjual dari produk :</p> 
                       <p>kaos lengan pendek</p> 
                       </div>
                   </div>
@@ -666,10 +684,10 @@ const ListProduct = () => {
                     <div className="stat-figure text-accent">
                       <BiMoneyWithdraw className="inline-block w-8 h-8 stroke-current"/>
                     </div>
-                    <div className="stat-title">Total Pemasukan</div>
+                    <div className="stat-title dark:text-white">Total Pemasukan Minggu Ini</div>
                     <div className="stat-value text-accent">
                             {formatValue({
-                              value: JSON.stringify(250000),
+                              value: JSON.stringify(200000),
                               groupSeparator: '.',
                               decimalSeparator: ',',
                               prefix: 'Rp. ',
@@ -693,9 +711,9 @@ const ListProduct = () => {
               </div>
 
               <div className="relative overflow-x-auto mt-8 mx-auto w-full">
-                <table className="sm:w-96 md:w-[700px] lg:w-[900px] text-left text-gray-500 overflow-x-auto">
-                  <thead className="text-[12px] md:text-[16px] text-zinc-800 font-semibold bg-white">
-                    <tr className="border-b-2">
+                <table className="sm:w-96 md:w-[700px] lg:w-[900px] text-left text-gray-500 overflow-x-auto dark:text-white dark:bg-slate-600">
+                  <thead className="text-[12px] md:text-[16px] text-zinc-800 font-semibold bg-white dark:text-white dark:bg-slate-600">
+                    <tr className="border-b-2 dark:border-lapak">
                       <th scope="col" className="px-4 py-3">
                         NO
                       </th>
@@ -716,15 +734,15 @@ const ListProduct = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="text-[15px]">
+                  <tbody className="text-[15px] bg-white dark:text-white dark:bg-slate-700 ">
                     { !product  ? (
                       <>
                       </>
                     ) : (
                       product.map((item:any, index:any)=>{
                         return(
-                        <tr className="bg-white border-b ">
-                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        <tr className="border-b dark:border-lapak">
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {index + 1}
                           </th>
                           <td className="px-8 py-">
