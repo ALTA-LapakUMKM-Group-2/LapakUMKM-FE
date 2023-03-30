@@ -113,13 +113,13 @@ const Home = () => {
             />
             <div className="flex flex-col w-11/12 mx-auto items-center">
                 <div className="mt-10 mx-auto w-3/6">
-                    <p className='dark:text-white text-xl font-semibold'>Cari Berdasarkan Kategori</p>
+                    <p className='dark:text-white font-semibold text-sm md:text-lg lg:text-xl'>Cari Berdasarkan Kategori</p>
                     <div className="flex w-full space-x-10 relative overflow-x-auto p-5">
                         {category?.map((item: any, index: any) => {
                             console.log("item test", item);
 
                             return (
-                                <button key={index} id={item.id} className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none dark:border-lapak dark:border-2"
+                                <button key={index} id={item.id} className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none dark:border-lapak dark:border-2 dark:bg-slate-700 dark:text-white"
                                     onClick={() => navigate(`/home/${item.category}`, {
                                         state: {
                                             id: item.id

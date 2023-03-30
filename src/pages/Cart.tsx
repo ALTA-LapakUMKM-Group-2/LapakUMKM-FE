@@ -48,7 +48,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [totalPrice, setTotalPrice] = useState<number>(price)
     const navigate = useNavigate()
     
-    console.log("test tokped",selectedItems);
     
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Product) => {
         const isChecked = e.target.checked;
@@ -59,7 +58,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
             return updatedItems;
         });
     };
-    console.log("total price", price);
     
     const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = e.target.checked;
@@ -108,7 +106,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
         TotalCart()
     }, [TotalCart])
 
-    console.log('cektotal', totalPrice);
 
     const getProfile = async () => {
         setLoading(true)
@@ -195,7 +192,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
     useEffect(() => {
         fetchDataCart()
     }, [])
-    console.log("Cart", cart);
     
     const imgURL = "https://storage.googleapis.com/images_lapak_umkm/product/"
     return (

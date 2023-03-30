@@ -8,14 +8,15 @@ module.exports = {
     extend: {
       backgroundImage: {
         'bgLogin': "url('/src/assets/bgLogin.jpg')",
-         'bgregis' :"url ('/src/assets/bgregis.jpg')"   
+        'bgregis' :"url ('/src/assets/bgregis.jpg')"   
       },
       colors: {
         'lapak' : '#31CFB9'
       },
     },
   },
-  plugins: [require("daisyui"), require('prettier-plugin-tailwindcss')],
+  plugins: [require("daisyui"), require('prettier-plugin-tailwindcss'),
+            require("tailwindcss-radix")()],
   daisyui: {
     base: false,
     darkTheme: "light",

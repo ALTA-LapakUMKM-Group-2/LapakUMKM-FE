@@ -17,6 +17,7 @@ import NotifikasiCoba from "./pages/NotifikasiCoba";
 import { getDark } from "./utils/redux/reducer/reducer";
 import { useState, useEffect, useMemo } from "react";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import LupaPassword from "./pages/LupaPassword";
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path="/historypembeli" element={<HistoryPembeli />} />
           <Route path="/toko/:name" element={<Toko />} />
           <Route path="/notif" element={<NotifikasiCoba />} />
+          <Route path="/new-password" element={<LupaPassword />} />
         </Routes >
       </BrowserRouter >
     </GoogleOAuthProvider>
