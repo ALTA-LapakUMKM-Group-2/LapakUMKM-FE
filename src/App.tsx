@@ -13,7 +13,7 @@ import Payment from "./pages/Payment";
 import Detail from "./pages/Detail";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import NotifikasiCoba from "./pages/NotifikasiCoba";
+// import NotifikasiCoba from "./pages/NotifikasiCoba";
 import { getDark } from "./utils/redux/reducer/reducer";
 import { useState, useEffect, useMemo } from "react";
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -36,10 +36,10 @@ function App() {
       <GoogleOAuthProvider clientId={`${import.meta.env.VITE_CLIENT_ID}`}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={checkToken ? <Home /> : <Login />} />
-            <Route path="/" element={<Login />} />
+            <Route path="/login" element={checkToken ? <Home /> : <Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/detail/:id" element={<Detail />} />
             <Route path="/payment/:name" element={<Payment />} />
             <Route path="/cart" element={<Cart />} />
@@ -49,7 +49,7 @@ function App() {
             <Route path="/listproduct/:nama_toko" element={<ListProduct />} />
             <Route path="/historypembeli" element={<HistoryPembeli />} />
             <Route path="/toko/:name" element={<Toko />} />
-            <Route path="/notif" element={<NotifikasiCoba />} />
+            {/* <Route path="/notif" element={<NotifikasiCoba />} /> */}
             <Route path="/new-password" element={<LupaPassword />} />
           </Routes >
         </BrowserRouter >

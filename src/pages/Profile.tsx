@@ -124,7 +124,6 @@ const Profile = () => {
       const res = await axios.post(`https://lapakumkm.mindd.site/users`, data, {
         headers: {
           Authorization: `Bearer ${cookies.token}`
-
         }
       })
       if (res.data) {

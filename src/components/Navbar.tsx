@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { handleAuth } from '../utils/redux/reducer/reducer';
 import axios from 'axios';
 
+import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 
 import Logo from '../assets/LapakUmkm2.png'
@@ -14,10 +15,6 @@ import { MdOutlineWorkHistory, MdOutlineShoppingCart } from 'react-icons/md'
 import { FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'
 import { HiCog6Tooth } from 'react-icons/hi2'
 import { BsShop } from 'react-icons/bs'
-
-
-
-
 
 interface NavbarProps {
     name?: string
@@ -30,6 +27,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, imgUser }) => {
 
     // handle log out
+    const MySwal = withReactContent(Swal)
     const dispatch = useDispatch()
     const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile']);
     const checkToken = cookies.token
@@ -40,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     const [photo, setPhoto] = useState<string>("")
 
     const handleLogout = () => {
-        Swal.fire({
+        MySwal.fire({
             title: "Are you sure?",
             icon: "warning",
             showCancelButton: true,
@@ -52,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
             cancelButtonColor: "#FE4135",
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
+                MySwal.fire({
                     position: "center",
                     icon: "success",
                     text: "Logout successfully",
@@ -66,7 +64,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 removeCookie('id');
                 removeCookie('token');
                 removeCookie('photo_profile');
-                navigate("/");
+                navigate("/login");
             }
         });
     }
@@ -231,7 +229,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                                         </a>
                                         </li>
                                     </> : <>
-                                        <li onClick={() => checkToken ? handleLogout() : navigate("/")}><a>
+                                        <li onClick={() => checkToken ? handleLogout() : navigate("/login")}><a>
                                             {checkToken ? <FaSignOutAlt /> : <FaSignInAlt />}
                                             {checkToken ? "Keluar" : "Masuk"}
                                         </a>

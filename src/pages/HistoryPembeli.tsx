@@ -19,10 +19,6 @@ import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
 import Modal from "../components/Modal"
 
-import Kaos from "../assets/kaos.png"
-import { string } from "prop-types"
-import { AnyArray } from "immer/dist/internal"
-
 interface FormValues {
   rating: number;
 }
@@ -69,8 +65,6 @@ const HistoryPembeli = () => {
         }
       })
       .then((res) => {
-
-
         setHistory(res.data.data)
       })
       .catch((err) => {
@@ -92,7 +86,6 @@ const HistoryPembeli = () => {
         res.data.data.image = ''
         res.data.data.size = ''
         res.data.data.shop_name = ''
-        // console.log('res' , res.data.data);
         setDetailHistory(res.data.data)
 
         const productIds = res.data.data.map((id: any) => id.product_id)
@@ -119,8 +112,6 @@ const HistoryPembeli = () => {
         .then((res) => {
           combine.push(res.data.data)
           setProduct(combine)
-          // console.log('test product id', res.data.data);
-          // console.log('test combine', combine);
         })
         .catch((err) => {
           console.log(err.response.data.message)
@@ -153,33 +144,6 @@ const HistoryPembeli = () => {
       setCombineProduk(cekDetail)
     }
   }, [product, detailHistory]);
-
-  // const [Produk2, setProduk2] = useState<any>()
-
-  // console.log("test product test", product);
-
-  const getProduct = [{ ...product }]
-  // console.log('testt clone product', getProduct);
-
-  // if(getProduct.product_name) {
-
-  // }
-
-  // console.log("test detail test", detailHistory);
-  const testClone: any = [{ detailHistory, ...product }]
-  // console.log('test clonee', testClone);
-
-
-  // const newProduk = [...detailHistory, ...product]
-
-  // const newProduk2 = detailHistory.map((item) => {
-  //   return (
-  //     setProduk2([...product, item])
-  //   )
-  // })
-
-  // console.log("New Produk :", newProduk)
-  // console.log("New Produk 2 :", newProduk2)
 
   useEffect(() => {
     dataFeedback()
@@ -249,19 +213,6 @@ const HistoryPembeli = () => {
     window.open(payment_link, "_blank")
   }
 
-  //   const numbers1 = [1, 2, 3, 4, 5];
-
-  //   numbers1.forEach((num) => {
-  //     console.log('forEach', num * 2); // output: 2, 4, 6, 8, 10
-  //   });
-
-  //   const numbers = [1, 2, 3, 4, 5];
-
-  // const doubledNumbers = numbers.map((num) => {
-  //   return num * 2;
-  // });
-  //  console.log("map", doubledNumbers);
-
   return (
     <Layout>
       {loading ? <Loading /> :
@@ -269,40 +220,44 @@ const HistoryPembeli = () => {
           <Navbar />
           <div className="px-8 md:px-28 lg:px-52 2xl:px-80 mb-28">
             <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
-            {history.map((item, index) => (
-              <div className="mb-10 rounded-lg shadow-[2px_4px_8px_0px_rgba(0,0,0,0.3)] bg-white w-[35vw] p-5 text-zinc-800 text-[20px] ">
-                <p>{`Total Barang : ${item.total_product}`}</p>
-                <p className=''>Total Belanja :
-                  {formatValue({
-                    value: JSON.stringify(item.total_payment),
-                    groupSeparator: '.',
-                    decimalSeparator: ',',
-                    prefix: ' Rp. ',
-                  })}
-                </p>
-                <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
-                <div className="flex mt-10 w-9/12 ml-auto ">
-                  <div className='ml-auto'>
-                    <CustomButton
-                      id="btn-balas"
-                      label='Bayar sekarang'
-                      type='submit'
-                      onClick={() => handleBayar(item.payment_link)}
-                    />
-                  </div>
+            {history ?
+              history.map((item, index) => (
+                <div className="mb-10 rounded-lg shadow-[2px_4px_8px_0px_rgba(0,0,0,0.3)] bg-white w-[35vw] p-5 text-zinc-800 text-[20px] ">
+                  <p>{`Total Barang : ${item.total_product}`}</p>
+                  <p className=''>Total Belanja :
+                    {formatValue({
+                      value: JSON.stringify(item.total_payment),
+                      groupSeparator: '.',
+                      decimalSeparator: ',',
+                      prefix: ' Rp. ',
+                    })}
+                  </p>
+                  <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
-                  <div className='ml-auto'>
-                    <CustomButton
-                      id="btn-bayar"
-                      label='Detail transaksi'
-                      onClick={() => dataTransaksiId(item.id)}
-                      className="rounded-xl bg-white border border-lapak w-full max-w-full px-6 py-2 text-[15px] md:text-[15px] lg:text-[14px] 2xl:text-[18px] font-semibold capitalize tracking-wider text-lapak hover:bg-lapak hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400 "
-                    />
+                  <div className="flex mt-10 w-9/12 ml-auto ">
+                    <div className='ml-auto'>
+                      <CustomButton
+                        id="btn-balas"
+                        label='Bayar sekarang'
+                        type='submit'
+                        onClick={() => handleBayar(item.payment_link)}
+                      />
+                    </div>
+
+                    <div className='ml-auto'>
+                      <CustomButton
+                        id="btn-bayar"
+                        label='Detail transaksi'
+                        onClick={() => dataTransaksiId(item.id)}
+                        className="rounded-xl bg-white border border-lapak w-full max-w-full px-6 py-2 text-[15px] md:text-[15px] lg:text-[14px] 2xl:text-[18px] font-semibold capitalize tracking-wider text-lapak hover:bg-lapak hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400 "
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+              :
+              <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>}
           </div>
 
           <Modal isOpen={showProduk} size='w-[40vw]' isClose={() => setShowProduk(false)} title="Detail Transaki" >

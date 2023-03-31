@@ -445,11 +445,13 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  diskusi.map((item) => {
-    item.childs?.map((child) => {
-      console.log("child diskusi :", child.discussion);
-    });
-  });
+  // diskusi.map((item) => {
+  //   item.childs?.map((child) => {
+  //     console.log("child diskusi :", child.discussion);
+  //   });
+  // });
+
+  diskusi.map((i) => console.log(i))
 
   return (
     <Layout>
@@ -556,7 +558,7 @@ const Detail = () => {
                         <button onClick={handleIncrement} className="btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
                       </div>
                       <div className="border-2 mt-5"></div>
-                      <div className="flex justify-center gap-5 mt-10 w-fit mx-auto ">
+                      <div className="flex 2xl:flex-row lg:flex-row md:flex-row flex-col justify-center gap-5 mt-10 w-fit mx-auto ">
                         <button className="btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit" onClick={() => {
                           navigate(`/payment/${name}`, {
                             state: {
@@ -618,7 +620,7 @@ const Detail = () => {
                     <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak dark:text-white dark:hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
                   </div>
 
-                  {feedback === null ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
+                  {feedback === null || undefined || "" || 502 ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
 
                     <div >
                       {feedback.map((item) => (
@@ -654,7 +656,7 @@ const Detail = () => {
                   </form>
 
 
-                  {diskusi === null ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
+                  {diskusi === null || undefined || "" || 502 ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
 
                     diskusi.map((item, index) => (
                       <div key={item.id} className="p-2 mb-4 border-b-2 border-zinc-400 relative">
