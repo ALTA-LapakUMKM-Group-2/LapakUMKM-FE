@@ -46,7 +46,7 @@ const CartCard: React.FC<CartProps> = ({
             </div>
             <div className="flex flex-col lg:flex-row">
                 <img className="object-cover md:w-full md:h-24 lg:w-32 lg:h-40 rounded-t-lg md:rounded-none md:rounded-l-lg "
-                    src={imgUrl + produkimg} alt={produkimg} />
+                    src={produkimg} alt={produkimg} />
 
                 <div className="flex flex-col px-4 leading-normal md:w-72 lg:w-80 justify-start dark:text-white">
                     <h5 className="mb-2 text-lg font-semibold tracking-tight text-gray-900 text-start dark:text-white">{produkName}</h5>

@@ -91,12 +91,14 @@ const Profile = () => {
   }
 
 
+
   useEffect(() => {
     getProfile()
     // if(showFromHome){
     //   setShowModal(showFromHome)
     // }
   }, [])
+
 
 
   const [fullName, setFullName] = useState('')

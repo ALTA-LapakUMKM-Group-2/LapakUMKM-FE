@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import LapakUmkm from '../assets/LapakUmkm2.png'
+import PasswordStrengthBar from 'react-password-strength-bar';
 import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -61,7 +62,8 @@ const Register = () => {
             Swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: { error },
+                title: 'Registrasi Gagal',
+                text: 'Email Mungkin Sudah Terdaftar',
                 showConfirmButton: true,
             });
         }
@@ -116,8 +118,10 @@ const Register = () => {
                                     <input
                                         onChange={(e) => setPassword(e.target.value)}
                                         type={showPassword ? "text" : "password"}
-                                        className="input input-bordered input-accent w-full max-w-lg pr-10"
+                                        className="input input-bordered input-accent w-full max-w-lg pr-10 mb-2"
+                                        minLength={8}
                                     />
+                                    <PasswordStrengthBar password={password}/>
                                     <button
                                         type="button"
                                         className="absolute right-2 top-3 text-black"
@@ -140,7 +144,7 @@ const Register = () => {
                             {" "}
                             Already have an account?{" "}
                             <a
-                                onClick={()=> navigate('/register')}
+                                onClick={()=> navigate('/')}
                                 className="font-medium text-indigo-600 hover:underline"
                             >
                                 Sign in

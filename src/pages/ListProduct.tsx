@@ -148,7 +148,7 @@ const ListProduct = () => {
           Authorization: `Bearer ${cookie.token}`
         }
       })
-      console.log(res.data)
+      console.log("dashboard", res.data)
       setDashboardData(res.data.data)
     } catch (error) {
 
