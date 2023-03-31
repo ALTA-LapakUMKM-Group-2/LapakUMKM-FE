@@ -14,6 +14,7 @@ import { formatValue } from 'react-currency-input-field'
 import { MdLocationOn } from 'react-icons/md'
 import { BsShop } from 'react-icons/bs'
 import Loading from '../components/Loading'
+import Loading2 from '../components/Loading2'
 type Detail = {
     product_id: number
     total_products: number
@@ -23,12 +24,7 @@ interface Transactions extends Detail {
     total_products: number
     total_payment: number
     product_detail: Detail
-
-
-
 }
-
-
 
 const Payment = () => {
     // const [showModal, setShowModal] = useState(false)
@@ -63,14 +59,14 @@ const Payment = () => {
                     Authorization: `Bearer ${cookie.token}`
                 }
             })
-            .then((response) => {
-                console.log(response);
-              // handle success
-            })
-            .catch((error) => {
-                console.log(error);
-              // handle error
-            });
+                .then((response) => {
+                    console.log(response);
+                    // handle success
+                })
+                .catch((error) => {
+                    console.log(error);
+                    // handle error
+                });
         });
     }
     useEffect(() => {
@@ -91,7 +87,6 @@ const Payment = () => {
                             product_id: item.product_id,
                             total_products: item.product_pcs
                         }
-
                     })
                 })
                 console.log('dataTrans', dataTrans);
@@ -104,7 +99,7 @@ const Payment = () => {
     // console.log("test cart2", cartTrans)
     // console.log("test cartPrice", totalCartPrice)
     console.log('data trans', dataTrans);
-    
+
     useEffect(() => {
         if (test && testPrice && testCount) {
             setDataTrans({
@@ -175,7 +170,7 @@ const Payment = () => {
             {
                 loading ? <Loading /> : <>
                     <div className='w-full h-full'>
-                    <Navbar />
+                        <Navbar />
                         <div className="flex flex-col bg-gradient-to-r px-5 md:px-10 ">
                             <div className="grid grid-cols-1 lg:grid-cols-2 w-full lg:mx-auto mt-20 md:mt-24 gap-5 pb-32 md:px-32 ">
                                 {/* Card 1 */}
@@ -297,7 +292,7 @@ const Payment = () => {
                                         <div className="card-body">
                                             <h1 className="2xl:text-4xl 2xl:font-semibold dark:text-white">Ringkasan Belanja </h1>
                                             <div className='border-2 mt-5 mb-5'>
-                                                                    </div >
+                                            </div >
                                             {
                                                 cart ?
                                                     cart.map((item: any, i: number) => {
@@ -406,7 +401,7 @@ const Payment = () => {
                     </div>
                 </>
             }
-          
+
 
         </Layout>
     )

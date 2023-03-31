@@ -1,3 +1,28 @@
+type Profile = {
+  id: number
+  username: string
+  profile_picture: string
+  full_name: string
+  photo_profile: string
+}
+
+type Product = {
+  product_name: string
+  price: number
+  total_product: number
+  rating: number
+  image: string
+  size: string
+}
+
+type Child = {
+  id: number
+  parent_id: number
+  user_id: number
+  discussion: string
+  user: Profile
+}
+
 export interface FeedbackTypes {
   id: number
   parent_id: number
@@ -6,14 +31,7 @@ export interface FeedbackTypes {
   feedback: string
   discussion: string
   user: Profile
-}
-
-type Profile = {
-  id: number
-  username: string
-  profile_picture: string
-  full_name: string
-  photo_profile: string
+  childs: Child[]
 }
 
 export interface DataType {
@@ -25,4 +43,29 @@ export interface DataType {
   price: number
   stock_remaining: number
   stock_sold: number
+}
+
+export interface HistoryType {
+  id: any
+  user_id: number
+  total_product: number
+  total_payment: number
+  payment_status: string
+  payment_link: string
+  user: Profile
+  product_id: number
+  product: Product
+  rating: number
+  product_image: string
+  shop_name: string
+  size: string
+  product_name: string
+}
+
+export interface HistoryIDType {
+  id?: number
+  product_id?: number
+  product?: Product
+  total_product?: number
+  rating?: number
 }

@@ -7,11 +7,12 @@ interface Props {
     image: any
     comment: string
     name: any
+    id?: number
 }
 
-const CardFeedback: FC<Props> = ({ rating, image, comment, name }) => {
+const CardFeedback: FC<Props> = ({ rating, image, comment, name, id }) => {
     return (
-        <div className='p-2 mb-4 border-b-2 border-zinc-400'>
+        <div className='p-2 mb-4 border-b-2 border-zinc-400' key={id}>
             <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
                 <img src={image} alt="profil.svg" />
             </div>
