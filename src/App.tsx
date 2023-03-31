@@ -33,27 +33,27 @@ function App() {
 
   return (
     <>
-    <GoogleOAuthProvider clientId={`${import.meta.env.VITE_CLIENT_ID}`}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={checkToken ? <Home /> : <Login />} />
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/payment/:name" element={<Payment />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/home/:kategori" element={<HomeFilter />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/listproduct/:nama_toko" element={<ListProduct />} />
-          <Route path="/historypembeli" element={<HistoryPembeli />} />
-          <Route path="/toko/:name" element={<Toko />} />
-          <Route path="/notif" element={<NotifikasiCoba />} />
-          <Route path="/new-password" element={<LupaPassword />} />
-        </Routes >
-      </BrowserRouter >
-    </GoogleOAuthProvider>
+      <GoogleOAuthProvider clientId={`${import.meta.env.VITE_CLIENT_ID}`}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={checkToken ? <Home /> : <Login />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/detail/:id" element={<Detail />} />
+            <Route path="/payment/:name" element={<Payment />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/home/:kategori" element={<HomeFilter />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/listproduct/:nama_toko" element={<ListProduct />} />
+            <Route path="/historypembeli" element={<HistoryPembeli />} />
+            <Route path="/toko/:name" element={<Toko />} />
+            <Route path="/notif" element={<NotifikasiCoba />} />
+            <Route path="/new-password" element={<LupaPassword />} />
+          </Routes >
+        </BrowserRouter >
+      </GoogleOAuthProvider>
     </>
   )
 }

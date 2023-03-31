@@ -11,6 +11,16 @@ type Product = {
   price: number
   total_product: number
   rating: number
+  image: string
+  size: string
+}
+
+type Child = {
+  id: number
+  parent_id: number
+  user_id: number
+  discussion: string
+  user: Profile
 }
 
 export interface FeedbackTypes {
@@ -21,6 +31,7 @@ export interface FeedbackTypes {
   feedback: string
   discussion: string
   user: Profile
+  childs: Child[]
 }
 
 export interface DataType {
@@ -35,7 +46,7 @@ export interface DataType {
 }
 
 export interface HistoryType {
-  id: number
+  id: any
   user_id: number
   total_product: number
   total_payment: number
@@ -45,6 +56,10 @@ export interface HistoryType {
   product_id: number
   product: Product
   rating: number
+  product_image: string
+  shop_name: string
+  size: string
+  product_name: string
 }
 
 export interface HistoryIDType {
