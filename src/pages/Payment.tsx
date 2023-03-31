@@ -39,6 +39,7 @@ const Payment = () => {
     const [dataTrans, setDataTrans] = useState<Transactions | any>()
     const [cartTrans, setCartTrans] = useState<any>()
     const [totalCartPrice, setTotalCartPrice] = useState<number>()
+    const [cartId, setCartId] = useState<any>([])
     const cart = location.state.forPayment
     const cartPrice = location.state.totalPrice
     const test = location.state.dca
@@ -48,18 +49,37 @@ const Payment = () => {
     // console.log('ceck testCount', testCount);
     // console.log('ceck testPrice', testPrice);
     // // console.log('test dca id', test.id);
-    console.log('total cart price', cartPrice);
+    console.log('total cart price', cart);
+    console.log('Cart Id', cartId);
 
     // // .map((item: any) => { 
     // //     return item.product_pcs
     // // })
+    const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
-
+    const handleDelete = async (idToDelete: any[]) => {
+        idToDelete.forEach((id) => {
+            axios.delete(`${cartEndPoint}/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${cookie.token}`
+                }
+            })
+            .then((response) => {
+                console.log(response);
+              // handle success
+            })
+            .catch((error) => {
+                console.log(error);
+              // handle error
+            });
+        });
+    }
     useEffect(() => {
         if (cart && cartPrice) {
             setCartTrans(
                 cart
             )
+            setCartId(cart.map((id: any) => id.id))
             setTotalCartPrice(cartPrice)
             if (cartTrans && totalCartPrice) {
                 setDataTrans({
@@ -84,6 +104,8 @@ const Payment = () => {
     // console.log("test cart", cart)
     // console.log("test cart2", cartTrans)
     // console.log("test cartPrice", totalCartPrice)
+    console.log('data trans', dataTrans);
+    
     useEffect(() => {
         if (test && testPrice && testCount) {
             setDataTrans({
@@ -96,12 +118,11 @@ const Payment = () => {
 
     }, [test, testPrice, testCount])
     const [loading, setLoading] = useState(false)
-    const payToWin = async (e: any) => {
+    const handlePay = async (e: any) => {
         e.preventDefault()
         const data = dataTrans
         console.log('test clone', data);
         setLoading(true)
-
         try {
             const res = await axios.post('https://lapakumkm.mindd.site/transactions', data, {
                 headers: {
@@ -111,7 +132,7 @@ const Payment = () => {
             console.log('test respon payment', res.data);
 
             console.log('res.data', res.data.data.payment_link);
-
+            handleDelete(cartId)
             if (res.data) {
                 window.open(res.data.data.payment_link, "_blank")
                 navigate('/historypembeli')
@@ -371,7 +392,7 @@ const Payment = () => {
                                             <div className="flex justify-center mt-20">
                                                 <button
                                                     className="btn btn-wide flex bg-lapak border-none 2xl:w-full text-white hover:bg-lapak hover:text-white hover:translate-y-2 2xl:font-semibold 2xl:text-xl"
-                                                    onClick={payToWin}
+                                                    onClick={handlePay}
                                                 >
                                                     Confirm and Pay
                                                 </button>

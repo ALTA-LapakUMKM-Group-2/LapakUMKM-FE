@@ -208,10 +208,10 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                             </div>
 
                         </label>
-                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold">
+                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold dark:bg-slate-700">
                             {checkToken ?
                                 <>
-                                    <div className="px-4 py-3 text-sm text-gray-900">
+                                    <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                         <div> {nama}</div>
                                         <div className="font-medium truncate">{mail}</div>
                                     </div>
