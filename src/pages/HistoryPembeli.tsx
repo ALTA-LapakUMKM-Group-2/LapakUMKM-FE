@@ -9,10 +9,10 @@ import '@smastrom/react-rating/style.css'
 
 import withReactContent from "sweetalert2-react-content"
 import Swal from "sweetalert2"
-import { HistoryType, HistoryIDType, DataType } from "../utils/types/DataType"
+import { HistoryType, DataType } from "../utils/types/DataType"
 
 import CustomButton from "../components/CustomButton"
-import CardFeedback from "../components/CardFeedback"
+import CardHistory from "../components/CardHistory"
 import CustomInput from "../components/CutomInput"
 import Loading from "../components/Loading"
 import Layout from "../components/Layout"
@@ -21,6 +21,7 @@ import Modal from "../components/Modal"
 
 import Kaos from "../assets/kaos.png"
 import { string } from "prop-types"
+import { AnyArray } from "immer/dist/internal"
 
 interface FormValues {
   rating: number;
@@ -41,7 +42,7 @@ const HistoryPembeli = () => {
   };
 
   const MySwal = withReactContent(Swal)
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const [cookie, setCookie] = useCookies(["token"])
   const [showFeedback, setShowFeedback] = useState<boolean>(false)
   const [value, setValue] = useState<FormValues>(initialFormValues)
@@ -68,8 +69,8 @@ const HistoryPembeli = () => {
         }
       })
       .then((res) => {
-        
-        
+
+
         setHistory(res.data.data)
       })
       .catch((err) => {
@@ -111,7 +112,7 @@ const HistoryPembeli = () => {
 
   async function dataProdukId(productId: any[]) {
     setLoading(true)
-    const combine:any = []
+    const combine: any = []
     productId.forEach((id) => {
       axios
         .get(`https://lapakumkm.mindd.site/products/${id}`)
@@ -120,7 +121,6 @@ const HistoryPembeli = () => {
           setProduct(combine)
           // console.log('test product id', res.data.data);
           // console.log('test combine', combine);
-          
         })
         .catch((err) => {
           console.log(err.response.data.message)
@@ -128,48 +128,47 @@ const HistoryPembeli = () => {
         .finally(() => setLoading(false))
     })
   }
-console.log('test product ke 705', product);
-console.log('test detail history 999', detailHistory);
+  console.log('test product ke 705', product);
+  console.log('test detail history 999', detailHistory);
 
-useEffect(() => {
-  if (product) {
-   const cekDetail = detailHistory.map((item: any) => {
-    const combine4:any = product.find((i: any) => i.id === item.product_id)
-    if(combine4) {
-      const data = {
-        product_image : combine4.product_image[0].image,
-        shop_name: combine4.user.shop_name,
-        size: combine4.size
-      }
-      return {
-        ...item,
-        ...data
-      }
-    } else {
-      return item
+  const [combineProduk, setCombineProduk] = useState<HistoryType[]>([])
+
+  useEffect(() => {
+    if (product) {
+      const cekDetail = detailHistory.map((item: any) => {
+        const combine4: any = product.find((i: any) => i.id === item.product_id)
+        if (combine4) {
+          const data = {
+            product_image: combine4.product_image[0].image,
+            shop_name: combine4.user.shop_name,
+            size: combine4.size
+          }
+          return {
+            ...item,
+            ...data
+          }
+        }
+      })
+      console.log('cek terakhir sebelom puasa', cekDetail);
+      setCombineProduk(cekDetail)
     }
-   })
-   console.log('cek terakhir sebelom puasa', cekDetail);
-   
-   
-  }
-}, [product, detailHistory]);
+  }, [product, detailHistory]);
 
   // const [Produk2, setProduk2] = useState<any>()
-  
+
   // console.log("test product test", product);
-  
-  const getProduct = [{...product}]
+
+  const getProduct = [{ ...product }]
   // console.log('testt clone product', getProduct);
-  
+
   // if(getProduct.product_name) {
 
   // }
 
   // console.log("test detail test", detailHistory);
-  const testClone:any = [{detailHistory, ...product}]
+  const testClone: any = [{ detailHistory, ...product }]
   // console.log('test clonee', testClone);
-  
+
 
   // const newProduk = [...detailHistory, ...product]
 
@@ -250,19 +249,19 @@ useEffect(() => {
     window.open(payment_link, "_blank")
   }
 
-//   const numbers1 = [1, 2, 3, 4, 5];
+  //   const numbers1 = [1, 2, 3, 4, 5];
 
-//   numbers1.forEach((num) => {
-//     console.log('forEach', num * 2); // output: 2, 4, 6, 8, 10
-//   });
+  //   numbers1.forEach((num) => {
+  //     console.log('forEach', num * 2); // output: 2, 4, 6, 8, 10
+  //   });
 
-//   const numbers = [1, 2, 3, 4, 5];
+  //   const numbers = [1, 2, 3, 4, 5];
 
-// const doubledNumbers = numbers.map((num) => {
-//   return num * 2;
-// });
-//  console.log("map", doubledNumbers);
- 
+  // const doubledNumbers = numbers.map((num) => {
+  //   return num * 2;
+  // });
+  //  console.log("map", doubledNumbers);
+
   return (
     <Layout>
       {loading ? <Loading /> :
@@ -308,13 +307,13 @@ useEffect(() => {
 
           <Modal isOpen={showProduk} size='w-[40vw]' isClose={() => setShowProduk(false)} title="Detail Transaki" >
             <form className="p-5">
-              {/* {detailHistory.map((item) => (
-                <CardFeedback
+              {combineProduk.map((item) => (
+                <CardHistory
                   id={item.id}
-                  produkImg={Kaos}
-                  sellerName="Toko@7"
-                  produkName='Baju Jelek'
-                  size={'L'}
+                  produkImg={item.product_image}
+                  sellerName={item.shop_name}
+                  produkName={item.product.product_name}
+                  size={item.size}
                   price={50000}
                   totalPrice={item.product.price}
                   status="Done"
@@ -322,7 +321,7 @@ useEffect(() => {
                   rating={item.rating}
                   handleFeedback={() => setShowFeedback(true)}
                 />
-              ))} */}
+              ))}
             </form>
           </Modal>
 

@@ -4,7 +4,6 @@ import { formatValue } from 'react-currency-input-field'
 import CustomButton from './CutomInput'
 import '@smastrom/react-rating/style.css'
 
-
 interface FeedbackProps {
     id: any
     sellerName: string
@@ -20,7 +19,7 @@ interface FeedbackProps {
     handleEdit?: React.MouseEventHandler
 }
 
-const FeedbackCard: React.FC<FeedbackProps> = ({
+const CardHistory: React.FC<FeedbackProps> = ({
     id,
     sellerName,
     produkName,
@@ -42,7 +41,6 @@ const FeedbackCard: React.FC<FeedbackProps> = ({
         itemShapes: StarDrawing,
         activeFillColor: '#FDD231',
         inactiveFillColor: '#ffffff',
-
     };
     return (
         <div id={id} className="mt-5 w-11/12 md:w-10/12 lg:w-[600px] 2xl:w-[43rem] px-8 py-4 bg-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.4)]">
@@ -61,7 +59,7 @@ const FeedbackCard: React.FC<FeedbackProps> = ({
                         })}</span> x {quantity}</p>
                     <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px]'>Total :
                         {formatValue({
-                            value: JSON.stringify(price * quantity),
+                            value: JSON.stringify(totalPrice),
                             groupSeparator: '.',
                             decimalSeparator: ',',
                             prefix: 'Rp. ',
@@ -94,4 +92,4 @@ const FeedbackCard: React.FC<FeedbackProps> = ({
     )
 }
 
-export default FeedbackCard
+export default CardHistory

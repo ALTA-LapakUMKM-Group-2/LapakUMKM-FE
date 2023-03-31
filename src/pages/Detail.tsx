@@ -51,25 +51,24 @@ const Detail = () => {
   const [cookie, setCookie] = useCookies(['token', "id"])
   const [feedback, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
-  const [balas, setBalas] = useState<string>("")
+  const [balas, setBalas] = useState<string | undefined>("")
   const [newDiskus, setnewDiskus] = useState<string>("")
   const [disable, setDisable] = useState<boolean>(true)
   const [hide, setHide] = useState<boolean>(true)
   const navigate = useNavigate()
-  const [test ,setTest] = useState<Product[]>([])
-  
+  const [test, setTest] = useState<Product[]>([])
+  const [productId, setProductId] = useState<any>()
+  const [userId, setUserId] = useState<any>()
+
   const handleUpdate = (e: any) => {
     e.preventDefault()
   }
   const [count, setCount] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0  );
+  const [price, setPrice] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(price)
-  const [testCount ,SetTestCount] = useState<any>(count)
-  const [dca ,setDca] = useState<any>({})
-  const [tesPrice ,setTestPrice] = useState<any>(totalPrice)
-  
- 
-  
+  const [testCount, SetTestCount] = useState<any>(count)
+  const [dca, setDca] = useState<any>({})
+  const [tesPrice, setTestPrice] = useState<any>(totalPrice)
   const [image, setImage] = useState<any>([])
   const [photoToko, setPhotoToko] = useState('')
   const [category, setCategory] = useState<any>('')
@@ -120,10 +119,13 @@ const Detail = () => {
     // .finally(() => setLoading(false))
   }
   // console.log('cek user id', userId);
-  console.log('test abc', testCount);
-  console.log('test asd', tesPrice);
-  console.log('test dca', dca);
+  // console.log('test abc', testCount);
+  // console.log('test asd', tesPrice);
+  // console.log('test dca', dca);
   // console.log('test tesett', test);
+
+  console.log("product_id :", productId)
+  console.log(typeof productId)
 
   useEffect(() => {
     fetchData();
@@ -152,10 +154,6 @@ const Detail = () => {
 
   };
 
-
-  const [productId, setProductId] = useState<any>()
-  const [userId, setUserId] = useState<any>()
-
   const addToCart = async () => {
 
     const data = {
@@ -170,9 +168,9 @@ const Detail = () => {
 
     try {
       const res = await axios.post('https://lapakumkm.mindd.site/carts', data, {
-          headers: {
-            Authorization: `Bearer ${cookie.token}`
-          }
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
       })
       if (res.data) {
         // console.log('testos add to cart', res.data);
@@ -198,7 +196,7 @@ const Detail = () => {
     }
 
   }
-  
+
   useEffect(() => {
     feedbackData()
   }, [])
@@ -325,18 +323,67 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
+
+
+  const [diskus, setDiskus] = useState<string>("")
+
   const changeDiskus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBalas(e.target.value);
+    setDiskus(e.target.value);
   };
 
-  const handleBalas = (id_diskusi: number) => {
+  const handleEdit = (id: number) => {
     setLoading(true)
     const body = {
-      product_id: id,
-      discussion: balas
+      discussion: diskus
     }
     axios
-      .post(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/discussions`, body, {
+      .put(`https://lapakumkm.mindd.site/discussions/${id}`, body, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        MySwal.fire({
+          icon: "success",
+          title: res.data.data.message,
+          text: "Diskusi berhasil di edit",
+          showCloseButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+      .catch((err) => {
+        MySwal.fire({
+          icon: "error",
+          title: err.response.data.message,
+          text: "Gagal megubah diskusi",
+          showConfirmButton: false,
+          showCancelButton: false,
+          timer: 1500
+        })
+      })
+      .finally(() => diskusiData())
+      .finally(() => setLoading(false))
+  }
+
+  const [newBalas, setNewBalas] = useState<string>("")
+
+  const changeDiskusBalas = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBalas(e.target.value);
+    if (balas) {
+      setNewBalas(balas)
+    }
+  };
+
+  const handleBalas = (parent_id: number) => {
+    setLoading(true)
+    const body = {
+      product_id: productId,
+      discussion: newBalas,
+      parent_id
+    };
+    axios
+      .post(`https://lapakumkm.mindd.site/discussions`, body, {
         headers: {
           Authorization: `Bearer ${cookie.token}`
         }
@@ -362,9 +409,9 @@ const Detail = () => {
           timer: 1200
         })
       })
+      .finally(() => diskusiData())
       .finally(() => setLoading(false))
   }
-  // console.log('cek kategor', category);
 
   const DeleteDiskusi = (id: number) => {
     setLoading(true);
@@ -398,8 +445,11 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  
-
+  diskusi.map((item) => {
+    item.childs?.map((child) => {
+      console.log("child diskusi :", child.discussion);
+    });
+  });
 
   return (
     <Layout>
@@ -508,8 +558,8 @@ const Detail = () => {
                       <div className="border-2 mt-5"></div>
                       <div className="flex justify-center gap-5 mt-10 w-fit mx-auto ">
                         <button className="btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit" onClick={() => {
-                          navigate(`/payment/${name}` , {
-                            state : {
+                          navigate(`/payment/${name}`, {
+                            state: {
                               dca: dca,
                               testPrice: tesPrice,
                               testCount: testCount
@@ -632,6 +682,26 @@ const Detail = () => {
 
                         <p id={`edit_diskusi ${item.id}`} className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
 
+                        {item.childs ?
+                          <div className='pl-10 relative'>
+                            {item.childs?.map((child) => {
+                              return (
+                                <>
+                                  <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
+                                    <img src={child.user.photo_profile ? child.user.photo_profile : Default} alt="profil.svg" />
+                                  </div>
+
+                                  <div className='flex justify-between text-zinc-800 items-center py-3'>
+                                    <h1 className='text-lg font-bold dark:text-white'>{child.user.full_name}</h1>
+                                  </div>
+
+                                  <p id={``} className='text-gray-700 my-4 dark:text-white'>{child.discussion}</p>
+                                </>
+                              )
+                            })
+                            }
+                          </div> : ""}
+
                         <div id={`input-edit_diskusi ${item.id}`} className="relative hidden my-5">
                           <form>
                             <CustomInput
@@ -641,20 +711,21 @@ const Detail = () => {
                               defaultValue={item.discussion}
                               type='text'
                               name='edit_diskusi'
+                              onChange={changeDiskus}
                             />
                             <div className='w-3/12 mt-4 ml-auto'>
                               <CustomButton
-                                id="btn-balas"
-                                label='Balas'
+                                id="btn-edit"
+                                label='Perbarui'
                                 type='submit'
-                                onClick={() => handleBalas(item.id)}
+                                onClick={() => handleEdit(item.id)}
                               />
                             </div>
                           </form>
 
                           <div className='absolute bottom-0 right-48 w-3/12'>
                             <CustomButton
-                              id="btn-balas"
+                              id="btn-kembali"
                               label='Kembali'
                               onClick={() => handleHide(item.id)}
                             />
@@ -670,7 +741,7 @@ const Detail = () => {
                               label=''
                               type='text'
                               name='balas_diskusi'
-                              onChange={changeDiskus}
+                              onChange={changeDiskusBalas}
                             />
 
                             <div className='w-3/12 mt-4 ml-auto'>
@@ -678,14 +749,14 @@ const Detail = () => {
                                 id="btn-balas"
                                 label='Balas'
                                 type='submit'
-                                onClick={() => handleBalas(item.id)}
+                                onClick={() => handleBalas(item.parent_id)}
                               />
                             </div>
                           </form>
 
                           <div className='absolute bottom-0 right-48 w-3/12'>
                             <CustomButton
-                              id="btn-balas"
+                              id="btn-kembali"
                               label='Kembali'
                               onClick={() => handleHide(item.id)}
                             />

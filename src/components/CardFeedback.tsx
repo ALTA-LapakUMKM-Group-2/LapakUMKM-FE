@@ -10,7 +10,7 @@ interface Props {
     id?: number
 }
 
-const CardFeedback: FC<Props> = ({ rating, image, comment, name ,id}) => {
+const CardFeedback: FC<Props> = ({ rating, image, comment, name, id }) => {
     return (
         <div className='p-2 mb-4 border-b-2 border-zinc-400' key={id}>
             <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >

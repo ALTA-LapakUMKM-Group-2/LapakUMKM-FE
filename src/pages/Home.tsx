@@ -28,11 +28,11 @@ const Home = () => {
         try {
             const res = await axios.get('https://lapakumkm.mindd.site/users', {
                 headers: {
-                Authorization: `Bearer ${cookie.token}`
+                    Authorization: `Bearer ${cookie.token}`
                 }
             })
             setUser(res.data.data)
-            if(res.data.data.address === undefined){
+            if (res.data.data.address === undefined) {
                 Swal.fire({
                     icon: "warning",
                     title: "Anda Belum Melengkapi Profile Anda",
@@ -44,7 +44,7 @@ const Home = () => {
                 }).then((update) => {
                     if (update.isConfirmed) {
                         navigate(`/profile`, {
-                            state:{
+                            state: {
                                 showModal: true
                             }
                         })
@@ -52,7 +52,7 @@ const Home = () => {
                 })
             }
         } catch (error) {
-    
+
         }
         setLoading(false)
     }
@@ -75,53 +75,9 @@ const Home = () => {
             .finally(() => setLoading(false));
     }
 
-    const [tambah, setTambah] = useState<number>(10);
-
-    const handleScroll = (e: any) => {
-
-        const scrollHeight = e.target.documentElement.scrollHeight;
-        const currentHeight = Math.ceil(
-            e.target.documentElement.scrollTop + window.innerHeight
-        );
-
-        console.log("current >:", currentHeight)
-        console.log("scroll <:", scrollHeight)
-        if (currentHeight + 10 >= scrollHeight) {
-            // getAllData();
-            setTambah(tambah + 5)
-        }
-    };
-
     useEffect(() => {
-        getAllData();
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
+        getAllData()
     }, []);
-
-    console.log(data)
-    console.log("tambah", tambah)
-
-
-    // const LoadMore = () => {
-    //     setLoad(load + 10);
-    //     if (load >= data.length) {
-    //         setFinis(true)
-    //     } else {
-    //         setFinis(false)
-    //     }
-    // }
-
-
-    // useEffect(() => {
-    //     if (load >= data.length) {
-    //         setFinis(true);
-    //     } else {
-    //         setFinis(false);
-    //     }
-    // }, [load, data]);
-
 
     const [category, setCategory] = useState<any>([])
     const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
@@ -135,7 +91,6 @@ const Home = () => {
             })
             setCategory(res.data.data)
         } catch (error) {
-
         }
     }
 
@@ -175,7 +130,7 @@ const Home = () => {
                             data?.filter((item: any) => {
                                 return search.toLocaleLowerCase() === "" ?
                                     item : item.product_name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-                            }).slice(0, tambah).map((item: any, index) => {
+                            }).map((item: any, index) => {
                                 // console.log('test', item);
 
                                 return (
@@ -194,13 +149,6 @@ const Home = () => {
                             }
                             )
                     }
-                </div>
-                <div className='mb-20 mt-10'>
-                    {/* <CustomButton
-                            id="btn- loadmore"
-                            label="Lihat lebih banyak"
-                            onClick={LoadMore}
-                        /> */}
                 </div>
             </div>
         </Layout >
