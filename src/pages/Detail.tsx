@@ -62,7 +62,7 @@ const Detail = () => {
     e.preventDefault()
   }
   const [count, setCount] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<number>(0  );
   const [totalPrice, setTotalPrice] = useState<number>(price)
   const [testCount ,SetTestCount] = useState<any>(count)
   const [dca ,setDca] = useState<any>({})

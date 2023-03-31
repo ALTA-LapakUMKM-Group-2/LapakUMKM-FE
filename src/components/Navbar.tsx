@@ -113,8 +113,10 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 setPhoto(photo_profile)
             })
             .catch((err) => {
-                const { statusText } = err.response
-                console.log(statusText)
+                // const { statusText } = err.response
+                // console.log(statusText)
+                console.log(err);
+                
             })
     }
 

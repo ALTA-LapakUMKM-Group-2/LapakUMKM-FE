@@ -178,7 +178,9 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                             <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor='kategori'>
                                                 Kategori
                                             </label>
-                                            <select className=" border-2 mt-2 border-lapak input input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px] "
+                                            <select className="border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
+                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]"
                                             defaultValue={''}
                                             id='kategori'
                                             name='kategori'
@@ -196,9 +198,11 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                             </select>
                                         </div>
                                         <div className="w-full">
-                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minprice">Minimum Price</label>
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minprice">Harga Minimal</label>
                                                 <CurrencyInput
-                                                    className='input border-2 mt-2 border-lapak input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                                                    className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
+                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
                                                     id="minprice"
                                                     name="minprice"
                                                     prefix='Rp. '
@@ -211,9 +215,11 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                                 />
                                         </div>
                                         <div className="">
-                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="maxprice">Maximum Price</label>
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="maxprice">Harga Maksimal</label>
                                                 <CurrencyInput
-                                                    className='input border-2 mt-2 border-lapak input-success w-full max-w-full rounded-lg bg-zinc-100 px-4 font-normal text-zinc-800 placeholder-slate-400 disabled:bg-slate-400 text-[16px]'
+                                                    className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
+                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
                                                     id="maxprice"
                                                     name="maxprice"
                                                     prefix='Rp. '
@@ -226,7 +232,7 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                                 />
                                         </div>
                                         <div className="">
-                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minrating" id='minrating'>Minimum Ratings</label>
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minrating" id='minrating'>Minimal Ratings</label>
                                             <Rating
                                                 itemStyles={customStyles}
                                                 isRequired
