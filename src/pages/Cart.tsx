@@ -8,7 +8,7 @@ import CartCard from '../components/CartCard'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import { useNavigate } from 'react-router'
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import Loading from '../components/Loading'
 import Search from '../components/Search'
 

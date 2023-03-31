@@ -12,7 +12,7 @@ import Search from '../components/Search'
 import { useCookies } from 'react-cookie'
 import { DataType } from '../utils/types/DataType'
 import InfiniteScroll from "react-infinite-scroll-component"
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

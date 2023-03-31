@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import withReactContent from 'sweetalert2-react-content'
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import CardFeedback from '../components/CardFeedback'
 import ChatModal from '../components/ChatModal'
 import Layout from '../components/Layout'

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import { Cookies, useCookies } from 'react-cookie';
 import axios from 'axios';
 import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { handleAuth } from '../utils/redux/reducer/reducer';
 import Loading from '../components/Loading';
 import Layout from '../components/Layout';

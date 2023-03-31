@@ -15,7 +15,7 @@ import { useCookies } from 'react-cookie'
 import { useLocation } from 'react-router-dom'
 import Loading from '../components/Loading'
 import Search from '../components/Search'
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import sowwy from '../assets/photo_2023-03-16_20-34-20.jpg'
 import { gsap } from 'gsap'
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
