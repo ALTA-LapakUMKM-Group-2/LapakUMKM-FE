@@ -4,7 +4,7 @@ import LapakUmkm from '../assets/LapakUmkm2.png'
 import PasswordStrengthBar from 'react-password-strength-bar';
 import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../components/CustomButton';
 import Loading from '../components/Loading';

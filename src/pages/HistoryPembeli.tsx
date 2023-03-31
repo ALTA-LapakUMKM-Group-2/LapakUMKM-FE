@@ -8,7 +8,7 @@ import { Rating } from "@smastrom/react-rating"
 import '@smastrom/react-rating/style.css'
 
 import withReactContent from "sweetalert2-react-content"
-import Swal from "sweetalert2"
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { HistoryType, DataType } from "../utils/types/DataType"
 
 import CustomButton from "../components/CustomButton"

@@ -18,7 +18,7 @@ import Modal from "../components/Modal"
 import TextArea from "../components/TextArea"
 import axios from "axios"
 import { Cookies } from "react-cookie"
-import Swal from "sweetalert2"
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { useLocation } from "react-router-dom"
 import Loading from "../components/Loading"
 

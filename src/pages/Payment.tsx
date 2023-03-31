@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import dai from '../assets/dai.jpg'
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import Modal from '../components/Modal'
 import CustomInput from '../components/CutomInput'
 import CustomButton from '../components/CustomButton'

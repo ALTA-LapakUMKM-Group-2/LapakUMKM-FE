@@ -6,8 +6,8 @@ import { handleAuth } from '../utils/redux/reducer/reducer';
 import axios from 'axios';
 
 import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
 
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import Logo from '../assets/LapakUmkm2.png'
 import Default from '../assets/default.jpg'
 
