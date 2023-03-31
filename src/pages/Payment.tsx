@@ -14,6 +14,7 @@ import { formatValue } from 'react-currency-input-field'
 import { MdLocationOn } from 'react-icons/md'
 import { BsShop } from 'react-icons/bs'
 import Loading from '../components/Loading'
+import Loading2 from '../components/Loading2'
 type Detail = {
     product_id: number
     total_products: number

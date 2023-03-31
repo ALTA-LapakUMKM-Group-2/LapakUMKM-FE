@@ -44,7 +44,6 @@ const Detail = () => {
   const [product, setProduct] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [stock, setStock] = useState<number>(0);
-  const [count, setCount] = useState<number>(1);
   const [size, setSize] = useState('')
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
@@ -58,40 +57,18 @@ const Detail = () => {
   const [hide, setHide] = useState<boolean>(true)
   const navigate = useNavigate()
   const [test ,setTest] = useState<Product[]>([])
-
+  
   const handleUpdate = (e: any) => {
     e.preventDefault()
   }
-  const [price, setPrice] = useState<number>(0);
+  const [count, setCount] = useState<number>(1);
+  const [price, setPrice] = useState<number>(0  );
   const [totalPrice, setTotalPrice] = useState<number>(price)
   const [testCount ,SetTestCount] = useState<any>(count)
   const [dca ,setDca] = useState<any>({})
   const [tesPrice ,setTestPrice] = useState<any>(totalPrice)
   
-  const handleIncrement = () => {
-    const tstCount = count + 1
-    const newTotal = price * tstCount
-    setCount(tstCount);
-    setTotalPrice(newTotal);
-    setTestPrice(newTotal)
-    SetTestCount(tstCount)
-
-  };
-
-  const handleDecrement = () => {
-    const tstCount = count - 1
-    const newTotal = totalPrice
-    if (count > 1) {
-      SetTestCount(tstCount);
-      setTestPrice(totalPrice - price);
-      setTotalPrice(newTotal - price);
-      setCount(tstCount);
-    } else {
-      setTotalPrice(price)
-    }
-
-  };
-
+ 
   
   const [image, setImage] = useState<any>([])
   const [photoToko, setPhotoToko] = useState('')
@@ -151,6 +128,29 @@ const Detail = () => {
   useEffect(() => {
     fetchData();
   }, [])
+  const handleIncrement = () => {
+    const tstCount = count + 1
+    const newTotal = price * tstCount
+    setCount(tstCount);
+    setTotalPrice(newTotal);
+    setTestPrice(newTotal)
+    SetTestCount(tstCount)
+
+  };
+
+  const handleDecrement = () => {
+    const tstCount = count - 1
+    const newTotal = totalPrice
+    if (count > 1) {
+      SetTestCount(tstCount);
+      setTestPrice(totalPrice - price);
+      setTotalPrice(newTotal - price);
+      setCount(tstCount);
+    } else {
+      setTotalPrice(price)
+    }
+
+  };
 
 
   const [productId, setProductId] = useState<any>()

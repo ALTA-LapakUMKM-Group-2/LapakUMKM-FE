@@ -281,7 +281,7 @@ const Profile = () => {
       {
         loading ? <Loading /> : <>
           <Modal isOpen={modalAing} isClose={() => setModalAing(false)}>
-            <form onSubmit={handleUpdateStatus}>
+            <form onSubmit={handleUpdateStatus} className="mt-5">
               <CustomInput
                 onChange={(e) => setShopName(e.target.value)}
                 id="shop_name"
@@ -338,7 +338,9 @@ const Profile = () => {
             <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider dark:text-white">Profile Detail Saya</h1>
 
             <div className="flex flex-col md:flex-row lg:flex-row mt-4 md:mt-10 lg:mt-14">
-              <div className="bg-none dark:bg-slate-800 dark:border-2 dark:border-lapak md:bg-white lg:bg-white p-6 avatar md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
+
+              <div className="2xl:avatar xl:avatar lg:avatar bg-none dark:bg-slate-800 dark:border-2 dark:border-lapak  md:bg-white lg:bg-white p-6  md:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] lg:shadow-[0px_2px_5px_0px_rgba(0,0,0,0.5)] rounded-lg flex flex-col items-center md:w-5/12 lg:w-3/12 2xl:w-[24rem] h-[23rem] md:h-[23rem] lg:h-[23rem] 2xl:h-[32rem]">
+
                 <div className="rounded-full w-9/12 md:w-11/12 lg:w-11/12 overflow-hidden h-4/6" >
                   <img src={data.photo_profile ? data.photo_profile : Default} alt="profile.png" className="cursor-pointer" onClick={() => setModalImage(true)} />
                 </div>
@@ -432,25 +434,6 @@ const Profile = () => {
           <Modal isOpen={showModal} isClose={() => setShowModal(false)} title='Edit Profile'>
             <form action="" onSubmit={handleEditProfile}>
               <div className=" flex flex-col md:flex-row lg:flex-row py-5">
-                {/* <div className="w-11/12 md:w-6/12 lg:w-6/12 flex flex-col items-center justify-center">
-                  <p className="text-zinc-800 text-[22px] font-semibold mb-8">Tambah Foto Porfile</p>
-                  <div
-                    className="w-[10em] h-[10rem] md:w-[12rem] md:h-[12rem] lg:w-[16rem] lg:h-[16rem] overflow-hidden rounded-full"
-                  >
-                    <img
-                      src={Avatar}
-                      alt="porfil.jpg"
-                      className="w-full"
-                    />
-                  </div>
-                  <input
-                    id="upload_gambar"
-                    type="file"
-                    accept="image.png, image.jpeg, image.jpg"
-                    className="w-full mt-8 text-[18px] text-zinc-800 text-center file:rounded-lg file:bg-lapak file:py-1 file:md:py-2 file:lg:py-2 file:px-4 file:md:px-8 file:lg:px-10   file:text-[18px] file:text-white hover:file:bg-sky-500 hover:file:cursor-pointer"
-                  />
-                </div> */}
-
                 <div className="w-11/12 md:w-6/12 lg:w-10/12 space-y-4 items-center mx-2 md:mx-24 lg:mx-24 mt-8 md:mt-0 lg:mt-0">
 
                   <CustomInput

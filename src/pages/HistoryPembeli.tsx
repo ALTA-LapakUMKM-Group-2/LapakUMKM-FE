@@ -1,13 +1,18 @@
+import { formatValue } from "react-currency-input-field"
 import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { useCookies } from "react-cookie"
+import axios from "axios"
 
 import { Rating } from "@smastrom/react-rating"
 import '@smastrom/react-rating/style.css'
 
 import withReactContent from "sweetalert2-react-content"
 import Swal from "sweetalert2"
+import { HistoryType, HistoryIDType, DataType } from "../utils/types/DataType"
 
 import CustomButton from "../components/CustomButton"
-import FeedbackCard from "../components/FeedbackCard"
+import CardFeedback from "../components/CardFeedback"
 import CustomInput from "../components/CutomInput"
 import Loading from "../components/Loading"
 import Layout from "../components/Layout"
@@ -16,7 +21,6 @@ import Modal from "../components/Modal"
 
 import Kaos from "../assets/kaos.png"
 import { string } from "prop-types"
-import axios from "axios"
 
 interface FormValues {
   rating: number;
@@ -37,11 +41,167 @@ const HistoryPembeli = () => {
   };
 
   const MySwal = withReactContent(Swal)
+  // const navigate = useNavigate()
+  const [cookie, setCookie] = useCookies(["token"])
   const [showFeedback, setShowFeedback] = useState<boolean>(false)
   const [value, setValue] = useState<FormValues>(initialFormValues)
   const [feedback, setFeedback] = useState<string>("")
+  const [history, setHistory] = useState<HistoryType[]>([])
+  const [detailHistory, setDetailHistory] = useState<HistoryType[]>([])
+  const [FeedbackData, setFeedbackData] = useState<HistoryType[]>([])
+  const [product, setProduct] = useState<DataType[]>([])
+  const [productId, setProductId] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [disable, setDisable] = useState<boolean>(true)
+  const [showProduk, setShowProduk] = useState<boolean>(false)
+
+  useEffect(() => {
+    dataTransaksi()
+  }, [])
+
+  function dataTransaksi() {
+    setLoading(true)
+    axios
+      .get(`https://lapakumkm.mindd.site/transactions`, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        
+        
+        setHistory(res.data.data)
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+      })
+      .finally(() => setLoading(false))
+  }
+
+  const dataTransaksiId = async (id: number) => {
+    setShowProduk(true)
+    setLoading(true)
+    axios
+      .get(`https://lapakumkm.mindd.site/transactions/${id}/details`, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        res.data.data.image = ''
+        res.data.data.size = ''
+        res.data.data.shop_name = ''
+        // console.log('res' , res.data.data);
+        setDetailHistory(res.data.data)
+
+        const productIds = res.data.data.map((id: any) => id.product_id)
+        if (productIds) {
+          dataProdukId(productIds)
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+      })
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    productId ? dataProdukId(productId) : ""
+  }, [])
+
+  async function dataProdukId(productId: any[]) {
+    setLoading(true)
+    const combine:any = []
+    productId.forEach((id) => {
+      axios
+        .get(`https://lapakumkm.mindd.site/products/${id}`)
+        .then((res) => {
+          combine.push(res.data.data)
+          setProduct(combine)
+          // console.log('test product id', res.data.data);
+          // console.log('test combine', combine);
+          
+        })
+        .catch((err) => {
+          console.log(err.response.data.message)
+        })
+        .finally(() => setLoading(false))
+    })
+  }
+console.log('test product ke 705', product);
+console.log('test detail history 999', detailHistory);
+
+useEffect(() => {
+  if (product) {
+   const cekDetail = detailHistory.map((item: any) => {
+    const combine4:any = product.find((i: any) => i.id === item.product_id)
+    if(combine4) {
+      const data = {
+        product_image : combine4.product_image[0].image,
+        shop_name: combine4.user.shop_name,
+        size: combine4.size
+      }
+      return {
+        ...item,
+        ...data
+      }
+    } else {
+      return item
+    }
+   })
+   console.log('cek terakhir sebelom puasa', cekDetail);
+   
+   
+  }
+}, [product, detailHistory]);
+
+  // const [Produk2, setProduk2] = useState<any>()
+  
+  // console.log("test product test", product);
+  
+  const getProduct = [{...product}]
+  // console.log('testt clone product', getProduct);
+  
+  // if(getProduct.product_name) {
+
+  // }
+
+  // console.log("test detail test", detailHistory);
+  const testClone:any = [{detailHistory, ...product}]
+  // console.log('test clonee', testClone);
+  
+
+  // const newProduk = [...detailHistory, ...product]
+
+  // const newProduk2 = detailHistory.map((item) => {
+  //   return (
+  //     setProduk2([...product, item])
+  //   )
+  // })
+
+  // console.log("New Produk :", newProduk)
+  // console.log("New Produk 2 :", newProduk2)
+
+  useEffect(() => {
+    dataFeedback()
+  }, [])
+
+  function dataFeedback() {
+    setLoading(true)
+    axios
+      .get(`https://lapakumkm.mindd.site/feedbacks`, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        setFeedbackData(res.data.data)
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+      })
+      .finally(() => setLoading(false))
+  }
 
   useEffect(() => {
     if (value.rating !== 0) {
@@ -86,6 +246,23 @@ const HistoryPembeli = () => {
       .finally(() => setLoading(false))
   }
 
+  const handleBayar = (payment_link: string) => {
+    window.open(payment_link, "_blank")
+  }
+
+//   const numbers1 = [1, 2, 3, 4, 5];
+
+//   numbers1.forEach((num) => {
+//     console.log('forEach', num * 2); // output: 2, 4, 6, 8, 10
+//   });
+
+//   const numbers = [1, 2, 3, 4, 5];
+
+// const doubledNumbers = numbers.map((num) => {
+//   return num * 2;
+// });
+//  console.log("map", doubledNumbers);
+ 
   return (
     <Layout>
       {loading ? <Loading /> :
@@ -93,33 +270,61 @@ const HistoryPembeli = () => {
           <Navbar />
           <div className="px-8 md:px-28 lg:px-52 2xl:px-80 mb-28">
             <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
+            {history.map((item, index) => (
+              <div className="mb-10 rounded-lg shadow-[2px_4px_8px_0px_rgba(0,0,0,0.3)] bg-white w-[35vw] p-5 text-zinc-800 text-[20px] ">
+                <p>{`Total Barang : ${item.total_product}`}</p>
+                <p className=''>Total Belanja :
+                  {formatValue({
+                    value: JSON.stringify(item.total_payment),
+                    groupSeparator: '.',
+                    decimalSeparator: ',',
+                    prefix: ' Rp. ',
+                  })}
+                </p>
+                <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
-            <FeedbackCard
-              id={1}
-              produkImg={Kaos}
-              sellerName="Toko@7"
-              produkName='Baju Jelek'
-              size={'L'}
-              price={50000}
-              status="Done"
-              rating={4}
-              quantity={2}
-              handleFeedback={() => setShowFeedback(true)}
-            />
+                <div className="flex mt-10 w-9/12 ml-auto ">
+                  <div className='ml-auto'>
+                    <CustomButton
+                      id="btn-balas"
+                      label='Bayar sekarang'
+                      type='submit'
+                      onClick={() => handleBayar(item.payment_link)}
+                    />
+                  </div>
 
-            <FeedbackCard
-              id={1}
-              produkImg={Kaos}
-              sellerName="Toko@7"
-              produkName='Baju Jelek'
-              size={'L'}
-              price={35000}
-              status="Pending"
-              rating={0}
-              quantity={2}
-              handleFeedback={() => setShowFeedback(true)}
-            />
+                  <div className='ml-auto'>
+                    <CustomButton
+                      id="btn-bayar"
+                      label='Detail transaksi'
+                      onClick={() => dataTransaksiId(item.id)}
+                      className="rounded-xl bg-white border border-lapak w-full max-w-full px-6 py-2 text-[15px] md:text-[15px] lg:text-[14px] 2xl:text-[18px] font-semibold capitalize tracking-wider text-lapak hover:bg-lapak hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400 "
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+
+          <Modal isOpen={showProduk} size='w-[40vw]' isClose={() => setShowProduk(false)} title="Detail Transaki" >
+            <form className="p-5">
+              {/* {detailHistory.map((item) => (
+                <CardFeedback
+                  id={item.id}
+                  produkImg={Kaos}
+                  sellerName="Toko@7"
+                  produkName='Baju Jelek'
+                  size={'L'}
+                  price={50000}
+                  totalPrice={item.product.price}
+                  status="Done"
+                  quantity={item.total_product}
+                  rating={item.rating}
+                  handleFeedback={() => setShowFeedback(true)}
+                />
+              ))} */}
+            </form>
+          </Modal>
 
           <Modal isOpen={showFeedback} size='w-96' isClose={() => setShowFeedback(false)} title="Review" >
             <form onSubmit={(e) => handleSubmit(e)}>

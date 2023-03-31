@@ -42,7 +42,8 @@ const Toko = () => {
     useEffect(() => {
         getPrudukToko()
     }, [])
-
+    console.log('cek foto', foto);
+    
     console.log('test data toko', data);
     console.log('ambil data toko', getUserToko);
     const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/' + foto
@@ -88,11 +89,11 @@ const Toko = () => {
                     {/*  */}
                     {/*  */}
                     <div className='flex flex-col mx-auto'>
-                        <div className='flex flex-col rounded-md bg-white dark:border-lapak dark:border-4 border-b-8 border-lapak mt-5 mb-5 p-10 max-w-fit min-w-[500px] mx-auto shadow-lg dark:bg-slate-600  '>
+                        <div className='flex flex-col rounded-md bg-white dark:border-lapak dark:border-4 border-b-8 border-lapak mt-5 mb-5 p-10 max-w-fit w-full 2xl:min-w-[500px]  mx-auto shadow-lg dark:bg-slate-600  '>
                             <div className='flex w-fit gap-5 '>
                                 <img src={foto ? foto : Default} className='w-32 rounded-full' />
                                 <div className=' text-lg'>
-                                    <h1 className='mb-5 text-3xl dark:text-white font-bold'>{tokoName}</h1>
+                                    <h1 className='mb-5 2xl:text-3xl dark:text-white font-bold text-xl'>{tokoName}</h1>
                                     <h1 className='flex items-center gap-2 dark:text-white font-semibold'><MdOutlineLocationOn className='flex items-center' /> <span className='flex items-center'>{address}</span></h1>
                                 </div>
                             </div>
