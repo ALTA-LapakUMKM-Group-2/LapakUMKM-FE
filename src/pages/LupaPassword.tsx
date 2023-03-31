@@ -14,6 +14,7 @@ import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CutomInput';
 import Modal from '../components/Modal';
+import PasswordStrengthBar from 'react-password-strength-bar';
 
 const LupaPassword = () => {
     const navigate = useNavigate()
@@ -100,10 +101,11 @@ const LupaPassword = () => {
                     <div className="relative">
                     <input
                         type={showPassword ? "text" : "password"}
-                        className="input input-bordered input-accent w-full max-w-lg pr-10"
+                        className="input input-bordered input-accent w-full max-w-lg pr-10 mb-2"
                         onChange={handlePasswordChange}
                         minLength={8}
                     />
+                    <PasswordStrengthBar password={password}/>
                     <button
                         type="button"
                         className="absolute right-2 top-3 text-zinc-800"
