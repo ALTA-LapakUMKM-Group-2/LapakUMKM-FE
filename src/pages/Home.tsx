@@ -13,6 +13,8 @@ import { useCookies } from 'react-cookie'
 import { DataType } from '../utils/types/DataType'
 import InfiniteScroll from "react-infinite-scroll-component"
 import Swal from 'sweetalert2'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
     const navigate = useNavigate()
@@ -20,46 +22,46 @@ const Home = () => {
     const [data, setData] = useState<DataType[]>([])
     const [tenData, setTenData] = useState([])
     const [loading, setLoading] = useState(false)
-    const [cookie, setCookie] = useCookies(["token"]);
+    const [cookie, setCookie] = useCookies(["token", 'testSwal']);
     const [user, setUser] = useState<any>({})
     const [search, setSearch] = useState('')
+    const [swal2, setSwal2] = useState(false)
+    const [cekAddress, setCekAddress] = useState('')
+    const notify = () => toast.info("Anda Belum Melengkapi Profile Anda");
     const getProfile = async () => {
         setLoading(true)
         try {
             const res = await axios.get('https://lapakumkm.mindd.site/users', {
                 headers: {
-                Authorization: `Bearer ${cookie.token}`
+                    Authorization: `Bearer ${cookie.token}`
                 }
             })
             setUser(res.data.data)
-            if(res.data.data.address === undefined){
-                Swal.fire({
-                    icon: "warning",
-                    title: "Anda Belum Melengkapi Profile Anda",
-                    confirmButtonText: "Isi Data",
-                    confirmButtonColor: "#31CFB9",
-                    showCancelButton: true,
-                    cancelButtonText: "Nanti Saja",
-                    cancelButtonColor: "#db1f1f"
-                }).then((update) => {
-                    if (update.isConfirmed) {
-                        navigate(`/profile`, {
-                            state:{
-                                showModal: true
-                            }
-                        })
-                    }
-                })
-            }
+            setCekAddress(res.data.data.address)
+
+
         } catch (error) {
-    
+
         }
         setLoading(false)
     }
     console.log("user", user)
+    let testSwal: any = ''
+    const [isSwalDisplayed, setIsSwalDisplayed] = useState(false);
+
+    useEffect(() => {
+        if (cekAddress === undefined) {
+            notify()
+        }
+    }, [cekAddress]);
+
+
+
+
+
     useEffect(() => {
         getProfile()
-    }, [])
+    }, [testSwal])
     const getAllData = () => {
         setLoading(true);
 
@@ -148,6 +150,14 @@ const Home = () => {
         <Layout>
             <Navbar
                 children={<Search onSearch={(e) => setSearch(e.target.value)} />}
+            />
+            <ToastContainer
+            className='toast-lapak'
+                position="top-center"
+                closeOnClick
+                rtl={false}
+                draggable
+                pauseOnHover
             />
             <div className="flex flex-col w-11/12 mx-auto items-center">
                 <div className="mt-10 mx-auto w-3/6">

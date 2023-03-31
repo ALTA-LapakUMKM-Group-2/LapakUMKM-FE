@@ -33,9 +33,9 @@ const Profile = () => {
   const [disable, setDisable] = useState<boolean>(true);
   const [shopName, setShopName] = useState('')
   const location = useLocation()
-  const showFromHome = location.state.showModal
+  // const showFromHome = location.state.showModal
 
-  console.log(showFromHome);
+  // console.log(showFromHome);
   
   const handleUpdateStatus = async (e: any) => {
     e.preventDefault()
@@ -91,9 +91,9 @@ const Profile = () => {
 
   useEffect(() => {
     getProfile()
-    if(showFromHome){
-      setShowModal(showFromHome)
-    }
+    // if(showFromHome){
+    //   setShowModal(showFromHome)
+    // }
   }, [])
 
   const [fullName, setFullName] = useState('')

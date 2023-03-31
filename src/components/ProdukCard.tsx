@@ -8,6 +8,7 @@ import { Rating } from '@smastrom/react-rating';
 import { TbShoppingCartPlus } from 'react-icons/tb'
 import { MdLocationOn } from 'react-icons/md'
 import { AiFillStar } from 'react-icons/ai';
+import { useCookies } from 'react-cookie';
 
 interface ListingProps {
     id: number;
@@ -43,11 +44,15 @@ const ProdukCard: React.FC<ListingProps> = ({
     handlename,
     size
 }) => {
-
+    const [cookie, setCookie] = useCookies(['token'])
     const navigate = useNavigate()
 
     const onClick = () => {
-        navigate(`/detail/${id}`)
+        if(!cookie.token){
+            navigate('/')
+        } else {
+            navigate(`/detail/${id}`)
+        }
     }
 
     const StarDrawing = (
@@ -71,8 +76,8 @@ const ProdukCard: React.FC<ListingProps> = ({
             </a>
             <div className="px-5 pb-5 flex flex-col space-y-1 gap-2 dark:text-white">
                 <a href="#">
-                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2">{produkName}</h5>
-                    <h5 className="text-l font-medium tracking-tight text-gray-900 dark:text-white">Ukuran : {size }</h5>
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2 ">{produkName}</h5>
+                    <h5 className="text-l font-medium tracking-tight text-gray-900 dark:text-white mt-5">Ukuran : {size }</h5>
                 </a>
                 <h5 className="text-l font-semibold tracking-tight text-gray-900 flex dark:text-white"><MdLocationOn className=' w-6 h-6 mr-2 dark:text-lapak' />{location}</h5>
                 <div className="rating ">
@@ -93,7 +98,7 @@ const ProdukCard: React.FC<ListingProps> = ({
                         groupSeparator: '.',
                         decimalSeparator: ',',
                     })}</span>
-                    <button className="btn btn-sm bg-lapak border-none hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300" onClick={() => navigate(`/detail/${id}`)} ><TbShoppingCartPlus /></button>
+                    <button className="btn btn-sm bg-lapak border-none hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300" onClick={onClick} ><TbShoppingCartPlus /></button>
                 </div>
             </div>
         </div>
