@@ -85,7 +85,6 @@ const Profile = () => {
     }
     setLoading(false)
   }
-
   const [fullName, setFullName] = useState('')
   const [address, setAddress] = useState('')
   const [email, setEmail] = useState('')

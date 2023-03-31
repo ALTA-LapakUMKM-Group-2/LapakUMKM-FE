@@ -173,16 +173,20 @@ const Login = () => {
     await axios
       .get(`https://lapakumkm.mindd.site/auth/forget-password?email=${password}`)
       .then((res) => {
-        MySwal.fire({
+        setModalOpen(false)
+        Swal.fire({
           icon: "info",
-          html: `
-            <p class="text-color5 mb-5 text-[20px] capitalize">konfirmasi via WhatsApp setelah mendaftar untuk masuk grub</p>
-            <a class="text-color1 bg-color6 px-4 py-0 rounded-full" href="${link}">Cek Email</a>`,
-          showConfirmButton: false,
-        })
+          title: "Silahkan Cek Email Anda",
+          confirmButtonText: "Cek Email",
+          confirmButtonColor: "#31CFB9",
+      }).then((cekEmail) => {
+          if (cekEmail.isConfirmed) {
+              window.open(`${link}`)
+          }
+      })
       })
       .catch((err) => {
-        MySwal.fire({
+        Swal.fire({
           icon: "error",
           title: err.response.data.message,
           text: "Email tidak terdaftar",
