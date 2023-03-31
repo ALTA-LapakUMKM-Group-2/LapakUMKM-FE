@@ -62,7 +62,7 @@ const Modal: React.FC<DialogProps> = ({isOpen, isClose, title, children, size}) 
                     )}
                     onClick={isClose}
                 >
-                    <HiOutlineXMark className="h-8 w-8 text-gray-500 hover:text-lapak dark:hover:text-lapak dark:text-gray-500" />
+                    <HiOutlineXMark className="h-8 w-8 text-gray-500  hover:text-lapak dark:hover:text-lapak dark:text-white" />
                 </DialogPrimitive.Close>
                 </DialogPrimitive.Content>
             </Transition.Child>

@@ -90,6 +90,7 @@ const HistoryPembeli = () => {
 
         const productIds = res.data.data.map((id: any) => id.product_id)
         if (productIds) {
+          setProductId(productIds)
           dataProdukId(productIds)
         }
       })
@@ -98,7 +99,7 @@ const HistoryPembeli = () => {
       })
       .finally(() => setLoading(false))
   }
-
+  console.log("productId", productId)
   useEffect(() => {
     productId ? dataProdukId(productId) : ""
   }, [])
@@ -112,6 +113,7 @@ const HistoryPembeli = () => {
         .then((res) => {
           combine.push(res.data.data)
           setProduct(combine)
+          console.log("test hulu sia",res.data.data)
         })
         .catch((err) => {
           console.log(err.response.data.message)
@@ -138,6 +140,8 @@ const HistoryPembeli = () => {
             ...item,
             ...data
           }
+        }else{
+          return item
         }
       })
       console.log('cek terakhir sebelom puasa', cekDetail);
@@ -212,18 +216,19 @@ const HistoryPembeli = () => {
   const handleBayar = (payment_link: string) => {
     window.open(payment_link, "_blank")
   }
-
+  console.log("testni bajingan", combineProduk)
+  console.log("history bajingan", history)
   return (
     <Layout>
       {loading ? <Loading /> :
         <>
           <Navbar />
-          <div className="px-8 md:px-28 lg:px-52 2xl:px-80 mb-28">
+          <div className="flex flex-col justify-center items-center">
             <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
-
+              <div className="grid xl:grid-cols-3 gap-5">
             {history ?
               history.map((item, index) => (
-                <div className="mb-10 rounded-lg shadow-[2px_4px_8px_0px_rgba(0,0,0,0.3)] bg-white w-[35vw] p-5 text-zinc-800 text-[20px] ">
+                <div className="mb-10 rounded-lg shadow-[2px_4px_8px_0px_rgba(0,0,0,0.3)] bg-white dark:bg-slate-800 dark:border dark:border-lapak p-5 text-zinc-800 text-[20px] dark:text-white">
                   <p>{`Total Barang : ${item.total_product}`}</p>
                   <p className=''>Total Belanja :
                     {formatValue({
@@ -235,7 +240,7 @@ const HistoryPembeli = () => {
                   </p>
                   <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
-                  <div className="flex mt-10 w-9/12 ml-auto ">
+                  <div className="flex mt-10 flex-wrap gap-4 ">
                     <div className='ml-auto'>
                       <CustomButton
                         id="btn-balas"
@@ -259,10 +264,11 @@ const HistoryPembeli = () => {
               :
               <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>}
           </div>
-
-          <Modal isOpen={showProduk} size='w-[40vw]' isClose={() => setShowProduk(false)} title="Detail Transaki" >
+          </div>
+          <Modal isOpen={showProduk} size='w-fit max-h-[800px]  overflow-scroll' isClose={() => setShowProduk(false)} title="Detail Transaki" >
             <form className="p-5">
-              {combineProduk ? 
+             <div className="grid">
+             {combineProduk ? 
               <>
               {combineProduk.map((item) => (
                 <CardHistory
@@ -281,6 +287,7 @@ const HistoryPembeli = () => {
               ))}
               </> : <></> 
             }
+             </div>
             </form>
           </Modal>
 

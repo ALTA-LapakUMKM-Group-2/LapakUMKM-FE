@@ -63,7 +63,7 @@ const Detail = () => {
   const handleUpdate = (e: any) => {
     e.preventDefault()
   }
-  const [count, setCount] = useState<number>(1);
+  const [count, setCount] = useState<number >(1);
   const [price, setPrice] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(price)
   const [testCount, SetTestCount] = useState<any>(count)
@@ -100,8 +100,8 @@ const Detail = () => {
         setCategory(category)
         res.data.data.total_price = totalPrice
         res.data.data.product_pcs = count
-        SetTestCount(res.data.data.total_price)
-        setTestPrice(res.data.data.product_pcs)
+        SetTestCount(res.data.data.product_pcs)
+        setTestPrice(res.data.data.total_price )
       })
       .catch((err) => {
         console.log(err.response.statusText)
@@ -119,10 +119,11 @@ const Detail = () => {
     // .finally(() => setLoading(false))
   }
   // console.log('cek user id', userId);
-  // console.log('test abc', testCount);
-  // console.log('test asd', tesPrice);
+  console.log('test abc', testCount);
+  console.log('test asd', tesPrice);
   // console.log('test dca', dca);
   // console.log('test tesett', test);
+
 
   console.log("product_id :", productId)
   console.log(typeof productId)
@@ -495,7 +496,7 @@ const Detail = () => {
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
-                  <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-white dark:border-2">
+                  <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-lapak dark:border-2">
                     <div className="max-w-5xl max-h-96 ">
                       {loading ? <Loading /> :
                         image ?
@@ -527,7 +528,7 @@ const Detail = () => {
                     </div>
                   </div>
                   {/* Card kanan */}
-                  <div className="p-5 rounded-md max-w-3xl w-full h-fit border-2 border-gray-200 shadow-lg mx-auto">
+                  <div className="p-5 rounded-md max-w-3xl w-full h-fit border-2 dark:border-lapak border-gray-200 shadow-lg mx-auto">
                     <div className="w-full h-full">
                       <div className="flex justify-between items-center mb-5 ">
                         <h1 className="font-bold text-2xl dark:text-white">{product} </h1>
@@ -552,18 +553,18 @@ const Detail = () => {
                         groupSeparator: '.',
                         decimalSeparator: ',',
                       })}</span></h1>
-                      <div className="flex gap-2 border w-fit mt-10 items-center overflow-hidden">
-                        <button onClick={handleDecrement} className="btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 mr-5 ml-2">-</button>
+                      <div className="flex gap-2 border w-fit mt-10 items-center overflow-hidden dark:border-lapak">
+                        <button onClick={handleDecrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-none dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 mr-5 ml-2">-</button>
                         <h1 className="font-bold dark:text-white">{count}</h1>
-                        <button onClick={handleIncrement} className="btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
+                        <button onClick={handleIncrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-none dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
                       </div>
-                      <div className="border-2 mt-5"></div>
+                      <div className="border-2 mt-5 dark:border-lapak"></div>
                       <div className="flex 2xl:flex-row lg:flex-row md:flex-row flex-col justify-center gap-5 mt-10 w-fit mx-auto ">
                         <button className="btn  bg-lapak hover:bg-white border-lapak hover:border hover:text-lapak border-none w-fit" onClick={() => {
                           navigate(`/payment/${name}`, {
                             state: {
                               dca: dca,
-                              testPrice: tesPrice,
+                              testPrice: totalPrice,
                               testCount: testCount
                             }
                           })
@@ -574,12 +575,12 @@ const Detail = () => {
                   </div>
                 </div>
                 {/* Break Line  */}
-                <div className='border-2 mt-10'>
+                <div className='border-2 mt-10 dark:border-lapak'>
 
                 </div>
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
-                  <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md '>
+                  <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md dark:border-lapak'>
                     <img src={photoToko ? photoToko : Default} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
                       state: {
                         id: userId
@@ -599,19 +600,19 @@ const Detail = () => {
                     </div>
                   </div>
                   <h1 className='text-3xl font-bold dark:text-white'>Informasi Produk :</h1>
-                  <div className='w-full shadow-xl p-5 rounded-xl border text-lg font-semibold dark:text-white'>
+                  <div className='w-full shadow-xl p-5 rounded-xl border text-lg font-semibold dark:text-white dark:border-lapak dark:border-2'>
                     <h1>stock : <span className='ml-4'>{stock}</span> </h1>
                     <h1>Kategori : <span className='ml-4'>{category}</span></h1>
                     <h1>Brand : <span className='ml-4'>{product}</span></h1>
                     <h1>Ukuran : <span className='ml-4'>{size}</span></h1>
-                    <div className='border-2 mt-5 mb-5'>
+                    <div className='border-2 mt-5 mb-5 dark:border-lapak'>
                     </div>
                     <h1 >Deskripsi : </h1>
                     <h1>{description}</h1>
                   </div>
                 </div>
                 {/* end */}
-                <div className='border-2 mt-20 mb-5'>
+                <div className='border-2 mt-20 mb-5 dark:border-lapak'>
                 </div>
 
                 <div className='flex mt-20 flex-col gap-5 w-7/12'>
@@ -635,7 +636,7 @@ const Detail = () => {
                     <a href='#feedback' className='text-[16px] flex items-center hover:cursor-pointer hover:text-lapak text-zinc-800 mb-2 dark:text-white dark:hover:text-lapak'>Lihat Ulasan <HiOutlineArrowLongUp /></a>
                   </div>
 
-                  <form onSubmit={(e) => handleNewDiskusi(e)} className='p-4 border-2 border-zinc-300 rounded-md'>
+                  <form onSubmit={(e) => handleNewDiskusi(e)} className='p-4 border-2 border-zinc-300 rounded-md dark:border-lapak'>
                     <p className='dark:text-white'>Ada pertanyaan ? Diskusikan dengan penjual disini</p>
                     <CustomInput
                       id='input-diskusi'
