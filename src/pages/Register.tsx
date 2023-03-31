@@ -142,12 +142,12 @@ const Register = () => {
 
                         <p className="mt-8 text-sm font-semibold  text-center text-gray-700">
                             {" "}
-                            Already have an account?{" "}
+                            Sudah punya akun ?{" "}
                             <a
-                                onClick={()=> navigate('/')}
+                                onClick={()=> navigate('/login')}
                                 className="font-medium text-indigo-600 hover:underline"
                             >
-                                Sign in
+                                Masuk
                             </a>
                         </p>
                     </div>

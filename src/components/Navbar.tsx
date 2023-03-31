@@ -200,12 +200,12 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                             </div>
 
                         </label>
-                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold dark:bg-slate-700">
+                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-lapak font-semibold dark:bg-slate-700 ">
                             {checkToken ?
                                 <>
-                                    <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                                        <div> {nama}</div>
-                                        <div className="font-medium truncate">{mail}</div>
+                                    <div className="px-4 py-3 text-sm text-gray-900 w-44 dark:text-white">
+                                        <div className=''> {nama}</div>
+                                        <div className="font-medium ">{mail}</div>
                                     </div>
                                 </>
                                 : <></>}
@@ -215,12 +215,12 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                                         <li onClick={() => checkToken ? navigate('/profile') : navigate('/')}><a id='link-profile'>
 
                                             <HiCog6Tooth />
-                                            Profile
+                                            Data Diri
                                         </a>
                                         </li>
                                         <li onClick={() => checkToken ? navigate('/historypembeli') : navigate('/')}><a>
                                             <MdOutlineWorkHistory />
-                                            Your History
+                                            Riwayat Belanja
                                         </a>
                                         </li>
                                         <li onClick={() => checkToken ? handleLogout() : navigate("/")}><a>

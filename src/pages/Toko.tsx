@@ -93,7 +93,7 @@ const Toko = () => {
                             <div className='flex w-fit gap-5 '>
                                 <img src={foto ? foto : Default} className='w-32 rounded-full' />
                                 <div className=' text-lg'>
-                                    <h1 className='mb-5 2xl:text-3xl dark:text-white font-bold text-xl'>{tokoName}</h1>
+                                    <h1 className='mb-5 2xl:text-2xl dark:text-white font-bold text-xl'>{tokoName}</h1>
                                     <h1 className='flex items-center gap-2 dark:text-white font-semibold'><MdOutlineLocationOn className='flex items-center' /> <span className='flex items-center'>{address}</span></h1>
                                 </div>
                             </div>
