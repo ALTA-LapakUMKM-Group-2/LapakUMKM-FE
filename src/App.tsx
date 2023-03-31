@@ -36,7 +36,7 @@ function App() {
       <GoogleOAuthProvider clientId={`${import.meta.env.VITE_CLIENT_ID}`}>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={checkToken ? <Home /> : <Login />} />
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />

@@ -49,7 +49,7 @@ const ProdukCard: React.FC<ListingProps> = ({
 
     const onClick = () => {
         if(!cookie.token){
-            navigate('/')
+            navigate('/login')
         } else {
             navigate(`/detail/${id}`)
         }

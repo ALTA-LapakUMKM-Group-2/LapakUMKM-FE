@@ -94,7 +94,7 @@ const HistoryPembeli = () => {
         }
       })
       .catch((err) => {
-        console.log(err.response.data)
+        console.log(err)
       })
       .finally(() => setLoading(false))
   }
@@ -262,6 +262,8 @@ const HistoryPembeli = () => {
 
           <Modal isOpen={showProduk} size='w-[40vw]' isClose={() => setShowProduk(false)} title="Detail Transaki" >
             <form className="p-5">
+              {combineProduk ? 
+              <>
               {combineProduk.map((item) => (
                 <CardHistory
                   id={item.id}
@@ -277,6 +279,8 @@ const HistoryPembeli = () => {
                   handleFeedback={() => setShowFeedback(true)}
                 />
               ))}
+              </> : <></> 
+            }
             </form>
           </Modal>
 

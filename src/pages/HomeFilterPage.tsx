@@ -92,6 +92,32 @@ const HomeFilter = () => {
             console.log("products",res.data.data)
             setProducts(res.data.data)
             setCategoryId('')
+            
+            
+        } catch (error) {
+    
+        }
+        setLoading(false)
+    }
+    
+    useEffect(() => {
+        if(formValues){
+            fetchProduct(formValues.minprice, formValues.maxprice, formValues.minrating, formValues.kategori ? formValues.kategori : categoryId)
+        }
+    }, [])
+
+
+
+    const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
+    const [category,setCategory] =useState<any>([''])
+    const fetchCategory = async () => {
+        try {
+            const res = await axios.get(categoryEndpoint,{
+                headers:{
+                Authorization: `Bearer ${cookie.token}`
+                }
+            })
+            setCategory(res.data.data)
             if(res.data.data === null){
                 Swal.fire({
                     title: 'Maaf!',
@@ -115,31 +141,6 @@ const HomeFilter = () => {
                     }
                 })
             }
-            
-        } catch (error) {
-    
-        }
-        setLoading(false)
-    }
-    
-    useEffect(() => {
-        if(formValues){
-            fetchProduct(formValues.minprice, formValues.maxprice, formValues.minrating, formValues.kategori ? formValues.kategori : categoryId)
-        }
-    }, [])
-
-
-
-    const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
-    const [category,setCategory] =useState<any>([''])
-    const fetchCategory = async () => {
-        try {
-            const res = await axios.get(categoryEndpoint,{
-                headers:{
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InVzZXIiLCJleHAiOjE2Nzk5MTc2MjN9.K8lerhsq124A_-y4Lf8gNAPIJtLe9xRUMLKjN_tWIZA`
-                }
-            })
-            setCategory(res.data.data)
         } catch (error) {
     
         }

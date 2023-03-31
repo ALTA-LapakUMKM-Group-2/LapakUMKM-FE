@@ -208,8 +208,11 @@ const Cart: React.FC<CartData> = ({ products }) => {
                             <div className="block md:w-[600px] lg:w-[500px] 2xl:w-[600px] mx-auto space-y-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-slate-800 dark:border-lapak dark:shadow-lg dark:shadow-slate-600">
                                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Keranjang</h5>
 
-                                {cart === null || undefined || "" || 502 ?
-                                    <p className='text-[20px] text-center underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50 py-20 text-zinc-600 font-semibold dark:text-zinc-50'> Keranjang anda masih kosong </p>
+                                {cart.length === 0 ?
+                                    <>
+                                        <p className='text-[20px] text-center underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50 py-20 text-zinc-600 font-semibold dark:text-zinc-50'> Keranjang anda masih kosong </p>
+                                        <button className="btn btn-primary mx-auto bg-lapak hover:bg-lapak hover:translate-x-2  border-none" onClick={() => navigate('/')}>Beli Product? </button>
+                                    </>
                                     :
                                     <div className="flex flex-col dark:text-white">
                                         <thead>

@@ -451,7 +451,7 @@ const Detail = () => {
   //   });
   // });
 
-  diskusi.map((i) => console.log(i))
+  // diskusi.map((i) => console.log(i))
 
   return (
     <Layout>

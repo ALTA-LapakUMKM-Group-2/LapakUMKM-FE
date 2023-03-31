@@ -126,7 +126,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     const handleNavigate = () => {
         if (!cookies.token) {
-            navigate('/')
+            navigate('/login')
         } else {
             navigate('/cart')
         }
