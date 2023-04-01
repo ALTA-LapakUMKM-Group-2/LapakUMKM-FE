@@ -91,34 +91,8 @@ const HomeFilter = () => {
             })
             console.log("products",res.data.data)
             setProducts(res.data.data)
-            setCategoryId('')
-            
-            
         } catch (error) {
-    
-        }
-        setLoading(false)
-    }
-    
-    useEffect(() => {
-        if(formValues){
-            fetchProduct(formValues.minprice, formValues.maxprice, formValues.minrating, formValues.kategori ? formValues.kategori : categoryId)
-        }
-    }, [])
-
-
-
-    const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
-    const [category,setCategory] =useState<any>([''])
-    const fetchCategory = async () => {
-        try {
-            const res = await axios.get(categoryEndpoint,{
-                headers:{
-                Authorization: `Bearer ${cookie.token}`
-                }
-            })
-            setCategory(res.data.data)
-            if(res.data.data === null){
+            if(error){
                 Swal.fire({
                     title: 'Maaf!',
                     text: 'Barang yang anda cari mungkin belum tersedia',
@@ -141,6 +115,28 @@ const HomeFilter = () => {
                     }
                 })
             }
+        }
+        setLoading(false)
+    }
+    
+    useEffect(() => {
+        if(formValues){
+            fetchProduct(formValues.minprice, formValues.maxprice, formValues.minrating, formValues.kategori ? formValues.kategori : categoryId)
+        }
+    }, [])
+
+
+
+    const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
+    const [category,setCategory] =useState<any>([''])
+    const fetchCategory = async () => {
+        try {
+            const res = await axios.get(categoryEndpoint,{
+                headers:{
+                Authorization: `Bearer ${cookie.token}`
+                }
+            })
+            setCategory(res.data.data)
         } catch (error) {
     
         }
@@ -180,8 +176,8 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                                 Kategori
                                             </label>
                                             <select className="border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
-                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
-                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]"
+                                                focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
+                                                bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]"
                                             defaultValue={''}
                                             id='kategori'
                                             name='kategori'
@@ -202,8 +198,8 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                             <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minprice">Harga Minimal</label>
                                                 <CurrencyInput
                                                     className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
-                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
-                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
+                                                        focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
+                                                        bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
                                                     id="minprice"
                                                     name="minprice"
                                                     prefix='Rp. '
@@ -219,8 +215,8 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                             <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="maxprice">Harga Maksimal</label>
                                                 <CurrencyInput
                                                     className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
-                      focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
-                      bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
+                                                        focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
+                                                        bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
                                                     id="maxprice"
                                                     name="maxprice"
                                                     prefix='Rp. '
@@ -272,7 +268,7 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                         sell={item.stock_sold}
                                         id={item.id}
                                         image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
-                                        rating={item.rating}
+                                        rating={item.rating ? Math.floor(item.rating) : 0}
                                         price={item.price}
                                     />
                                 )
