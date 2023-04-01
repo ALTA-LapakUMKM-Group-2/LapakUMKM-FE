@@ -10,9 +10,23 @@ type ChatModalProps = {
     size?: string
     titleStyle?: string
     img: string
-};
+
+}
 
 const ChatModal: React.FC<ChatModalProps> = ({ isOpen, isClose, img, children, size, titleStyle }) => {
+    const [inputValue, setInputValue] = useState("");
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      console.log(inputValue);
+      setInputValue("");
+    };
+  
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValue(e.target.value);
+    };
+  
+ 
     return (
         <div
             className={`transition-opacity ${isOpen ? "fixed opacity-100" : "opacity-0 hidden"
@@ -38,10 +52,17 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, isClose, img, children, s
                     {children}
                 </div>
                 <div className="absolute bottom-0 bg-gray-200 w-full h-20 overflow-auto">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="relative mx-5 pt-2">
-                            <input type="search" className="block input-accent w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50" placeholder="Tulis Pesan . . . " required/>
-                            <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-lapak hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"><FaRegPaperPlane/></button>
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={handleInputChange}
+                                className="block input-accent w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
+                                placeholder="Tulis Pesan . . ."
+                                required
+                            />
+                            <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-lapak hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"><FaRegPaperPlane /></button>
                         </div>
                     </form>
                 </div>

@@ -23,7 +23,7 @@ const Login = () => {
   const [profile, setProfile] = useState<any>({});
   const [openModal, setModalOpen] = useState<boolean>(false)
   const [LupaPassword, setLupaPassword] = useState<string>("")
-  const [cookie, setCookie] = useCookies(["token", "id", "photo_profile"]);
+  const [cookie, setCookie] = useCookies(["token", "id", "photo_profile", "name"]);
 
   const login = useGoogleLogin({
     onSuccess: tokenResponse => { console.log("buat ngambil token", tokenResponse), setUser(tokenResponse) },
@@ -55,9 +55,12 @@ const Login = () => {
         verified_email: profile.verified_email,
         photo: profile.picture
       });
+      console.log('test data userLogin', response.data);
+
       const { message, data } = response.data;
       setCookie("token", data.token, { path: "/" });
-      setCookie('id', data.user.full_name, { path: '/' })
+      setCookie('id', data.user.id, { path: '/' })
+      setCookie('name', data.user.full_name, { path: '/' })
       setCookie('photo_profile', profile.picture, { path: '/' })
       MySwal.fire({
         icon: "success",
@@ -118,7 +121,8 @@ const Login = () => {
       .post(`
       https://lapakumkm.mindd.site/auth/login`, body)
       .then((res) => {
-
+        console.log('test data userLogin', res.data);
+        
         const { message, data } = res.data
         console.log(data.token)
         setCookie("token", data.token, { path: "/" });
