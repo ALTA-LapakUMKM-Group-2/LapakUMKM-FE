@@ -115,64 +115,19 @@ const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose
                 </div>
                 {loading ? <Loading /> :
                     <div className="flex flex-col mb-20">
-                        {newChat.map((i) => {
-                            return (
-                                i.sender_id === cookie.id ?
-                                    <div className="chat chat-start bg-green-300">
-                                        <div className="chat-image avatar">
-                                            <div className="w-10 rounded-full">
-                                                <img src={i.recipient.photo_profile} alt="profile" />
-                                            </div>
-                                        </div>
-                                        <div className="chat-header">
-                                            {i.sender_id}
-                                        </div>
-                                        <div className="chat-bubble">{i.text}</div>
-                                    </div>
-                                    :
-                                    <div className="chat chat-end bg-blue-300">
-                                        <div className="chat-image avatar">
-                                            <div className="w-10 rounded-full">
-                                                <img src={i.recipient.photo_profile} />
-                                            </div>
-                                        </div>
-                                        <div className="chat-header">
-                                            {i.sender_id}
-                                        </div>
-                                        <div className="chat-bubble bg-lapak">{i.text}</div>
-                                    </div>
-                            )
-                        })}
-
-                        {/* {newChat
-                            .filter(chat => chat.recipient_id === parseInt(cookie.id))
-                            .map(i => (
-                                <div className="chat chat-start bg-green-300">
-                                    <div className="chat-image avatar">
-                                        <div className="w-10 rounded-full">
-                                            <img src={i.recipient.photo_profile} alt="profile" />
-                                        </div>
-                                    </div>
-                                    <div className="chat-header">
-                                        {i.recipient.full_name}
-                                    </div>
-                                    <div className="chat-bubble">{i.text}</div>
-                                </div>
-                            ))} */}
-
-                        {/* {newChat.filter(chat => chat.recipient_id !== parseInt(cookie.id)).map((i) => (
-                            <div className="chat chat-end bg-blue-300">
+                        {newChat.map((i) => (
+                            <div className={`${i.sender_id === parseInt(cookie.id) ? "chat chat-end" : "chat chat-start"}`}>
                                 <div className="chat-image avatar">
                                     <div className="w-10 rounded-full">
-                                        <img src={i.recipient.photo_profile} />
+                                        <img src={i.recipient.photo_profile} alt="profile" />
                                     </div>
                                 </div>
                                 <div className="chat-header">
                                     {i.recipient.full_name}
                                 </div>
-                                <div className="chat-bubble bg-lapak">{i.text}</div>
+                                <div className={`chat-bubble  ${i.sender_id === parseInt(cookie.id) ? "bg-lapak" : ""}`}>{i.text}</div>
                             </div>
-                        ))} */}
+                        ))}
                     </div>
                 }
                 <div className="absolute bottom-0 bg-gray-200 w-full h-20 overflow-auto">
