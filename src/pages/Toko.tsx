@@ -10,6 +10,7 @@ import axios from 'axios'
 import Loading from '../components/Loading'
 import { useLocation, useParams } from 'react-router-dom'
 import Default from "../assets/default.jpg"
+import { useCookies } from 'react-cookie'
 
 const Toko = () => {
     const [showChat, setShowChat] = useState(false)
@@ -17,11 +18,13 @@ const Toko = () => {
     const { id } = useParams()
     const location = useLocation()
     const [data, setData] = useState([])
-    const [getUserToko, setUserToko] = useState('')
+    const [getUserToko, setGetUserToko] = useState('')
     const [tokoName, setTokoName] = useState('')
     const [address, setAddress] = useState('')
     const [foto, setFoto] = useState('')
     const [fullName, setFullName] = useState('')
+    const [userToko , ] = useState()
+    const [cookie, setCookie] =useCookies(['token'])
     const [userId, setUserId] = useState(location.state.id)
 
     const getPrudukToko = async () => {
@@ -34,6 +37,7 @@ const Toko = () => {
             setFoto(photo_profile)
             setFullName(fullName)
             setData(res.data.data)
+            setGetUserToko(res.data.data[0].user_id)
         } catch (error) {
 
         }
@@ -42,6 +46,25 @@ const Toko = () => {
     useEffect(() => {
         getPrudukToko()
     }, [])
+
+    const chatToko = async() => {
+        try {
+            const res = await axios.post('https://lapakumkm.mindd.site/chats' , getUserToko, {
+                headers: {
+                    Authorization: `Bearer ${cookie.token}`
+                }
+            })
+            if(res.data){
+                console.log('test chat');
+                
+            }
+        } catch (error) {
+            
+        }
+    }
+
+
+
     console.log('cek foto', foto);
     
     console.log('test data toko', data);
@@ -60,29 +83,9 @@ const Toko = () => {
                         img={FotoProfile}
                         isOpen={showChat}
                         isClose={() => setShowChat(false)}
+                        
                     >
-                        <div className="chat chat-start">
-                            <div className="chat-image avatar">
-                                <div className="w-10 rounded-full">
-                                    <img src={FotoProfile} />
-                                </div>
-                            </div>
-                            <div className="chat-header">
-                                Obi-Wan Kenobi
-                            </div>
-                            <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
-                        </div>
-                        <div className="chat chat-end">
-                            <div className="chat-image avatar">
-                                <div className="w-10 rounded-full">
-                                    <img src={FotoProfile} />
-                                </div>
-                            </div>
-                            <div className="chat-header">
-                                Anakin
-                            </div>
-                            <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
-                        </div>
+                       
                     </ChatModal>
                     {/*test card  */}
                     {/* from-green-300 via-blue-500 to-purple-600 */}

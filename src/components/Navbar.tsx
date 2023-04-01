@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     // handle log out
     const MySwal = withReactContent(Swal)
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile']);
+    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile', 'name']);
     const checkToken = cookies.token
     const navigate = useNavigate()
     const [cart, setCart] = useState([])
@@ -61,7 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                     timer: 1500,
                 })
                 dispatch(handleAuth(false));
-                removeCookie('id');
+                removeCookie('name');
                 removeCookie('token');
                 removeCookie('photo_profile');
                 navigate("/login");
@@ -132,7 +132,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         }
     }
 
-    const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
+    const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
     useEffect(() => {
         if (theme === "dark") {
             document.documentElement.classList.add("dark");

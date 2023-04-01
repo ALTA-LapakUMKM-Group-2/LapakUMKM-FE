@@ -4,7 +4,7 @@ import Layout from '../components/Layout'
 import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import ProdukCard from '../components/ProdukCard'
 import { Rating } from '@smastrom/react-rating';
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Loading from '../components/Loading'
 import Loading2 from '../components/Loading2'
@@ -22,7 +22,7 @@ const Home = () => {
     const [data, setData] = useState<DataType[]>([])
     const [tenData, setTenData] = useState([])
     const [loading, setLoading] = useState(false)
-    const [cookie, setCookie] = useCookies(["token", 'testSwal']);
+    const [cookie, setCookie] = useCookies(["token", 'testSwal','id']);
     const [user, setUser] = useState<any>({})
     const [search, setSearch] = useState('')
     const [swal2, setSwal2] = useState(false)
@@ -46,7 +46,7 @@ const Home = () => {
         }
         setLoading(false)
     }
-    console.log("user", user)
+    // console.log("user", user)
     let testSwal: any = ''
     const [isSwalDisplayed, setIsSwalDisplayed] = useState(false);
 
@@ -81,15 +81,16 @@ const Home = () => {
     useEffect(() => {
         getAllData()
     }, []);
-
+   
     const [category, setCategory] = useState<any>([])
     const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
+    
 
     const fetchCategory = async () => {
         try {
             const res = await axios.get(categoryEndpoint, {
                 headers: {
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InVzZXIiLCJleHAiOjE2Nzk5MTc2MjN9.K8lerhsq124A_-y4Lf8gNAPIJtLe9xRUMLKjN_tWIZA`
+                    Authorization: `Bearer ${cookie.token}`
                 }
             })
             setCategory(res.data.data)
@@ -100,7 +101,40 @@ const Home = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
-    console.log('data', data);
+
+
+    // test notif stock
+  const productEndpoint = 'https://lapakumkm.mindd.site/products'
+    const [getStock ,setGetStock] = useState<any>([])
+    const getRestStock = async () => {
+        setLoading(true)
+        try {
+          const res = await axios.get(`${productEndpoint}?user_id=${cookie.id}`,{
+            headers:{
+              Authorization: `Bearer ${cookie.token}`
+            }
+          })
+          console.log('test restStockToko', res.data.data);
+          setGetStock(res.data.data)
+        } catch (error) {
+    
+        }
+        setLoading(false)
+      }
+      useEffect(() => {
+        getRestStock()
+      },[])
+      
+      useEffect(() => {
+          getStock.map((item:any) => {  
+                // console.log('test stock Toko', item.stock_remaining)
+                if(item.stock_remaining < 5) {
+                toast.warning(`Stock Product " ${item.product_name} " Anda,  Tersisa " ${item.stock_remaining} ". `);
+                } 
+          })
+      },[getStock])
+      console.log('getStock', getStock )
+    // console.log('data', data);
     const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
@@ -109,7 +143,7 @@ const Home = () => {
             />
             <ToastContainer
             className='toast-lapak'
-                position="top-center"
+                position="top-right"
                 closeOnClick
                 rtl={false}
                 draggable
@@ -142,7 +176,7 @@ const Home = () => {
                                 return search.toLocaleLowerCase() === "" ?
                                     item : item.product_name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
                             }).map((item: any, index) => {
-                                // console.log('test', item);
+                                console.log('test data product', item.rating);
 
                                 return (
                                     <ProdukCard
@@ -150,10 +184,10 @@ const Home = () => {
                                         key={index}
                                         produkName={item.product_name}
                                         location={item.user.address}
-                                        sell={item.stock_sold}
+                                        sell={item.stock_sold ? item.stock_sold : 0}
                                         id={item.id}
                                         image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
-                                        rating={4}
+                                        rating={item.rating ? Number(item.rating.toFixed(1)) : 0}
                                         price={item.price}
                                     />
                                 )
