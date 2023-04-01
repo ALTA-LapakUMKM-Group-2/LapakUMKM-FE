@@ -49,7 +49,7 @@ const Detail = () => {
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
-  const [cookie, setCookie] = useCookies(['token', "id"])
+  const [cookie, setCookie] = useCookies(['token', "id", "senderID", "roomID"])
   const [feedback, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
   const [balas, setBalas] = useState<string | undefined>("")
@@ -64,7 +64,7 @@ const Detail = () => {
   const handleUpdate = (e: any) => {
     e.preventDefault()
   }
-  const [count, setCount] = useState<number >(1);
+  const [count, setCount] = useState<number>(1);
   const [price, setPrice] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(price)
   const [testCount, SetTestCount] = useState<any>(count)
@@ -80,9 +80,6 @@ const Detail = () => {
       .get(`https://lapakumkm.mindd.site/products/${id}`)
       .then((res) => {
         const { full_name, address, shop_name, photo_profile } = res.data.data.user
-        // console.log('test user', res.data.data.user);
-        // console.log('test data', res.data.data.category.category);
-        // console.log('test dataaaaa', res.data.data);
         setDca(res.data.data)
         const category = res.data.data.category.category
         const { product_name, description, price, stock_remaining, size, user_id, id, product_image } = res.data.data;
@@ -102,10 +99,10 @@ const Detail = () => {
         res.data.data.total_price = totalPrice
         res.data.data.product_pcs = count
         SetTestCount(res.data.data.product_pcs)
-        setTestPrice(res.data.data.total_price )
+        setTestPrice(res.data.data.total_price)
       })
       .catch((err) => {
-        console.log(err.response.statusText)
+        // console.log(err.response.statusText)
         MySwal.fire({
           icon: "error",
           title: err.response.statusText,
@@ -117,17 +114,11 @@ const Detail = () => {
         })
       })
     setLoading(false)
-    // .finally(() => setLoading(false))
   }
-  // console.log('cek user id', userId);
-  console.log('test abc', testCount);
-  console.log('test asd', tesPrice);
-  // console.log('test dca', dca);
-  // console.log('test tesett', test);
 
 
-  console.log("product_id :", productId)
-  console.log(typeof productId)
+  // console.log("product_id :", productId)
+  // console.log(typeof productId)
 
   useEffect(() => {
     fetchData();
@@ -164,10 +155,6 @@ const Detail = () => {
       user_id: userId
     };
 
-    // console.log(typeof data);
-    // console.log(typeof count);
-    // console.log("test id ", data);
-
     try {
       const res = await axios.post('https://lapakumkm.mindd.site/carts', data, {
         headers: {
@@ -175,7 +162,6 @@ const Detail = () => {
         }
       })
       if (res.data) {
-        // console.log('testos add to cart', res.data);
         MySwal.fire({
           icon: "success",
           title: "Produk ditambahkan ke keranjang",
@@ -323,8 +309,6 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-
-
   const [diskus, setDiskus] = useState<string>("")
 
   const changeDiskus = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -445,15 +429,37 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  // diskusi.map((item) => {
-  //   item.childs?.map((child) => {
-  //     console.log("child diskusi :", child.discussion);
-  //   });
-  // });
+  const [roomID, setRoomID] = useState<string>("")
+  const [senderID, setSenderID] = useState<number>(0)
+  const [recipientID, setRecipientID] = useState<number>(0)
 
-  // diskusi.map((i) => console.log(i))
-  console.log("feedback ni boz", feedback);
-  
+
+  const handleShowChat = () => {
+    setShowChat(true)
+    const body = {
+      recipient_id: productId
+    }
+
+    axios
+      .post(`https://lapakumkm.mindd.site/chats`, body, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      })
+      .then((res) => {
+        console.log("room_id :", res.data.data.room_id)
+        const cekID = res.data.data.room_id
+
+        if (cekID) {
+          setRoomID(cekID)
+          setSenderID(res.data.data.sender_id)
+          setRecipientID(res.data.data.recipient_id)
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data.message)
+      })
+  }
   return (
     <Layout>
       {
@@ -467,30 +473,11 @@ const Detail = () => {
               img={FotoProfile}
               isOpen={showChat}
               isClose={() => setShowChat(false)}
-            >
-              <div className="chat chat-start">
-                <div className="chat-image avatar">
-                  <div className="w-10 rounded-full">
-                    <img src={FotoProfile} />
-                  </div>
-                </div>
-                <div className="chat-header">
-                  Obi-Wan Kenobi
-                </div>
-                <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
-              </div>
-              <div className="chat chat-end">
-                <div className="chat-image avatar">
-                  <div className="w-10 rounded-full">
-                    <img src={FotoProfile} />
-                  </div>
-                </div>
-                <div className="chat-header">
-                  Anakin
-                </div>
-                <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
-              </div>
-            </ChatModal>
+              product_id={productId}
+              Room={roomID}
+              Recipient_id={recipientID}
+            />
+
             {/* card for image */}
             <div className='w-full mt-10 mx-auto px-5 py-10  border dark:border-none rounded-lg'>
               <div className="max-w-7xl mx-auto">
@@ -532,7 +519,7 @@ const Detail = () => {
                     <div className="w-full h-full">
                       <div className="flex justify-between items-center mb-5 ">
                         <h1 className="font-bold text-2xl dark:text-white">{product} </h1>
-                        <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={() => setShowChat(true)}>
+                        <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={() => handleShowChat()}>
                           <BsChatText size={20} />
                         </button>
                       </div>
@@ -621,6 +608,7 @@ const Detail = () => {
                     <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak dark:text-white dark:hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
                   </div>
 
+
                   {feedback === undefined ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
 
                     <div >
@@ -657,7 +645,7 @@ const Detail = () => {
                   </form>
 
 
-                  {diskusi === null || undefined || "" || 502 ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
+                  {diskusi === null ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
 
                     diskusi.map((item, index) => (
                       <div key={item.id} className="p-2 mb-4 border-b-2 border-zinc-400 relative">

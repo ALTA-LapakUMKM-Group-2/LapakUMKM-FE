@@ -268,7 +268,7 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                         sell={item.stock_sold}
                                         id={item.id}
                                         image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
-                                        rating={item.rating ? Math.floor(item.rating) : 0}
+                                        rating={item.rating ? Number(item.rating.toFixed(1)) : 0}
                                         price={item.price}
                                     />
                                 )

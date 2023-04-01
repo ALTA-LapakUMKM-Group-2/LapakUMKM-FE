@@ -1,7 +1,6 @@
 type Profile = {
   id: number
   username: string
-  profile_picture: string
   full_name: string
   photo_profile: string
 }
@@ -21,6 +20,15 @@ type Child = {
   user_id: number
   discussion: string
   user: Profile
+}
+
+export interface Chat {
+  id: number
+  room_id: string
+  sender_id: number
+  recipient_id: number
+  recipient: Profile
+  text: string
 }
 
 export interface FeedbackTypes {
