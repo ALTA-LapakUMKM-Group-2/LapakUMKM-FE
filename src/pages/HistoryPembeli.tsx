@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import axios from "axios"
-
+import * as CollapsiblePrimitive  from "@radix-ui/react-collapsible";
 import { Rating } from "@smastrom/react-rating"
 import '@smastrom/react-rating/style.css'
-
+import { HiChevronDown } from "react-icons/hi";
 import withReactContent from "sweetalert2-react-content"
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { HistoryType, DataType } from "../utils/types/DataType"
@@ -18,12 +18,18 @@ import Loading from "../components/Loading"
 import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
 import Modal from "../components/Modal"
+import clsx from "clsx"
+import TextArea from "../components/TextArea"
+
 
 interface FormValues {
+  comment: string;
   rating: number;
 }
+
 const initialFormValues: FormValues = {
-  rating: 0,
+  comment: '',
+  rating: 0
 };
 
 const HistoryPembeli = () => {
@@ -41,6 +47,7 @@ const HistoryPembeli = () => {
   const navigate = useNavigate()
   const [cookie, setCookie] = useCookies(["token"])
   const [showFeedback, setShowFeedback] = useState<boolean>(false)
+  const [showEditFeedback, setShowEditFeedback] = useState<boolean>(false)
   const [value, setValue] = useState<FormValues>(initialFormValues)
   const [feedback, setFeedback] = useState<string>("")
   const [history, setHistory] = useState<HistoryType[]>([])
@@ -49,12 +56,36 @@ const HistoryPembeli = () => {
   const [product, setProduct] = useState<DataType[]>([])
   const [productId, setProductId] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [loadingItem, setLoadingItem] = useState<boolean>(false)
   const [disable, setDisable] = useState<boolean>(true)
   const [showProduk, setShowProduk] = useState<boolean>(false)
+  const [openItemId, setOpenItemId] = useState(null);
+  const [transactionsId, setTransactionsId] = useState<number>()
+  const [prodFeedId, setProdFeedId] = useState<number>()
+  const [prodTransDetail, setProdTransDetail] = useState<number>()
+  const [feedId, setFeedId] = useState<number>()
 
+  function handleItemClick(itemId:any) {
+    setOpenItemId((prevOpenItemId) =>
+      prevOpenItemId === itemId ? null : itemId
+    );
+  }
   useEffect(() => {
     dataTransaksi()
   }, [])
+
+  const handleIdClick = (id:any) => {
+    setTransactionsId(id.product_transaction_id);
+    setProdFeedId(id.product_id)
+    setProdTransDetail(id.id)
+  }
+
+  useEffect(() => {
+    if (transactionsId !== null && prodFeedId !== null) {
+      console.log("ini id trans", transactionsId);
+      console.log("ini id prod", prodFeedId);
+    }
+  }, [transactionsId, prodFeedId]);
 
   function dataTransaksi() {
     setLoading(true)
@@ -74,9 +105,8 @@ const HistoryPembeli = () => {
   }
 
   const dataTransaksiId = async (id: number) => {
-    setShowProduk(true)
     setLoading(true)
-    axios
+    await axios
       .get(`https://lapakumkm.mindd.site/transactions/${id}/details`, {
         headers: {
           Authorization: `Bearer ${cookie.token}`
@@ -99,32 +129,29 @@ const HistoryPembeli = () => {
       })
       .finally(() => setLoading(false))
   }
-  console.log("productId", productId)
+  
   useEffect(() => {
     productId ? dataProdukId(productId) : ""
   }, [])
 
-  async function dataProdukId(productId: any[]) {
-    setLoading(true)
+  const dataProdukId = async (productId: any[]) => {
+    setLoadingItem(true)
     const combine: any = []
-    productId.forEach((id) => {
-      axios
-        .get(`https://lapakumkm.mindd.site/products/${id}`)
+    await productId.forEach((id) => {
+      axios.get(`https://lapakumkm.mindd.site/products/${id}`)
         .then((res) => {
           combine.push(res.data.data)
           setProduct(combine)
-          console.log("test hulu sia",res.data.data)
+          console.log("test produk",res.data.data)
         })
         .catch((err) => {
           console.log(err.response.data.message)
         })
-        .finally(() => setLoading(false))
+        .finally(() => setLoadingItem(false))
     })
   }
-  console.log('test product ke 705', product);
-  console.log('test detail history 999', detailHistory);
 
-  const [combineProduk, setCombineProduk] = useState<HistoryType[]>([])
+  const [combineProduk, setCombineProduk] = useState<HistoryType[] | any>([])
 
   useEffect(() => {
     if (product) {
@@ -144,7 +171,7 @@ const HistoryPembeli = () => {
           return item
         }
       })
-      console.log('cek terakhir sebelom puasa', cekDetail);
+      
       setCombineProduk(cekDetail)
     }
   }, [product, detailHistory]);
@@ -152,11 +179,12 @@ const HistoryPembeli = () => {
   useEffect(() => {
     dataFeedback()
   }, [])
-
+  
+  const feedbackEndpoint = 'https://lapakumkm.mindd.site/feedbacks'
   function dataFeedback() {
     setLoading(true)
     axios
-      .get(`https://lapakumkm.mindd.site/feedbacks`, {
+      .get(feedbackEndpoint, {
         headers: {
           Authorization: `Bearer ${cookie.token}`
         }
@@ -178,16 +206,29 @@ const HistoryPembeli = () => {
     }
   }, [value.rating, feedback])
 
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue({ ...value, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
+    setValue(initialFormValues);
     const body = {
+      product_id: prodFeedId,
+      parent_id: Math.floor(Math.random() * 10) + 1,
+      transaction_id: transactionsId,
+      product_transaction_detail_id: prodTransDetail,
       rating: value.rating,
-      feedback
+      feedback: value.comment,
     };
-
-    axios
-      .post(`https://virtserver.swaggerhub.com/UMARUUUN11_1/ALTA-LapakUMKM/1.0.0/feedbacks`, body)
+    await axios.post(feedbackEndpoint, body,{
+        headers:{
+          Authorization: `Bearer ${cookie.token}`,
+          "Content-Type": 'application/json',
+          Accept: 'application/json'
+        }
+      })
       .then((res) => {
         const { message } = res.data;
         MySwal.fire({
@@ -198,6 +239,10 @@ const HistoryPembeli = () => {
           showConfirmButton: false,
           timer: 1200,
         })
+          setShowFeedback(false)
+          dataProdukId(productId)
+          dataTransaksi()
+          handleOpenCollapsible(null)
       })
       .catch((err) => {
         const { data } = err.response;
@@ -210,14 +255,51 @@ const HistoryPembeli = () => {
           confirmButtonColor: "#31CFB9"
         })
       })
-      .finally(() => setLoading(false))
-  }
+    }
 
+    const handleEditFeedBack = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      setValue(initialFormValues)
+      setLoading(false)
+      axios.put(`${feedbackEndpoint}/${feedId}`, {
+        ing: value.rating,
+        feedback: value.comment,
+      }, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`,
+          "Content-Type": 'application/json'
+        }
+      }).then((response) => {
+        console.log(response)
+        Swal.fire({
+          icon: 'success',
+          iconColor: '#FDD231',
+          padding: '1em',
+          title: 'Successfuly Edit Your FeedBack',
+          color: '#ffffff',
+          background: '#0B3C95 ',
+          showConfirmButton: false,
+          timer: 2000
+        })
+        dataProdukId(productId)
+        dataTransaksi()
+        handleOpenCollapsible(null)
+        setShowEditFeedback(false)
+      })
+        .catch(error => { console.log(error) })
+        .finally(() =>
+          setLoading(true)
+        )
+    }
   const handleBayar = (payment_link: string) => {
     window.open(payment_link, "_blank")
   }
-  console.log("testni bajingan", combineProduk)
-  console.log("history bajingan", history)
+  const [historyDetail, setHistoryDetail] = useState<any>(null);
+
+  const handleOpenCollapsible = (id:any) => {
+    const selectedHistory:any = history.find((item) => item.id === id);
+    setHistoryDetail(selectedHistory);
+  };
   return (
     <Layout>
       {loading ? <Loading /> :
@@ -225,98 +307,148 @@ const HistoryPembeli = () => {
           <Navbar />
           <div className="flex flex-col justify-center items-center">
             <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
-              <div className="grid xl:grid-cols-3 gap-5">
-            {history ?
-              history.map((item, index) => (
-                <div className="mb-10 rounded-lg shadow-[2px_4px_8px_0px_rgba(0,0,0,0.3)] bg-white dark:bg-slate-800 dark:border dark:border-lapak p-5 text-zinc-800 text-[20px] dark:text-white">
-                  <p>{`Total Barang : ${item.total_product}`}</p>
-                  <p className=''>Total Belanja :
-                    {formatValue({
-                      value: JSON.stringify(item.total_payment),
-                      groupSeparator: '.',
-                      decimalSeparator: ',',
-                      prefix: ' Rp. ',
-                    })}
-                  </p>
-                  <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
+            <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5">
+              {history ? history.map((item)=>{
+                return(
+                  <CollapsiblePrimitive.Root key={item.id} open={historyDetail?.id === item.id} onOpenChange={() => handleOpenCollapsible(item.id)}>
+                    <CollapsiblePrimitive.Trigger
+                      className={clsx(
+                        "group flex w-72 sm:w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
+                        "bg-white text-gray-900 dark:bg-slate-700 dark:text-gray-100 shadow dark:border dark:border-lapak",
+                        "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+                      )}
+                      onClick={() => dataTransaksiId(item.id)}
+                    >
+                      <div className="mb-1 rounded-lg bg-white text-gray-900 dark:bg-slate-700 dark:text-gray-100 
+                      select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium">
+                        <p>{`Total Barang : ${item.total_product}`}</p>
+                        <p className=''>Total Belanja :
+                          {formatValue({
+                            value: JSON.stringify(item.total_payment),
+                            groupSeparator: '.',
+                            decimalSeparator: ',',
+                            prefix: ' Rp. ',
+                          })}
+                        </p>
+                        <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
-                  <div className="flex mt-10 flex-wrap gap-4 ">
-                    <div className='ml-auto'>
-                      <CustomButton
-                        id="btn-balas"
-                        label='Bayar sekarang'
-                        type='submit'
-                        onClick={() => handleBayar(item.payment_link)}
-                      />
-                    </div>
+                        <div className="flex mt-2 flex-wrap gap-y-2 sm:gap-4 ">
+                          <div className='ml-auto'>
+                            <CustomButton
+                              id="btn-balas"
+                              label='Bayar sekarang'
+                              type='submit'
+                              className='btn btn-xs rounded-lg border-none bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400'
+                              onClick={()=> {handleBayar(item.payment_link)}}
+                            />
+                          </div>
 
-                    <div className='ml-auto'>
-                      <CustomButton
-                        id="btn-bayar"
-                        label='Detail transaksi'
-                        onClick={() => dataTransaksiId(item.id)}
-                        className="rounded-xl bg-white border border-lapak w-full max-w-full px-6 py-2 text-[15px] md:text-[15px] lg:text-[14px] 2xl:text-[18px] font-semibold capitalize tracking-wider text-lapak hover:bg-lapak hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400 "
-                      />
+                          <div className='ml-auto'>
+                            <CustomButton
+                              id="btn-bayar"
+                              label='Detail transaksi'
+                              onClick={() => dataTransaksiId(item.id)}
+                              className="btn btn-xs rounded-lg bg-white border border-lapak text-sm w-36 font-semibold capitalize tracking-wider text-lapak hover:bg-lapak hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400 "
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <HiChevronDown className="transform duration-300 ease-in-out group-radix-state-open:rotate-90" />
+                    </CollapsiblePrimitive.Trigger>
+                    <CollapsiblePrimitive.Content className="mt-4 flex flex-col space-y-4 mb-10">
+                    {loadingItem ? 
+                    <div className={clsx(
+                      "group flex w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
+                      "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100",
+                      "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+                    )}>
+                      <Loading/> 
                     </div>
-                  </div>
-                </div>
-              ))
+                    :
+                      <div className="grid">
+                        {combineProduk ? 
+                          <>
+                          {combineProduk.map((item:any) => (
+                            <CardHistory
+                              id={item.id}
+                              produkImg={item.product_image ? item.product_image : "Photo not found"}
+                              sellerName={item.shop_name}
+                              produkName={item.product.product_name}
+                              size={item.size}
+                              price={item.product.price}
+                              totalPrice={item.product.price}
+                              status="Done"
+                              quantity={item.total_product}
+                              rating={item.rating}
+                              handleEdit={()=> (setShowEditFeedback(true), setValue((prevData) => ({ ...prevData, rating: item.rating })))}
+                              handleFeedback={() => {setShowFeedback(true), handleIdClick(item)
+                              }}
+                            />
+                          ))}
+                          </> : <></> 
+                        }
+                      </div>
+                    }
+                    </CollapsiblePrimitive.Content>
+                  </CollapsiblePrimitive.Root>
+                )
+              })
               :
-              <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>}
-          </div>
-          </div>
-          <Modal isOpen={showProduk} size='w-fit max-h-[800px]  overflow-scroll' isClose={() => setShowProduk(false)} title="Detail Transaki" >
-            <form className="p-5">
-             <div className="grid">
-             {combineProduk ? 
               <>
-              {combineProduk.map((item) => (
-                <CardHistory
-                  id={item.id}
-                  produkImg={item.product_image}
-                  sellerName={item.shop_name}
-                  produkName={item.product.product_name}
-                  size={item.size}
-                  price={50000}
-                  totalPrice={item.product.price}
-                  status="Done"
-                  quantity={item.total_product}
-                  rating={item.rating}
-                  handleFeedback={() => setShowFeedback(true)}
-                />
-              ))}
-              </> : <></> 
-            }
-             </div>
-            </form>
-          </Modal>
-
-          <Modal isOpen={showFeedback} size='w-96' isClose={() => setShowFeedback(false)} title="Review" >
-            <form onSubmit={(e) => handleSubmit(e)}>
-              <p className="text-[18px] font-semibold text-zinc-800 border-t-2 border-zinc-600 pt-4 ">Ulasan anda :</p>
-              <textarea
-                id="input-ulasan"
-                name="Feedback"
-                placeholder="Masukkan ulasan anda disini"
-                typeof="text"
-                className="border-2 w-11/12 border-zinc-300 rounded-lg p-2 mt-2"
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
+                <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>
+              </>
+              }
+            </div>
+          </div>
+          <Modal isOpen={showFeedback} size='w-96' isClose={() => setShowFeedback(false)} title="Beri Ulasan" >
+            <form onSubmit={handleSubmit} className="w-10/12 mx-auto mt-5">
+              <TextArea
+                label="Ulasan anda"
+                name='comment'
+                value={value.comment}
+                onChange={handleTextAreaChange}
+                placeholder="tulis ulasan anda"
               />
-
-              <p className="text-[18px] font-semibold text-zinc-800 mt-4">Penilaian anda :</p>
-              <div className="rating">
-                <Rating
-                  itemStyles={customStyles}
-                  isRequired
-                  style={{ maxWidth: 120 }}
-                  value={value.rating}
-                  onChange={(selectedValue: any) => setValue((data) => ({ ...data, rating: selectedValue }))}
-                />
-              </div>
-
+              <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Beri Rating</label>
+              <Rating
+                itemStyles={customStyles}
+                isRequired
+                style={{ maxWidth: 200 }}
+                value={value.rating}
+                visibleLabelId="rating"
+                onChange={(selectedValue: any) => setValue((data) => ({ ...data, rating: selectedValue }))}
+              />
               <div className="mt-4 px-2">
                 <CustomButton
+                  type="submit"
+                  id="btn-feedback"
+                  label="Tambah Ulasan"
+                  loading={disable || loading}
+                />
+              </div>
+            </form>
+          </Modal>
+          <Modal isOpen={showEditFeedback} size='w-96' isClose={() => setShowEditFeedback(false)} title="Review" >
+            <form onSubmit={handleEditFeedBack}>
+              <TextArea
+                label="Ulasan anda"
+                name='comment'
+                value={value.comment}
+                onChange={handleTextAreaChange}
+                placeholder="masukan ulasan baru anda"
+              />
+              <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Beri Rating</label>
+              <Rating
+                itemStyles={customStyles}
+                isRequired
+                style={{ maxWidth: 200 }}
+                value={value.rating}
+                visibleLabelId="rating"
+                onChange={(selectedValue: any) => setValue((data) => ({ ...data, rating: selectedValue }))}
+              />
+              <div className="mt-4 px-2">
+                <CustomButton
+                  type="submit"
                   id="btn-feedback"
                   label="Tambah Ulasan"
                   loading={disable || loading}

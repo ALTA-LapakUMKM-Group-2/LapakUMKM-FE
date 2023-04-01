@@ -19,7 +19,7 @@ import TextArea from "../components/TextArea"
 import axios from "axios"
 import { Cookies } from "react-cookie"
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import Loading from "../components/Loading"
 
 
@@ -67,7 +67,7 @@ const ListProduct = () => {
   const [shopName, setShopName] = useState('')
   const [editMode, setEditMode] = useState(false)
   const [dashboardData, setDashboardData] = useState<any>()
-
+  const navigate = useNavigate()
   const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     event.preventDefault();
@@ -148,7 +148,7 @@ const ListProduct = () => {
           Authorization: `Bearer ${cookie.token}`
         }
       })
-      console.log("dashboard", res.data)
+      console.log("dashboard", res.data.data)
       setDashboardData(res.data.data)
     } catch (error) {
 
@@ -160,7 +160,7 @@ const ListProduct = () => {
     fetchProduct()
     fetchDashboard()
   }, [])
-  console.log(product)
+  console.log(dashboardData)
 
   const fetchImage = async (id: number) => {
     setLoading(true)
@@ -181,7 +181,7 @@ const ListProduct = () => {
   useEffect(() => {
     fetchImage(productId)
   }, [])
-  console.log("product Id", productId)
+  console.log("product Id", product)
   console.log("gambaer",picture)
 
 
@@ -396,7 +396,7 @@ const ListProduct = () => {
         showCancelButton: false,
         timer: 1500,
       })
-    }).finally(()=>setLoading(true))
+    }).finally(()=>setLoading(false))
 }
 
   const handleDelete = async (id:any) =>{
@@ -622,7 +622,7 @@ const ListProduct = () => {
                       >
                         {category?.map((item:any, index:any) => {
                             return(
-                              <option value={item.id}>{item.category}</option>
+                              <option key={index} value={item.id}>{item.category}</option>
                             )
                           })        
                         } 
@@ -673,7 +673,7 @@ const ListProduct = () => {
                       <FiShoppingBag className="inline-block w-8 h-8 stroke-current"/>
                     </div>
                     <div className="stat-title dark:text-white">Barang Paling Laris</div>
-                    <div className="stat-value text-lapak"> Item</div>
+                    <div className="stat-value text-lapak">{dashboardData?.total_sell_in_week} Item</div>
                     <div className="stat-desc text-base dark:text-white"> 
                       <p>item terjual dari produk :</p> 
                       <p>kaos lengan pendek</p> 
@@ -687,7 +687,7 @@ const ListProduct = () => {
                     <div className="stat-title dark:text-white">Total Pemasukan Minggu Ini</div>
                     <div className="stat-value text-accent">
                             {formatValue({
-                              value: JSON.stringify(200000),
+                              value: JSON.stringify(2000),
                               groupSeparator: '.',
                               decimalSeparator: ',',
                               prefix: 'Rp. ',
@@ -699,7 +699,16 @@ const ListProduct = () => {
 
             <div className="flex flex-col mt-16 mx-auto w-80 sm:w-96 md:w-[700px] lg:w-[900px]">
               <div className="flex justify-between">
-                <p className="text-[16px] md:text-[24px] font-semibold text-zinc-800 dark:text-white">{shopName}</p>
+                        <div className="tooltip tooltip-top tooltip-accent cursor-pointer" onClick={()=> navigate(`/toko/${shopName}`,{
+                          state:{
+                            id: user_id
+                          }
+                        })} data-tip="Lihat Toko">
+                            <div className="indicator">
+                                <p className="text-[16px] md:text-[24px] font-semibold text-zinc-800 dark:text-white">{shopName}</p>
+                            </div>
+                        </div>
+                
 
                 <div className="text-sm md:w-52 lg:w-56 mt-5">
                   <CustomButton
@@ -741,7 +750,7 @@ const ListProduct = () => {
                     ) : (
                       product.map((item:any, index:any)=>{
                         return(
-                        <tr className="border-b dark:border-lapak">
+                        <tr className="border-b dark:border-lapak" key={index}>
                           <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {index + 1}
                           </th>
@@ -767,7 +776,7 @@ const ListProduct = () => {
                           </td>
   
                           <td className="py-4 text-center">
-                            {item.stock_sold}
+                            {item.stock_sold ? item.stock_sold : 0}
                           </td>
   
                           <td className="flex flex-col gap-2 px-6 py-16 md:py-14 lg:py-4">

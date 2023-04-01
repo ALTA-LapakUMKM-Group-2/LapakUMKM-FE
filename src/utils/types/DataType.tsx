@@ -46,6 +46,7 @@ export interface DataType {
   id: number
   category_id: number
   product_name: string
+  product_transaction_id: number
   description: string
   size: string
   price: number
@@ -57,6 +58,7 @@ export interface HistoryType {
   id: any
   user_id: number
   total_product: number
+  product_transaction_id: number
   total_payment: number
   payment_status: string
   payment_link: string
