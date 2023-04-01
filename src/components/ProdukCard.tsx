@@ -68,7 +68,7 @@ const ProdukCard: React.FC<ListingProps> = ({
     const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
 
     return (
-
+        
 
         <div className="w-60 h-full max-w-sm bg-white border border-gray rounded-lg shadow-lg dark:bg-slate-600 dark:border-4 dark:border-lapak">
             <a onClick={onClick} href="#">
