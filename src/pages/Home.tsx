@@ -114,7 +114,7 @@ const Home = () => {
               Authorization: `Bearer ${cookie.token}`
             }
           })
-        //   console.log('test restStockToko', res.data.data);
+          console.log('test restStockToko', res.data.data);
           setGetStock(res.data.data)
         } catch (error) {
     
