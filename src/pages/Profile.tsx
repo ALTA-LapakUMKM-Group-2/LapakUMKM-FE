@@ -10,7 +10,7 @@ import Navbar from "../components/Navbar"
 import Modal from "../components/Modal"
 import Avatar from "../assets/profile.jpg"
 import { MdOutlineAlternateEmail, MdOutlineWorkHistory, MdLockReset } from "react-icons/md"
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
+import { AiFillEye, AiFillEyeInvisible,AiOutlineShop } from "react-icons/ai"
 import { HiOutlineDevicePhoneMobile } from "react-icons/hi2"
 import { BsHouseDoor } from "react-icons/bs"
 import { GoPackage } from "react-icons/go"
@@ -339,7 +339,7 @@ const Profile = () => {
           </Modal>
 
           <div className="w-full px-5 md:px-16 lg:px-28 2xl:px-40">
-            <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-20 tracking-wider dark:text-white">Profile Detail Saya</h1>
+            <h1 className="text-zinc-800 text-[30px] md:text-[30px] lg:text-[30px] 2xl:text-[40px] text-center md:text-start lg:text-start font-semibold md:mt-10 lg:mt-16 2xl:mt-5 tracking-wider dark:text-white">Profile Detail Saya</h1>
 
             <div className="flex flex-col md:flex-row lg:flex-row mt-4 md:mt-10 lg:mt-14">
 
@@ -369,7 +369,11 @@ const Profile = () => {
 
             <div onClick={() => navigate('/historypembeli')} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white"><MdOutlineWorkHistory className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Lihat history pembelian ?</div>
 
-            <div onClick={() => upgradePenjual()} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white"><SlHandbag className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Ingin menjadi penjual ?</div>
+            <div onClick={() => upgradePenjual()} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-9/12 md:w-5/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white">
+           <button className="btn btn-wide bg-lapak border-lapak hover:scale-125 hover:bg-lapak text-black ">
+            <AiOutlineShop className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" /> <span className="2xl:text-md">Ingin menjadi penjual ?</span>
+            </button> 
+              </div>
 
             <div onClick={() => navigate(`/listproduct/${data.shop_name}`, {
               state: {
@@ -378,7 +382,11 @@ const Profile = () => {
             })} className={`${data.role === 'seller' ? "inline-block" : "hidden"} flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-3/12 text-zinc-800 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-zinc-500 dark:text-white`}><GoPackage className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Lihat product anda</div>
 
 
-            <div onClick={deleteUser} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-red-400"><VscTrash className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Hapus akun </div>
+            <div onClick={deleteUser} className="flex text-[18px] md:text-[18px] lg:text-[18px] 2xl:text-[24px] w-8/12 md:w-4/12 lg:w-2/12 mb-10 text-red-500 font-medium gap-2 md:gap-2 lg:gap-2 2xl:gap-3 mt-4 md:mt-4 lg:mt-4 2xl:mt-6 text-center hover:cursor-pointer hover:text-red-400" >
+              <button className="btn btn-wide  gap-2 text-red hover:text-red bg-red-700 hover:bg-red-700 border-none hover:scale-125 text-white">
+                <VscTrash className="w-6 md:w-6 lg:w-6 2xl:w-9 h-6 md:h-6 lg:h-6 2xl:h-9" />Hapus akun 
+                </button>
+                </div>
           </div>
 
           <Modal isOpen={modalPassword} isClose={() => setModalPassword(false)}>

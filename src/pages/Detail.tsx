@@ -212,6 +212,8 @@ const Detail = () => {
       .get(`https://lapakumkm.mindd.site/products/${id}/discussions`)
       .then((res) => {
         const { data } = res.data
+        console.log('tesst diskusiii', res.data.data);
+        
         setDiskusi(data)
       })
       .catch((err) => {

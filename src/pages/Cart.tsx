@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import Loading from '../components/Loading'
 import Search from '../components/Search'
+import Default from "../assets/default.jpg"
+import noimg from "../assets/download.png"
 
 interface Product {
     selected: unknown
@@ -256,10 +258,10 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                             <CartCard
                                                                 key={item.id}
                                                                 id={"keranjang"}
-                                                                img={FotoProfile}
+                                                                img={item.photo_profile ? item.photo_profile : Default}
                                                                 sellerName={item.lapak_name}
                                                                 produkName={item.product_name}
-                                                                produkimg={item.product_image}
+                                                                produkimg={item.product_image == "" ? noimg :  item.product_image }
                                                                 counts={item.product_pcs}
                                                                 price={item.product_price}
                                                                 onCheck={handleCheckAll}

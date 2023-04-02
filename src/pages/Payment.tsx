@@ -148,6 +148,34 @@ const Payment = () => {
         }
         setLoading(false);
     }
+
+    const sumCartPcs = () => {
+        const sum = cart?.reduce((total: any, current: any) => {
+            return total + current.product_pcs;
+        }, 0);
+
+        console.log('Total sum:', sum);
+    }
+    // useEffect(() => {
+    //  let sum2 =  cart?.reduce((total: any, i: any) => {
+    //     console.log('tess quan', i)
+    //     return total + i.product_pcs
+    //     console.log('test pcs', i.product_pcs);
+    //     const sum = i.product_pcs.
+
+    //     return sum
+    // },0)
+
+
+    //     console.log('test summ', sum2)
+    // },[cart])
+
+    // useEffect(() => {
+    //     const sum = 
+
+    //     console.log('Total sum:', sum);
+    //   }, [cart]);
+
     const handleAddAlamat = async () => {
         try {
             const res = await axios.post('')
@@ -196,7 +224,7 @@ const Payment = () => {
                                                             <>
                                                                 <div className='flex' key={i}>
                                                                     <div className='flex flex-row gap-5 p-2 md:p-5'>
-                                                                        <img src={item.photo_profile} className='w-16 md:w-32 rounded-full' />
+                                                                        <img src={item.photo_profile ? item.photo_profile : Default} className='w-16 md:w-32 rounded-full' />
                                                                         <div className='flex flex-col text-sm md:text-lg 2xl:text-xl font-semibold gap-2'>
                                                                             <h1 className='dark:text-white flex'> <BsShop className=' w-6 h-6 mr-2 dark:text-white mt-1' />{item.lapak_name}</h1>
                                                                             <h1 className='dark:text-white flex'><MdLocationOn className=' w-6 h-6 mr-2 dark:text-white mt-1' />{item.lapak_address}</h1>
@@ -214,7 +242,7 @@ const Payment = () => {
                                                                             value: JSON.stringify(item.product_price),
                                                                             groupSeparator: '.',
                                                                             decimalSeparator: ',',
-                                                                        })}</h1>
+                                                                        })}/pcs</h1>
                                                                     </div>
                                                                 </div>
                                                                 <div className='border-2 mt-5 mb-5'>
@@ -315,6 +343,10 @@ const Payment = () => {
                                                                                 decimalSeparator: ',',
                                                                             })}</div>
                                                                     </div>
+                                                                    <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
+                                                                        <div>Banyaknya Barang</div>
+                                                                        <div>{item.product_pcs}</div>
+                                                                    </div>
                                                                     <div className='border-2 mt-5 mb-5'>
                                                                     </div >
 
@@ -343,6 +375,11 @@ const Payment = () => {
                                                                         decimalSeparator: ',',
                                                                     })
                                                                 }</div>
+
+                                                            </div>
+                                                            <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
+                                                                <div>Banyaknya Barang</div>
+                                                                <div>{testCount}</div>
                                                             </div>
                                                             <div className='border-2 mt-5 mb-5'>
                                                             </div>
@@ -353,6 +390,18 @@ const Payment = () => {
                                             {
                                                 cart ?
                                                     <>
+                                                        {/* {
+                                                        cart.map((item: any) => {
+                                                            return ( */}
+                                                        <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
+                                                            <div>Total semua barang</div>
+                                                            <div>{cart?.reduce((total: any, i: any) => {
+                                                                return total + i.product_pcs;
+                                                            }, 0)}</div>
+                                                        </div>
+                                                        {/* //         )
+                                                    //     })
+                                                    // } */}
                                                         <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:font-bold 2xl:text-3xl dark:text-white mt-5">
                                                             <div>
                                                                 Total Semua
@@ -371,6 +420,10 @@ const Payment = () => {
                                             {
                                                 test ?
                                                     <>
+                                                        <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
+                                                            <div>Total semua barang</div>
+                                                            <div>{testCount}</div>
+                                                        </div>
                                                         <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:font-bold 2xl:text-3xl dark:text-white mt-5" >
                                                             <div>
                                                                 Total Semua

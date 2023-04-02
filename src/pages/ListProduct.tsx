@@ -8,7 +8,6 @@ import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
 import { formatValue } from "react-currency-input-field"
 import Kaos from "../assets/kaos.png"
-
 import { FiShoppingBag } from 'react-icons/fi'
 import { FaUpload } from 'react-icons/fa';
 import { BiImageAdd } from 'react-icons/bi'
@@ -183,7 +182,7 @@ const ListProduct = () => {
   }, [])
   console.log("product Id", product)
   console.log("gambaer",picture)
-
+console.log('test dashboard' , dashboardData)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       setLoading(true)
@@ -668,15 +667,15 @@ const ListProduct = () => {
             <div className="mt-10 flex flex-col md:flex-row lg:flex-row items-center justify-center">
 
                 <div className="stats shadow-xl flex flex-col md:flex-row lg:flex-row dark:bg-slate-800 dark:shadow-sm dark:shadow-slate-600">      
-                  <div className="stat p-10 dark:border-r dark:border-slate-600">
+                  <div className="stat p-10 dark:border-r dark:border-slate-600 gap-2">
                     <div className="stat-figure text-accent">
                       <FiShoppingBag className="inline-block w-8 h-8 stroke-current"/>
                     </div>
                     <div className="stat-title dark:text-white">Barang Paling Laris</div>
-                    <div className="stat-value text-lapak">{dashboardData?.total_sell_in_week} Item</div>
+                    <div className="stat-value text-lapak">{dashboardData?.total_sell_in_week !== 0 ? dashboardData?.total_sell_in_week : 'Belum Terjual'} {dashboardData?.total_sell_in_week ? 'item' : ''}</div>
                     <div className="stat-desc text-base dark:text-white"> 
                       <p>item terjual dari produk :</p> 
-                      <p>kaos lengan pendek</p> 
+                      <p className="2xl:text-lg font-semibold text-lapak">{dashboardData?.favorite_product_name_in_week !== '' ? dashboardData?.favorite_product_name_in_week : 'Belum ada produk yang terjual'}</p> 
                       </div>
                   </div>
                   
@@ -687,7 +686,7 @@ const ListProduct = () => {
                     <div className="stat-title dark:text-white">Total Pemasukan Minggu Ini</div>
                     <div className="stat-value text-accent">
                             {formatValue({
-                              value: JSON.stringify(2000),
+                              value: JSON.stringify(dashboardData?.total_cash_in_week !== 0 ? dashboardData?.total_cash_in_week :  0),
                               groupSeparator: '.',
                               decimalSeparator: ',',
                               prefix: 'Rp. ',
@@ -755,7 +754,7 @@ const ListProduct = () => {
                             {index + 1}
                           </th>
                           <td className="px-8 py-">
-                            {item.product_image === null ? (
+                            {item.product_image === undefined || "" ? (
                               <BiImageAdd
                               aria-hidden='true'
                               className="float-left w-12 h-12 md:w-20 mr-2 cursor-pointer"
