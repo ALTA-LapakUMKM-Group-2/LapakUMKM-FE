@@ -21,19 +21,20 @@ type ChatModalProps = {
 };
 
 const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose, img, children, size, titleStyle, Recipient_id }) => {
-    const [cookie, setCookie] = useCookies(["token", "id", "roomID"])
+    const [cookie, setCookie] = useCookies(["token", "id", "roomID" ,'photo_profile', 'tokoId' , 'name'])
     const [loading, setLoading] = useState<boolean>(false)
 
     const [chat, setChat] = useState<string>("")
     const [roomID, setRoomID] = useState<string>("")
     const [newChat, setNewChat] = useState<Chat[]>([])
-
+    console.log('test cookie tokoId', cookie.tokoId);
+    
     const onChat = async (e: React.FormEvent<HTMLFormElement>) => {
         setLoading(true)
         e.preventDefault();
         const body = {
             text: chat,
-            recipient_id: 1
+            recipient_id: parseInt(cookie.tokoId)
         }
         axios
             .post(`https://lapakumkm.mindd.site/chats`, body, {
@@ -62,34 +63,35 @@ const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose
         }
     }, [roomID, Room])
 
-
+    const [getRecepient, setGetRecepient ] = useState<any>('')
     function fetchDataChat(room_id: any) {
         setLoading(true)
         console.log("room ID ceked 2:", room_id)
         axios
-            .get(`https://lapakumkm.mindd.site/rooms/R13/chats`, {
+            .get(`https://lapakumkm.mindd.site/rooms/${room_id}/chats`, {
                 headers: {
                     Authorization: `Bearer ${cookie.token}`
                 }
             })
             .then((res) => {
-                // console.log("data chat :", res.data.data)
-                setNewChat(res.data.data)
+                console.log("data chat :", res.data.data)
+                setNewChat(res.data.data)   
             })
             .catch((err) => { })
             .finally(() => setLoading(false))
     }
 
-    newChat.map((item) =>
-        (console.log("data chat :", item))
-    )
+    // newChat.map((item) =>
+    //     (console.log("data chat :", item))
+    // )
 
     // newChat
     //     .filter(chat => chat.recipient_id === 3)
     //     .map(i => (
     //         console.log("data chat 2 :", i)
     //     ))
-
+    console.log('test newChat', newChat);
+    
     return (
         < div
             className={`transition-opacity ${isOpen ? "fixed opacity-100" : "opacity-0 hidden"
@@ -115,19 +117,36 @@ const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose
                 </div>
                 {loading ? <Loading /> :
                     <div className="flex flex-col mb-20">
-                        {newChat.map((i) => (
-                            <div className={`${i.sender_id === parseInt(cookie.id) ? "chat chat-end" : "chat chat-start"}`}>
+                        {newChat ? 
+                    
+                            newChat.map((i : any) => (
+                            <div className={`${i.sender_id == cookie.id ? "chat chat-end" : "chat chat-start"}`}>
                                 <div className="chat-image avatar">
                                     <div className="w-10 rounded-full">
-                                        <img src={i.recipient.photo_profile} alt="profile" />
+                                        <img src={i.sender_id ? i.sender.photo_profile : i.recipient.photo_profile} alt="profile" />
                                     </div>
                                 </div>
                                 <div className="chat-header">
-                                    {i.recipient.full_name}
+                                    {i.sender_id ? i.sender.full_name : i.recipient.name}
                                 </div>
-                                <div className={`chat-bubble  ${i.sender_id === parseInt(cookie.id) ? "bg-lapak" : ""}`}>{i.text}</div>
+                                <div className={`chat-bubble  ${i.sender_id == cookie.id ? "bg-lapak" : ""}`}>{i.text == "" ? undefined || null : i.text}</div>
                             </div>
-                        ))}
+                        ))
+                         : <>
+                         
+                        <div className="chat chat-start">
+                            <div className="chat-image avatar">
+                                <div className="w-10 rounded-full">
+                                    <img src={img} />
+                                </div>
+                            </div>
+                            <div className="chat-header">
+                                Obi-Wan Kenobi
+                            </div>
+                            <div className="chat-bubble">YTanya lah pada malaikat</div>
+                        </div>
+                       
+                         </>}
                     </div>
                 }
                 <div className="absolute bottom-0 bg-gray-200 w-full h-20 overflow-auto">

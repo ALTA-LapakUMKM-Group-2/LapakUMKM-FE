@@ -39,6 +39,7 @@ interface Product {
 
 
 const Detail = () => {
+  
   const { id } = useParams();
   const MySwal = withReactContent(Swal);
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,7 +50,8 @@ const Detail = () => {
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
-  const [cookie, setCookie] = useCookies(['token', "id", "senderID", "roomID"])
+  const [cookie, setCookie] = useCookies(["token", "id", "roomID" ,'photo_profile', 'tokoId' , 'name'])
+
   const [feedback, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
   const [balas, setBalas] = useState<string | undefined>("")
@@ -100,6 +102,8 @@ const Detail = () => {
         res.data.data.product_pcs = count
         SetTestCount(res.data.data.product_pcs)
         setTestPrice(res.data.data.total_price)
+        console.log('res.data.data', res.data.data);
+        setCookie('tokoId', res.data.data.user_id , {path: "/"})
       })
       .catch((err) => {
         // console.log(err.response.statusText)
@@ -432,6 +436,7 @@ const Detail = () => {
   const [roomID, setRoomID] = useState<string>("")
   const [senderID, setSenderID] = useState<number>(0)
   const [recipientID, setRecipientID] = useState<number>(0)
+  const [idFetch, setIdFetch] = useState<any>('')
 
 
   const handleShowChat = () => {
@@ -447,19 +452,24 @@ const Detail = () => {
         }
       })
       .then((res) => {
+        // setIdFetch(res.data.data.room_id)
         console.log("room_id :", res.data.data.room_id)
         const cekID = res.data.data.room_id
-
+        console.log('cek room', res.data.data);
+        
         if (cekID) {
           setRoomID(cekID)
           setSenderID(res.data.data.sender_id)
           setRecipientID(res.data.data.recipient_id)
         }
-      })
+      }
+      
+      )
       .catch((err) => {
         console.log(err.response.data.message)
       })
   }
+
   return (
     <Layout>
       {
@@ -479,11 +489,11 @@ const Detail = () => {
             />
 
             {/* card for image */}
-            <div className='w-full mt-10 mx-auto px-5 py-10  border dark:border-none rounded-lg'>
+            <div className='w-full mt-10 mx-auto px-5 py-10   dark:border-none rounded-lg'>
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
-                  <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-lapak dark:border-2">
+                  <div className="bg-transparent shadow-lg border rounded-lg h-fit p-5 dark:border-lapak dark:border-2">
                     <div className="max-w-5xl max-h-96 ">
                       {loading ? <Loading /> :
                         image ?
@@ -543,7 +553,7 @@ const Detail = () => {
                       <div className="flex gap-2 border w-fit mt-10 items-center overflow-hidden dark:border-lapak">
                         <button onClick={handleDecrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-none dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 mr-5 ml-2">-</button>
                         <h1 className="font-bold dark:text-white">{count}</h1>
-                        <button onClick={handleIncrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-none dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
+                        <button onClick={handleIncrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-transparent dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
                       </div>
                       <div className="border-2 mt-5 dark:border-lapak"></div>
                       <div className="flex 2xl:flex-row lg:flex-row md:flex-row flex-col justify-center gap-5 mt-10 w-fit mx-auto ">

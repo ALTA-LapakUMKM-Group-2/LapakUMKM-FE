@@ -15,6 +15,8 @@ import { MdLocationOn } from 'react-icons/md'
 import { BsShop } from 'react-icons/bs'
 import Loading from '../components/Loading'
 import Loading2 from '../components/Loading2'
+import Default from "../assets/default.jpg"
+
 type Detail = {
     product_id: number
     total_products: number
@@ -40,7 +42,7 @@ const Payment = () => {
     const test = location.state.dca
     const testPrice = location.state.testPrice
     const testCount = location.state.testCount
-    // console.log('ceck dca', test);
+    console.log('ceck dca', test);
     // console.log('ceck testCount', testCount);
     // console.log('ceck testPrice', testPrice);
     // // console.log('test dca id', test.id);
@@ -153,7 +155,7 @@ const Payment = () => {
 
         }
     }
-    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+    // const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
 
@@ -192,9 +194,9 @@ const Payment = () => {
 
                                                         return (
                                                             <>
-                                                                <div className='flex'>
+                                                                <div className='flex' key={i}>
                                                                     <div className='flex flex-row gap-5 p-2 md:p-5'>
-                                                                        <img src={imgUrl + item.product_image} className='w-16 md:w-32 rounded-full' />
+                                                                        <img src={item.photo_profile} className='w-16 md:w-32 rounded-full' />
                                                                         <div className='flex flex-col text-sm md:text-lg 2xl:text-xl font-semibold gap-2'>
                                                                             <h1 className='dark:text-white flex'> <BsShop className=' w-6 h-6 mr-2 dark:text-white mt-1' />{item.lapak_name}</h1>
                                                                             <h1 className='dark:text-white flex'><MdLocationOn className=' w-6 h-6 mr-2 dark:text-white mt-1' />{item.lapak_address}</h1>
@@ -203,7 +205,7 @@ const Payment = () => {
                                                                 </div>
                                                                 {/*selesai*/}
                                                                 <div className='flex flex-row mt-5 gap-5 p-2 md:p-5'>
-                                                                    <img src={imgUrl + item.product_image} className='rounded-lg cover w-20 md:w-1/2' />
+                                                                    <img src={item.product_image} className='rounded-lg cover w-20 md:w-1/2' />
                                                                     <div className='flex flex-col text-sm 2xl:text-xl font-semibold justify-center gap-2'>
                                                                         <h1 className='dark:text-white 2xl:text-3xl'>{item.product_name}</h1>
                                                                         <h1 className='dark:text-white'>{item.product_pcs} pcs</h1>
@@ -240,7 +242,7 @@ const Payment = () => {
                                                     <>
                                                         <div className='flex'>
                                                             <div className='flex flex-row gap-5 p-2 md:p-5'>
-                                                                <img src={test.user.photo_profile} className='w-16 md:w-32 rounded-full' />
+                                                                <img src={test.user.photo_profile ? test.user.photo_profile : Default} className='w-16 md:w-32 rounded-full' />
                                                                 <div className='flex flex-col text-sm md:text-lg 2xl:text-xl font-semibold gap-2'>
                                                                     <h1 className='dark:text-white flex'><BsShop className=' w-6 h-6 mr-2 dark:text-white mt-1' />{test.user.shop_name}</h1>
                                                                     <h1 className='dark:text-white flex'><MdLocationOn className=' w-6 h-6 mr-2 dark:text-white mt-1' />{test.user.address}</h1>

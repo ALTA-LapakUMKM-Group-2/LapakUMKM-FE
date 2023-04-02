@@ -65,6 +65,7 @@ const HistoryPembeli = () => {
   const [prodTransDetail, setProdTransDetail] = useState<number>()
   const [feedId, setFeedId] = useState<number>()
 
+
   function handleItemClick(itemId:any) {
     setOpenItemId((prevOpenItemId) =>
       prevOpenItemId === itemId ? null : itemId
@@ -82,8 +83,10 @@ const HistoryPembeli = () => {
 
   useEffect(() => {
     if (transactionsId !== null && prodFeedId !== null) {
+
       console.log("ini id trans", transactionsId);
       console.log("ini id prod", prodFeedId);
+
     }
   }, [transactionsId, prodFeedId]);
 
@@ -105,6 +108,7 @@ const HistoryPembeli = () => {
   }
 
   const dataTransaksiId = async (id: number) => {
+
     setLoading(true)
     await axios
       .get(`https://lapakumkm.mindd.site/transactions/${id}/details`, {
@@ -127,7 +131,7 @@ const HistoryPembeli = () => {
       .catch((err) => {
         console.log(err)
       })
-      .finally(() => setLoading(false))
+      .finally(() => setLoadingItem(false))
   }
   
   useEffect(() => {
@@ -171,6 +175,8 @@ const HistoryPembeli = () => {
           return item
         }
       })
+
+
       
       setCombineProduk(cekDetail)
     }
@@ -210,19 +216,25 @@ const HistoryPembeli = () => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
 
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
     setValue(initialFormValues);
     const body = {
       product_id: prodFeedId,
-      parent_id: Math.floor(Math.random() * 10) + 1,
+
+      parent_id: 0,
+
       transaction_id: transactionsId,
       product_transaction_detail_id: prodTransDetail,
       rating: value.rating,
       feedback: value.comment,
     };
+
     await axios.post(feedbackEndpoint, body,{
+
         headers:{
           Authorization: `Bearer ${cookie.token}`,
           "Content-Type": 'application/json',
@@ -239,10 +251,12 @@ const HistoryPembeli = () => {
           showConfirmButton: false,
           timer: 1200,
         })
+
           setShowFeedback(false)
           dataProdukId(productId)
           dataTransaksi()
           handleOpenCollapsible(null)
+
       })
       .catch((err) => {
         const { data } = err.response;
@@ -256,6 +270,7 @@ const HistoryPembeli = () => {
         })
       })
     }
+
 
     const handleEditFeedBack = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -307,19 +322,25 @@ const HistoryPembeli = () => {
           <Navbar />
           <div className="flex flex-col justify-center items-center">
             <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
+
             <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5">
+
               {history ? history.map((item)=>{
                 return(
                   <CollapsiblePrimitive.Root key={item.id} open={historyDetail?.id === item.id} onOpenChange={() => handleOpenCollapsible(item.id)}>
                     <CollapsiblePrimitive.Trigger
                       className={clsx(
+
                         "group flex w-72 sm:w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
                         "bg-white text-gray-900 dark:bg-slate-700 dark:text-gray-100 shadow dark:border dark:border-lapak",
+
                         "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
                       )}
                       onClick={() => dataTransaksiId(item.id)}
                     >
+
                       <div className="mb-1 rounded-lg bg-white text-gray-900 dark:bg-slate-700 dark:text-gray-100 
+
                       select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium">
                         <p>{`Total Barang : ${item.total_product}`}</p>
                         <p className=''>Total Belanja :
@@ -333,13 +354,16 @@ const HistoryPembeli = () => {
                         <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
                         <div className="flex mt-2 flex-wrap gap-y-2 sm:gap-4 ">
+
                           <div className='ml-auto'>
                             <CustomButton
                               id="btn-balas"
                               label='Bayar sekarang'
                               type='submit'
+
                               className='btn btn-xs rounded-lg border-none bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400'
                               onClick={()=> {handleBayar(item.payment_link)}}
+
                             />
                           </div>
 
@@ -348,7 +372,9 @@ const HistoryPembeli = () => {
                               id="btn-bayar"
                               label='Detail transaksi'
                               onClick={() => dataTransaksiId(item.id)}
+
                               className="btn btn-xs rounded-lg bg-white border border-lapak text-sm w-36 font-semibold capitalize tracking-wider text-lapak hover:bg-lapak hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400 "
+
                             />
                           </div>
                         </div>
@@ -380,7 +406,9 @@ const HistoryPembeli = () => {
                               status="Done"
                               quantity={item.total_product}
                               rating={item.rating}
+
                               handleEdit={()=> (setShowEditFeedback(true), setValue((prevData) => ({ ...prevData, rating: item.rating })))}
+
                               handleFeedback={() => {setShowFeedback(true), handleIdClick(item)
                               }}
                             />
@@ -429,6 +457,7 @@ const HistoryPembeli = () => {
             </form>
           </Modal>
           <Modal isOpen={showEditFeedback} size='w-96' isClose={() => setShowEditFeedback(false)} title="Review" >
+
             <form onSubmit={handleEditFeedBack}>
               <TextArea
                 label="Ulasan anda"
