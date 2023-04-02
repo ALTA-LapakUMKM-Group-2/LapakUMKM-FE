@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     // handle log out
     const MySwal = withReactContent(Swal)
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile', 'name', 'tokoId']);
+    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile', 'full_name', "name"]);
     const checkToken = cookies.token
     const navigate = useNavigate()
     const [cart, setCart] = useState([])
@@ -64,8 +64,9 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 removeCookie('name');
                 removeCookie('token');
                 removeCookie('id');
-                removeCookie('tokoId');
                 removeCookie('photo_profile');
+                removeCookie('id');
+                removeCookie('full_name');
                 navigate("/login");
             }
         });
@@ -113,7 +114,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 setPhoto(photo_profile)
             })
             .catch((err) => {
-           
+
                 console.log(err);
 
             })
