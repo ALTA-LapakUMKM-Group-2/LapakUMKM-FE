@@ -436,8 +436,9 @@ const Detail = () => {
 
   const handleShowChat = () => {
     setShowChat(true)
+    console.log("USER ID :", userId)
     const body = {
-      recipient_id: productId
+      recipient_id: userId
     }
 
     axios
@@ -476,6 +477,7 @@ const Detail = () => {
               product_id={productId}
               Room={roomID}
               Recipient_id={recipientID}
+              userID={userId}
             />
 
             {/* card for image */}
