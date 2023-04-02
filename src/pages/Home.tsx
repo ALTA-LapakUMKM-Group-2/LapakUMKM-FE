@@ -22,7 +22,7 @@ const Home = () => {
     const [data, setData] = useState<DataType[]>([])
     const [tenData, setTenData] = useState([])
     const [loading, setLoading] = useState(false)
-    const [cookie, setCookie] = useCookies(["token", 'testSwal','id']);
+    const [cookie, setCookie] = useCookies(["token", 'testSwal', 'id']);
     const [user, setUser] = useState<any>({})
     const [search, setSearch] = useState('')
     const [swal2, setSwal2] = useState(false)
@@ -81,10 +81,9 @@ const Home = () => {
     useEffect(() => {
         getAllData()
     }, []);
-   
+
     const [category, setCategory] = useState<any>([])
     const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
-    
 
     const fetchCategory = async () => {
         try {
@@ -104,37 +103,37 @@ const Home = () => {
 
 
     // test notif stock
-  const productEndpoint = 'https://lapakumkm.mindd.site/products'
-    const [getStock ,setGetStock] = useState<any>([])
+    const productEndpoint = 'https://lapakumkm.mindd.site/products'
+    const [getStock, setGetStock] = useState<any>([])
     const getRestStock = async () => {
         setLoading(true)
         try {
-          const res = await axios.get(`${productEndpoint}?user_id=${cookie.id}`,{
-            headers:{
-              Authorization: `Bearer ${cookie.token}`
-            }
-          })
-          console.log('test restStockToko', res.data.data);
-          setGetStock(res.data.data)
+            const res = await axios.get(`${productEndpoint}?user_id=${cookie.id}`, {
+                headers: {
+                    Authorization: `Bearer ${cookie.token}`
+                }
+            })
+            console.log('test restStockToko', res.data.data);
+            setGetStock(res.data.data)
         } catch (error) {
-    
+
         }
         setLoading(false)
-      }
-      useEffect(() => {
+    }
+    useEffect(() => {
         getRestStock()
-      },[])
-      
-      useEffect(() => {
-        if(cookie.token)
-          getStock.map((item:any) => {  
+    }, [])
+
+    useEffect(() => {
+        if (cookie.token)
+            getStock.map((item: any) => {
                 // console.log('test stock Toko', item.stock_remaining)
-                if(item.stock_remaining < 5) {
-                toast.warning(`Stock Product " ${item.product_name} " Anda,  Tersisa " ${item.stock_remaining} ". `);
-                } 
-          })
-      },[getStock])
-      console.log('getStock', getStock )
+                if (item.stock_remaining < 5) {
+                    toast.warning(`Stock Product " ${item.product_name} " Anda,  Tersisa " ${item.stock_remaining} ". `);
+                }
+            })
+    }, [getStock])
+    console.log('getStock', getStock)
     // console.log('data', data);
     const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
@@ -143,7 +142,7 @@ const Home = () => {
                 children={<Search onSearch={(e) => setSearch(e.target.value)} />}
             />
             <ToastContainer
-            className='toast-lapak'
+                className='toast-lapak'
                 position="top-right"
                 closeOnClick
                 rtl={false}
@@ -177,7 +176,6 @@ const Home = () => {
                                 return search.toLocaleLowerCase() === "" ?
                                     item : item.product_name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
                             }).map((item: any, index) => {
-                                console.log('test data product', item.rating);
 
                                 return (
                                     <ProdukCard
