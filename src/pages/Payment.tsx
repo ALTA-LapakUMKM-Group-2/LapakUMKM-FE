@@ -345,7 +345,7 @@ const Payment = () => {
                                                                     </div>
                                                                     <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
                                                                         <div>Banyaknya Barang</div>
-                                                                        <div>{item.product_pcs}</div>
+                                                                        <div>{item.product_pcs} pcs</div>
                                                                     </div>
                                                                     <div className='border-2 mt-5 mb-5'>
                                                                     </div >
@@ -379,7 +379,7 @@ const Payment = () => {
                                                             </div>
                                                             <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
                                                                 <div>Banyaknya Barang</div>
-                                                                <div>{testCount}</div>
+                                                                <div>{testCount}pcs</div>
                                                             </div>
                                                             <div className='border-2 mt-5 mb-5'>
                                                             </div>
@@ -397,7 +397,7 @@ const Payment = () => {
                                                             <div>Total semua barang</div>
                                                             <div>{cart?.reduce((total: any, i: any) => {
                                                                 return total + i.product_pcs;
-                                                            }, 0)}</div>
+                                                            }, 0)} pcs</div>
                                                         </div>
                                                         {/* //         )
                                                     //     })
@@ -422,7 +422,7 @@ const Payment = () => {
                                                     <>
                                                         <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
                                                             <div>Total semua barang</div>
-                                                            <div>{testCount}</div>
+                                                            <div>{testCount}pcs</div>
                                                         </div>
                                                         <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:font-bold 2xl:text-3xl dark:text-white mt-5" >
                                                             <div>
