@@ -22,6 +22,9 @@ import CustomInput from '../components/CutomInput'
 import CustomButton from '../components/CustomButton'
 import Default from "../assets/default.jpg"
 import { stringify } from 'querystring'
+import NotFound from '../assets/download.png'
+import '@smastrom/react-rating/style.css'
+import { Rating } from '@smastrom/react-rating';
 
 
 interface Product {
@@ -37,6 +40,15 @@ interface Product {
   total_price: number
 }
 
+interface FormValues {
+  comment: string;
+  rating: number;
+}
+
+const initialFormValues: FormValues = {
+  comment: '',
+  rating: 0
+};
 
 const Detail = () => {
   const { id } = useParams();
@@ -44,13 +56,14 @@ const Detail = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [value, setValue] = useState<FormValues>(initialFormValues)
   const [stock, setStock] = useState<number>(0);
   const [size, setSize] = useState('')
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
-  const [cookie, setCookie] = useCookies(['token', "id", "senderID", "roomID"])
-  const [feedback, setFeedback] = useState<FeedbackTypes[]>([])
+  const [cookie, setCookie] = useCookies(['token', "id", "senderID", "roomID", "name"])
+  const [feedbacks, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
   const [balas, setBalas] = useState<string | undefined>("")
   const [newDiskus, setnewDiskus] = useState<string>("")
@@ -60,6 +73,17 @@ const Detail = () => {
   const [test, setTest] = useState<Product[]>([])
   const [productId, setProductId] = useState<any>()
   const [userId, setUserId] = useState<any>()
+
+  const StarDrawing = (
+    <path d="M11.0748 3.25583C11.4141 2.42845 12.5859 2.42845 12.9252 3.25583L14.6493 7.45955C14.793 7.80979 15.1221 8.04889 15.4995 8.07727L20.0303 8.41798C20.922 8.48504 21.2841 9.59942 20.6021 10.1778L17.1369 13.1166C16.8482 13.3614 16.7225 13.7483 16.8122 14.1161L17.8882 18.5304C18.1 19.3992 17.152 20.0879 16.3912 19.618L12.5255 17.2305C12.2034 17.0316 11.7966 17.0316 11.4745 17.2305L7.60881 19.618C6.84796 20.0879 5.90001 19.3992 6.1118 18.5304L7.18785 14.1161C7.2775 13.7483 7.1518 13.3614 6.86309 13.1166L3.3979 10.1778C2.71588 9.59942 3.07796 8.48504 3.96971 8.41798L8.50046 8.07727C8.87794 8.04889 9.20704 7.80979 9.35068 7.45955L11.0748 3.25583Z" stroke="#fdd231" strokeWidth="1" ></path>
+  );
+
+  const customStyles = {
+      itemShapes: StarDrawing,
+      activeFillColor: '#FDD231',
+      inactiveFillColor: '#ffffff',
+
+  };
 
   const handleUpdate = (e: any) => {
     e.preventDefault()
@@ -116,7 +140,9 @@ const Detail = () => {
     setLoading(false)
   }
 
-
+  const handleChangeEditFeedback = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue({ ...value, [e.target.name]: e.target.value });
+  };
   // console.log("product_id :", productId)
   // console.log(typeof productId)
 
@@ -169,7 +195,6 @@ const Detail = () => {
 
         })
       }
-      navigate('/cart');
 
     } catch (err: any) {
       MySwal.fire({
@@ -201,6 +226,95 @@ const Detail = () => {
     feedbackData()
   }, [])
 
+  const [parentId, setParentId] = useState<number|null>()
+  const [prodTransDetail, setProdTransDetail] = useState<number|null>()
+  const [replyFeed, setReplyFeed] = useState<string>('')
+  console.log(parentId, prodTransDetail);
+  
+  const handleFeedbackReply = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setReplyFeed(e.target.value);
+  };
+
+  const handleBalasFeedback = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
+    e.preventDefault()
+    const body = {
+      product_id: productId,
+      parent_id: parentId,
+      product_transaction_detail_id: prodTransDetail,
+      feedback: replyFeed
+    }
+    axios
+      .post(`https://lapakumkm.mindd.site/feedbacks`, body, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`,
+          Accept: 'application/json',
+          "Content-Type": 'application/json'
+        }
+      })
+      .then((res) => {
+        MySwal.fire({
+          icon: "success",
+          iconColor: "#31CFB9",
+          title: "Anda berhasil membalas diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+        feedbackData()
+      })
+      .catch((err) => {
+        MySwal.fire({
+          icon: "error",
+          title: err.response.data.message,
+          text: "Gagal menambahkan diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+      .finally(() => setLoading(false))
+  }
+  const [feedbackId, setFeedbackId] = useState<number | null>()
+  console.log(feedbackId)
+  const handleEditFeedback = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
+    e.preventDefault()
+    setValue(initialFormValues);
+    const body = {
+      feedback: value.comment,
+      rating: value.rating
+    }
+    await axios.put(`https://lapakumkm.mindd.site/feedbacks/${feedbackId}`, body, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`,
+          Accept: 'application/json',
+          "Content-Type": 'application/json'
+        }
+      })
+      .then((res) => {
+        MySwal.fire({
+          icon: "success",
+          iconColor: "#31CFB9",
+          title: res.data.message,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+        feedbackData()
+      })
+      .catch((err) => {
+        MySwal.fire({
+          icon: "error",
+          title: err.response.data.message,
+          text: "Gagal menambahkan diskusi",
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      })
+      .finally(() => setLoading(false))
+  }
 
   function diskusiData() {
     setLoading(true);
@@ -460,6 +574,11 @@ const Detail = () => {
         console.log(err.response.data.message)
       })
   }
+  console.log("feed", feedbacks);
+  console.log("diskus", diskusi);
+  console.log("id", userId);
+  console.log("cookie id", cookie.id);
+  
   return (
     <Layout>
       {
@@ -484,57 +603,69 @@ const Detail = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
                   <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-lapak dark:border-2">
-                    <div className="max-w-5xl max-h-96 ">
-                      {loading ? <Loading /> :
-                        image ?
-                          <img src={image[0]?.image} className="max-w-fit max-h-72 md:col-span-2 rounded-md mx-auto" alt="" />
-                          :
-                          <img src={dai} className="w-full h-full md:col-span-2 rounded-md" alt="" />
-                      }
-                    </div>
-                    <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
+                    {loading   ? <Loading/> : 
+                      image ? 
+                      <>
                       {
-                        loading ? <Loading /> :
-                          image ?
-                            image.map((item: any) => {
-                              // console.log("test image", item);
-                              return (
-                                <>
-                                  <img src={item.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-
-                                </>
-                              )
-                            }) :
-                            <>
-                              <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                              <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                              <img src={dai} className="w-full h-md rounded-md max-w-xs" alt="" />
-                            </>
-                      }
-
-                    </div>
+                      image.length === 1? 
+                        <div className="max-w-5xl max-h-96 ">
+                          <img src={image[0]?.image} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
+                        </div>
+                          :
+                        image.length === 2 ?
+                        <div className="max-w-5xl max-h-96 grid grid-cols-2 gap-2">
+                          <img src={image[0]?.image} className="object-cover w-full h-96 rounded-md" alt="" />
+                          <img src={image[1]?.image} className="object-cover w-full h-96 rounded-md" alt="" />
+                        </div>
+                        :
+                        image.length === 3 ?
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
+                            <img src={image[0]?.image} className="md:col-span-2 w-full h-full md:max-h-96 rounded-md" alt="" />
+                            <div className="grid grid-rows-2">
+                              <img src={image[1]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                              <img src={image[2]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                            </div>
+                          </div>
+                        :
+                        image.length > 3 ?
+                        <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
+                          <img src={image[0]?.image} className="object-cover col-span-3 w-full h-28 md:max-h-60 rounded-md" alt="" />
+                          <img src={image[1]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                          <img src={image[2]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                          <img src={image[3]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                        </div>
+                      :
+                        <div className="max-w-5xl max-h-96 ">
+                          <img src={NotFound} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
+                        </div>
+                        }
+                      </>
+                      :
+                      <div className="max-w-5xl max-h-96 ">
+                          <img src={NotFound} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
+                      </div>
+                    }
                   </div>
-                  {/* Card kanan */}
                   <div className="p-5 rounded-md max-w-3xl w-full h-fit border-2 dark:border-lapak border-gray-200 shadow-lg mx-auto">
                     <div className="w-full h-full">
                       <div className="flex justify-between items-center mb-5 ">
-                        <h1 className="font-bold text-2xl dark:text-white">{product} </h1>
+                        <h1 className="font-bold text-xl text-zinc-800 dark:text-white">{product} </h1>
                         <button className="btn btn-ghost bg-lapak rounded-xl text-white" onClick={() => handleShowChat()}>
                           <BsChatText size={20} />
                         </button>
                       </div>
-                      <h1 className="font-bold text-2xl dark:text-white">Stock Tersedia <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{stock}</span></h1>
-                      <h1 className="font-bold text-2xl dark:text-white">Ukuran <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{size}</span></h1>
-                      <h1 className="font-bold text-2xl flex items-center gap-2 dark:text-white">
+                      <h1 className="font-semibold text-lg dark:text-white">Stock Tersedia <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{stock}</span></h1>
+                      <h1 className="font-semibold text-lg dark:text-white">Ukuran <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{size}</span></h1>
+                      <h1 className="font-semibold text-lg flex items-center gap-2 dark:text-white">
                         Rating <span className='dark:text-lapak'>:</span>  <span className=" font-medium flex gap-1"> <MdStarRate size={25} className='ml-3 text-yellow-500 dark:text-lapak' />4.5</span>
                       </h1>
-                      <h1 className="font-bold text-2xl mt-2 dark:text-white">Price <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{formatValue({
+                      <h1 className="font-semibold text-lg dark:text-white">Price <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'>{formatValue({
                         prefix: 'Rp. ',
                         value: JSON.stringify(price),
                         groupSeparator: '.',
                         decimalSeparator: ',',
                       })}</span></h1>
-                      <h1 className="font-bold text-2xl mt-2 dark:text-white">total price <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'> {formatValue({
+                      <h1 className="font-semibold text-lg dark:text-white">total price <span className='dark:text-lapak'>:</span> <span className='ml-3 font-medium'> {formatValue({
                         prefix: 'Rp. ',
                         value: JSON.stringify(totalPrice),
                         groupSeparator: '.',
@@ -568,11 +699,15 @@ const Detail = () => {
                 {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md dark:border-lapak'>
-                    <img src={photoToko ? photoToko : Default} className='w-20 rounded-full cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
-                      state: {
-                        id: userId
-                      }
-                    })} />
+                    <div className="avatar cursor-pointer">
+                      <div className="w-20 rounded-full">
+                        <img src={photoToko ? photoToko : Default} onClick={() => navigate(`/toko/${name}`, {
+                          state: {
+                            id: userId
+                          }
+                        })} />
+                      </div>
+                    </div>
                     <div className='font-bold text-lg dark:text-white'>
                       <h1 className='mb-5 cursor-pointer' onClick={() => navigate(`/toko/${name}`, {
                         state: {
@@ -586,8 +721,8 @@ const Detail = () => {
                       })} ><MdOutlineLocationOn className='dark:text-lapak mr-2' /> {address}</h1>
                     </div>
                   </div>
-                  <h1 className='text-3xl font-bold dark:text-white'>Informasi Produk :</h1>
-                  <div className='w-full shadow-xl p-5 rounded-xl border text-lg font-semibold dark:text-white dark:border-lapak dark:border-2'>
+                  <h1 className='text-2xl text-zinc-800 mb-2 font-semibold dark:text-white'>Informasi Produk :</h1>
+                  <div className='w-full shadow-xl p-5 rounded-xl border text-md font-medium dark:text-white dark:border-lapak dark:border-2'>
                     <h1>stock : <span className='ml-4'>{stock}</span> </h1>
                     <h1>Kategori : <span className='ml-4'>{category}</span></h1>
                     <h1>Brand : <span className='ml-4'>{product}</span></h1>
@@ -602,19 +737,135 @@ const Detail = () => {
                 <div className='border-2 mt-20 mb-5 dark:border-lapak'>
                 </div>
 
-                <div className='flex mt-20 flex-col gap-5 w-7/12'>
+                <div className='flex mt-20 flex-col gap-5 w-80 md:w-[600px]'>
                   <div className='flex justify-between'>
                     <p id='feedback' className='text-2xl text-zinc-800 mb-2 font-semibold dark:text-white'>Ulasan</p>
                     <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak dark:text-white dark:hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
                   </div>
 
-
-                  {feedback === undefined ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
+                  {feedbacks.length === 0 ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
 
                     <div >
-                      {feedback.map((item) => (
-                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile ? item.user.photo_profile: Default } comment={item.feedback} name={item.user.full_name}
-                        />
+                      {feedbacks.map((item) => (
+                        <>
+                          <div className='p-5 mb-4 border-2 shadow dark:border-lapak rounded-lg relative' key={item.id}>
+                            <div className='dropdown dropdown-bottom dropdown-end absolute top-2 right-0'>
+                              <label tabIndex={0} className={`${cookie.name === item.user.full_name ? "flex" : "hidden"} btn-ghost btn-circle btn`}>
+                                <GoKebabVertical className='text-zinc-800 dark:text-zinc-50' size={20} />
+                              </label>
+
+                              <ul
+                                tabIndex={0}
+                                className="dropdown-content menu rounded-box menu-compact mt-3 bg-zinc-50 text-zinc-800 px-10 py-4 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.3)] space-y-4 text-[16px] hover:cursor-pointer"
+                              >
+                                <li onClick={() => {handleDisplayEdit(item.id),setValue((prevData) => ({ ...prevData, rating: item.rating, comment: item.feedback })), setFeedbackId(item.id)}} className='hover:text-zinc-500  text-zinc-800'>perbarui</li>
+                              </ul>
+                            </div>
+                            <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
+                                <img src={item.user.photo_profile ? item.user.photo_profile: Default} alt="profil.svg" />
+                            </div>
+
+                            <div className='flex justify-between text-zinc-800 items-center py-3 '>
+                                <h1 className='text-lg font-bold dark:text-white'>{item.user.full_name ? item.user.full_name : "Tidak Diketahui"}</h1>
+                            </div>
+                            <div id={`edit_diskusi ${item.id}`} className="my-5 border-b-2 pb-2 shadow dark:border-lapak">
+                              <Rating
+                                value={item.rating}
+                                style={{ maxWidth: 120 }}
+                                itemStyles={customStyles}
+                                readOnly
+                                className='dark:text-lapak'
+                              />
+                            <p className='text-gray-700 dark:text-white mt-3'>{item.feedback}</p>
+                            </div>
+                            {item.childs ?
+                            <div className='pl-10 relative'>
+                              {item.childs?.map((child) => {
+                                return (
+                                  <>
+                                    <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
+                                      <img src={child.user.photo_profile ? child.user.photo_profile : Default} alt="profil.svg" />
+                                    </div>
+
+                                    <div className='flex justify-between text-zinc-800 items-center py-3'>
+                                      <h1 className='text-lg font-bold dark:text-white'>{child.user.full_name ? item.user.full_name : "Tidak Diketahui"}</h1>
+                                    </div>
+
+                                    <p id={``} className='text-gray-700 my-4 dark:text-white'>{child.feedback}</p>
+                                  </>
+                                )
+                              })
+                              }
+                            </div> : ""}
+                            <div id={`input-edit_diskusi ${item.id}`} className="relative hidden my-5">
+                              <form className='space-y-3' onSubmit={handleEditFeedback}>
+                                <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Edit Rating</label>
+                                <Rating
+                                  itemStyles={customStyles}
+                                  isRequired
+                                  style={{ maxWidth: 150 }}
+                                  value={value.rating}
+                                  visibleLabelId="rating"
+                                  onChange={(selectedValue: any) => setValue((data) => ({ ...data, rating: selectedValue }))}
+                                />
+                                <CustomInput
+                                  id={`input-edit-feedback`}
+                                  placeholder=''
+                                  label='Edit Ulasan'
+                                  defaultValue={value.comment}
+                                  type='text'
+                                  name='comment'
+                                  onChange={handleChangeEditFeedback}
+                                />
+                                <div className='w-3/12 mt-4 ml-auto'>
+                                  <CustomButton
+                                    id="btn-edit"
+                                    label='Perbarui'
+                                    type='submit'
+                                    onClick={()=> console.log(value)}
+                                  />
+                                </div>
+                              </form>
+                              <div className='absolute bottom-0 right-48 w-3/12'>
+                                <CustomButton
+                                  id="btn-kembali"
+                                  label='Kembali'
+                                  onClick={() => {handleHide(item.id), setValue((prevData) => ({ ...prevData, rating: 0 })),setFeedbackId(null)}}
+                                />
+                              </div>
+                            </div>
+                            <p id={`btn-balas ${item.id}`} onClick={() => {handleDisplay(item.id), setParentId(item.parent_id), setProdTransDetail(item.product_transaction_detail_id)}} className={`${parseInt(cookie.id) === userId ? "flex" : "hidden" } text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white`}>Balas Feedback ...</p>
+                              <div id={`input-balas_diskusi ${item.id}`} className="relative mb-5 hidden">
+                                <form onSubmit={handleBalasFeedback}>
+                                  <CustomInput
+                                    id={`input-balas-Feedback`}
+                                    placeholder='Balas Ulasan Anda'
+                                    label=''
+                                    type='text'
+                                    name='balas_feedback'
+                                    onChange={handleFeedbackReply}
+                                  />
+
+                                  <div className='w-3/12 mt-4 ml-auto'>
+                                    <CustomButton
+                                      id="btn-balas"
+                                      label='Balas'
+                                      type='submit'
+                                      onClick={() => console.log("isinya",replyFeed)}
+                                    />
+                                  </div>
+                                </form>
+
+                                <div className='absolute bottom-0 right-48 w-3/12'>
+                                  <CustomButton
+                                    id="btn-kembali"
+                                    label='Kembali'
+                                    onClick={() => {handleHide(item.id), setParentId(null), setProdTransDetail(null)}}
+                                  />
+                                </div>
+                              </div>
+                          </div>
+                        </>
                       ))}
                     </div>
                   }
@@ -635,7 +886,7 @@ const Detail = () => {
                       onChange={(e) => setnewDiskus(e.target.value)}
                     />
 
-                    <div className='flex gap-5 w-3/12 mt-4 ml-auto'>
+                    <div className='flex gap-5 w-40 mt-4 ml-auto'>
                       <CustomButton
                         id="btn-kirim_diskusi"
                         label='Kirim'
@@ -645,10 +896,10 @@ const Detail = () => {
                   </form>
 
 
-                  {diskusi === null ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
+                  {diskusi.length === 0 ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada diskusi</p> :
 
                     diskusi.map((item, index) => (
-                      <div key={item.id} className="p-2 mb-4 border-b-2 border-zinc-400 relative">
+                      <div key={item.id} className="p-5 mb-4 border-2 shadow dark:border-lapak rounded-lg relative">
                         <div className='dropdown dropdown-bottom dropdown-end absolute top-2 right-0'>
                           <label tabIndex={0} className={`${parseInt(cookie.id) === item.user_id ? "flex" : "hidden"} btn-ghost btn-circle btn`}>
                             <GoKebabVertical className='text-zinc-800 dark:text-zinc-50' size={20} />
@@ -656,10 +907,10 @@ const Detail = () => {
 
                           <ul
                             tabIndex={0}
-                            className="dropdown-content menu rounded-box menu-compact mt-3 bg-zinc-50 text-zinc-800 px-10 py-4 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.3)] space-y-4 text-[16px] hover:cursor-pointer"
+                            className="dropdown-content menu rounded-box menu-compact mt-3 bg-zinc-50 text-zinc-800 px-10 py-4 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.3)] space-y-4 text-[16px] hover:cursor-pointer dark:bg-slate-700 "
                           >
-                            <li onClick={() => handleDisplayEdit(item.id)} className='hover:text-zinc-500  text-zinc-800'>perbarui</li>
-                            <li onClick={() => DeleteDiskusi(item.id)} className='hover:text-red-400 text-red-500'>hapus</li>
+                            <li onClick={() => handleDisplayEdit(item.id)} className='hover:text-zinc-500  text-zinc-800 dark:text-white'>perbarui</li>
+                            <li onClick={() => DeleteDiskusi(item.id)} className={`${item.childs ? "hidden" : "flex" } hover:text-red-400 text-red-500`}>hapus</li>
                           </ul>
                         </div>
 
@@ -668,10 +919,11 @@ const Detail = () => {
 
                         </div>
                         <div className='flex justify-between text-zinc-800 items-center py-3'>
-                          <h1 className='text-lg font-bold dark:text-white'>{item.user.full_name}</h1>
+                          <h1 className='text-lg font-bold dark:text-white'>{item.user.full_name ? item.user.full_name : "Tidak Diketahui"}</h1>
                         </div>
-
-                        <p id={`edit_diskusi ${item.id}`} className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
+                        <div id={`edit_diskusi ${item.id}`} className="my-5 border-b-2 pb-2 shadow dark:border-lapak">
+                          <p id={`edit_diskusi ${item.id}`} className='text-gray-700 my-5 dark:text-white'>{item.discussion}</p>
+                        </div>
 
                         {item.childs ?
                           <div className='pl-10 relative'>
@@ -683,7 +935,7 @@ const Detail = () => {
                                   </div>
 
                                   <div className='flex justify-between text-zinc-800 items-center py-3'>
-                                    <h1 className='text-lg font-bold dark:text-white'>{child.user.full_name}</h1>
+                                    <h1 className='text-lg font-bold dark:text-white'>{child.user.full_name ? child.user.full_name : "Tidak Diketahui"}</h1>
                                   </div>
 
                                   <p id={``} className='text-gray-700 my-4 dark:text-white'>{child.discussion}</p>
@@ -713,7 +965,6 @@ const Detail = () => {
                               />
                             </div>
                           </form>
-
                           <div className='absolute bottom-0 right-48 w-3/12'>
                             <CustomButton
                               id="btn-kembali"

@@ -244,7 +244,7 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                         <CustomButton
                                         id='submit'
                                         name='submit'
-                                        label='submit'
+                                        label='Cari'
                                         onClick={()=> console.log(formValues)}
                                         />
                                     </form>

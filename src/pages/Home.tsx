@@ -38,9 +38,6 @@ const Home = () => {
             })
             setUser(res.data.data)
             setCekAddress(res.data.data.address)
-
-
-
         } catch (error) {
 
         }
@@ -63,6 +60,7 @@ const Home = () => {
     useEffect(() => {
         getProfile()
     }, [testSwal])
+
     const getAllData = () => {
         setLoading(true);
 
@@ -82,6 +80,8 @@ const Home = () => {
         getAllData()
     }, []);
    
+    console.log("data", data);
+    
     const [category, setCategory] = useState<any>([])
     const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
     

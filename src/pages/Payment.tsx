@@ -194,7 +194,7 @@ const Payment = () => {
                                                             <>
                                                                 <div className='flex'>
                                                                     <div className='flex flex-row gap-5 p-2 md:p-5'>
-                                                                        <img src={imgUrl + item.product_image} className='w-16 md:w-32 rounded-full' />
+                                                                        <img src={item.product_image} className='w-16 md:w-32 rounded-full' />
                                                                         <div className='flex flex-col text-sm md:text-lg 2xl:text-xl font-semibold gap-2'>
                                                                             <h1 className='dark:text-white flex'> <BsShop className=' w-6 h-6 mr-2 dark:text-white mt-1' />{item.lapak_name}</h1>
                                                                             <h1 className='dark:text-white flex'><MdLocationOn className=' w-6 h-6 mr-2 dark:text-white mt-1' />{item.lapak_address}</h1>
@@ -203,7 +203,7 @@ const Payment = () => {
                                                                 </div>
                                                                 {/*selesai*/}
                                                                 <div className='flex flex-row mt-5 gap-5 p-2 md:p-5'>
-                                                                    <img src={imgUrl + item.product_image} className='rounded-lg cover w-20 md:w-1/2' />
+                                                                    <img src={item.product_image} className='rounded-lg cover w-20 md:w-1/2' />
                                                                     <div className='flex flex-col text-sm 2xl:text-xl font-semibold justify-center gap-2'>
                                                                         <h1 className='dark:text-white 2xl:text-3xl'>{item.product_name}</h1>
                                                                         <h1 className='dark:text-white'>{item.product_pcs} pcs</h1>

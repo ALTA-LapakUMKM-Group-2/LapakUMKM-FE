@@ -116,7 +116,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose
                 {loading ? <Loading /> :
                     <div className="flex flex-col mb-20">
                         {newChat.map((i) => (
-                            <div className={`${i.sender_id === parseInt(cookie.id) ? "chat chat-end" : "chat chat-start"}`}>
+                            <div className={`${i.sender_id == parseInt(cookie.id) ? "chat chat-end" : "chat chat-start"}`}>
                                 <div className="chat-image avatar">
                                     <div className="w-10 rounded-full">
                                         <img src={i.recipient.photo_profile} alt="profile" />
@@ -125,7 +125,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose
                                 <div className="chat-header">
                                     {i.recipient.full_name}
                                 </div>
-                                <div className={`chat-bubble  ${i.sender_id === parseInt(cookie.id) ? "bg-lapak" : ""}`}>{i.text}</div>
+                                <div className={`chat-bubble  ${i.sender_id == parseInt(cookie.id) ? "bg-lapak" : ""}`}>{i.text}</div>
                             </div>
                         ))}
                     </div>

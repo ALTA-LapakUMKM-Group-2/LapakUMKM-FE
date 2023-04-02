@@ -24,9 +24,8 @@ const CardFeedback: FC<Props> = ({ rating, image, comment, name, id }) => {
                     <h2 className='text-lg font-bold dark:text-white'>{rating}</h2>
                 </div>
             </div>
-
-
             <p className='text-gray-700 my-5 dark:text-white'>{comment}</p>
+            <p id={`btn-balas`} className='text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white'>Balas Feedback ...</p>
         </div>
     )
 }
