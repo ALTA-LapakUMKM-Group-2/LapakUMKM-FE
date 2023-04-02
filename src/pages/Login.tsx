@@ -23,7 +23,7 @@ const Login = () => {
   const [profile, setProfile] = useState<any>({});
   const [openModal, setModalOpen] = useState<boolean>(false)
   const [LupaPassword, setLupaPassword] = useState<string>("")
-  const [cookie, setCookie] = useCookies(["token", "id", "photo_profile", "name"]);
+  const [cookie, setCookie] = useCookies(["token", "id", "photo_profile", "name", "full_name"]);
 
   const login = useGoogleLogin({
     onSuccess: tokenResponse => { console.log("buat ngambil token", tokenResponse), setUser(tokenResponse) },
@@ -122,11 +122,12 @@ const Login = () => {
       https://lapakumkm.mindd.site/auth/login`, body)
       .then((res) => {
         console.log('test data userLogin', res.data);
-        
         const { message, data } = res.data
         console.log(data.token)
         setCookie("token", data.token, { path: "/" });
         setCookie('id', data.user.id, { path: '/' })
+        setCookie('full_name', data.user.full_name, { path: '/' })
+        setCookie('photo_profile', data.user.photo_profile, { path: '/' })
         dispatch(handleAuth(true))
         MySwal.fire({
           icon: "success",
@@ -183,11 +184,11 @@ const Login = () => {
           title: "Silahkan Cek Email Anda",
           confirmButtonText: "Cek Email",
           confirmButtonColor: "#31CFB9",
-      }).then((cekEmail) => {
+        }).then((cekEmail) => {
           if (cekEmail.isConfirmed) {
-              window.open(`${link}`)
+            window.open(`${link}`)
           }
-      })
+        })
       })
       .catch((err) => {
         Swal.fire({

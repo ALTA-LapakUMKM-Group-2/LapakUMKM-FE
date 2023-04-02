@@ -501,7 +501,6 @@ const Detail = () => {
                               return (
                                 <>
                                   <img src={item.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-
                                 </>
                               )
                             }) :

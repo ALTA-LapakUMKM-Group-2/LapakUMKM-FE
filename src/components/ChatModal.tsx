@@ -21,7 +21,7 @@ type ChatModalProps = {
 };
 
 const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose, img, children, size, titleStyle, Recipient_id }) => {
-    const [cookie, setCookie] = useCookies(["token", "id", "roomID"])
+    const [cookie, setCookie] = useCookies(["token", "id", "roomID", "full_name", "photo_profile"])
     const [loading, setLoading] = useState<boolean>(false)
 
     const [chat, setChat] = useState<string>("")
@@ -119,11 +119,13 @@ const ChatModal: React.FC<ChatModalProps> = ({ Room, product_id, isOpen, isClose
                             <div className={`${i.sender_id === parseInt(cookie.id) ? "chat chat-end" : "chat chat-start"}`}>
                                 <div className="chat-image avatar">
                                     <div className="w-10 rounded-full">
-                                        <img src={i.recipient.photo_profile} alt="profile" />
+                                        <img src={i.sender_id === parseInt(cookie.id) ? cookie.photo_profile : "agung"} alt="profile" />
                                     </div>
                                 </div>
                                 <div className="chat-header">
-                                    {i.recipient.full_name}
+                                    {/* {i.sender_id == parseInt(cookie.id) ? cookie.full_name : i.recipient.full_name}
+                                </div> */}
+                                    {i.sender_id === parseInt(cookie.id) ? "maryam" : "agung"}
                                 </div>
                                 <div className={`chat-bubble  ${i.sender_id === parseInt(cookie.id) ? "bg-lapak" : ""}`}>{i.text}</div>
                             </div>
