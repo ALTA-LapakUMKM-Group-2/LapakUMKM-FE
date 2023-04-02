@@ -38,6 +38,7 @@ const Toko = () => {
             setFullName(fullName)
             setData(res.data.data)
             setGetUserToko(res.data.data[0].user_id)
+            console.log('cekk toko data', res.data.data[0].id)
         } catch (error) {
 
         }
@@ -66,7 +67,6 @@ const Toko = () => {
 
 
     console.log('cek foto', foto);
-    
     console.log('test data toko', data);
     console.log('ambil data toko', getUserToko);
     const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/' + foto
@@ -136,14 +136,14 @@ const Toko = () => {
                                     data?.map((item: any, i: number) => {
                                       
                                         return (
-                                            <ProdukCard
+                                            <ProdukCard 
                                                 produkName={item.product_name}
-                                                location='jakarta'
+                                                location={item.user.address}
                                                 sell={item.stock_sold}
-                                                id={i}
+                                                id={item.id}
                                                 key={i}
                                                 image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
-                                                rating={4}
+                                                rating={item.rating ? Number(item.rating.toFixed(1)) : 0}
                                                 price={item.price}
                                             />
                                         )

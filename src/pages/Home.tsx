@@ -71,6 +71,7 @@ const Home = () => {
             .then((res) => {
                 const { data } = res.data
                 setData(data)
+                console.log('test data poto',res.data.data)
             })
             .then((err) => {
 
