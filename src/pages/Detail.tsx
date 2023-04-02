@@ -612,7 +612,7 @@ const Detail = () => {
 
                     <div >
                       {feedback.map((item) => (
-                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile ? item.user.photo_profile: Default } comment={item.feedback} name={item.user.full_name}
+                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile ? item.user.photo_profile : Default} comment={item.feedback} name={item.user.full_name}
                         />
                       ))}
                     </div>

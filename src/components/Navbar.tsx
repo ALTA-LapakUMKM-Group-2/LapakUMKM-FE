@@ -225,6 +225,11 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                                             Riwayat Belanja
                                         </a>
                                         </li>
+                                        <li onClick={() => checkToken ? navigate('/historypembeli') : navigate('/')}><a>
+                                            <MdOutlineWorkHistory />
+                                            Obrolan
+                                        </a>
+                                        </li>
                                         <li onClick={() => checkToken ? handleLogout() : navigate("/")}><a>
                                             {checkToken ? <FaSignOutAlt /> : <FaSignInAlt />}
                                             {checkToken ? "Keluar" : "Masuk"}
