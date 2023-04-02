@@ -443,8 +443,9 @@ const Detail = () => {
 
   const handleShowChat = () => {
     setShowChat(true)
+    console.log("USER ID :", userId)
     const body = {
-      recipient_id: productId
+      recipient_id: userId
     }
 
     axios
@@ -488,6 +489,7 @@ const Detail = () => {
               product_id={productId}
               Room={roomID}
               Recipient_id={recipientID}
+              userID={userId}
             />
 
             {/* card for image */}
@@ -513,7 +515,6 @@ const Detail = () => {
                               return (
                                 <>
                                   <img src={item.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-
                                 </>
                               )
                             }) :
@@ -625,7 +626,7 @@ const Detail = () => {
 
                     <div >
                       {feedback.map((item) => (
-                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile ? item.user.photo_profile: Default } comment={item.feedback} name={item.user.full_name}
+                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile ? item.user.photo_profile : Default} comment={item.feedback} name={item.user.full_name}
                         />
                       ))}
                     </div>
