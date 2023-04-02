@@ -43,21 +43,21 @@ const CardHistory: React.FC<FeedbackProps> = ({
         inactiveFillColor: '#ffffff',
     };
     return (
-        <div id={id} className="mt-5 w-11/12 md:w-10/12 lg:w-[600px] 2xl:w-[43rem] px-8 py-4 bg-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.4)] dark:bg-slate-700 dark:border-white dark:border">
-            <p className="border-b-2 pb-2 font-semibold text-[18px] md:text-[16px] lg:text-[16px] 2xl:text-[22px] dark:text-white">{sellerName}</p>
-            <div className="flex flex-col md:flex-row lg:flex-row gap-5 md:gap-5 lg:gap-5 2xl:gap-8 mt-4">
-                <img src={produkImg} alt="produk.jpg" className="h-64 md:h-40 lg:h-44 2xl:h-52" />
-                <div className="space-y-1">
-                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px] dark:text-white'>{produkName}</p>
-                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px] dark:text-white'>Ukuran : {size}</p>
-                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px] dark:text-white'><span>
+        <div id={id} className="mt-5 w-60 sm:w-[400px] lg:w-[400px] 2xl:w-[400px] rounded-lg px-8 py-4 bg-white shadow dark:bg-slate-700 dark:border-lapak dark:border">
+            <p className="border-b-2 pb-2 font-semibold text-left text-sm font-medium dark:text-white dark:border-lapak">{sellerName}</p>
+            <div className="flex flex-col sm:flex-row lg:flex-row gap-5 md:gap-5 lg:gap-5 2xl:gap-8 mt-4">
+                <img src={produkImg} alt="produk.jpg" className="w-20 h-28 rounded-l" />
+                <div className="space-y-1 w-full">
+                    <p className='text-left text-sm font-medium dark:text-white'>{produkName}</p>
+                    <p className='text-left text-sm font-medium dark:text-white'>Ukuran : {size}</p>
+                    <p className='text-left text-sm font-medium dark:text-white'><span>
                         {formatValue({
                             value: JSON.stringify(price),
                             groupSeparator: '.',
                             decimalSeparator: ',',
                             prefix: 'Rp. ',
                         })}</span> x {quantity}</p>
-                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px] dark:text-white'>Total :
+                    <p className='text-left text-sm font-medium dark:text-white'>Total :
                         {formatValue({
                             value: JSON.stringify(totalPrice),
                             groupSeparator: '.',
@@ -65,26 +65,26 @@ const CardHistory: React.FC<FeedbackProps> = ({
                             prefix: 'Rp. ',
                         })}
                     </p>
-                    <p className='text-[16px] md:text-[15px] lg:text-[15px] 2xl:text-[18px] dark:text-white'>Status : {status}</p>
+                    <p className='text-left text-sm font-medium dark:text-white'>Status : {status}</p>
+                        <div className="rating">
+                            <Rating
+                                value={rating}
+                                style={{ maxWidth: 100 }}
+                                itemStyles={customStyles}
+                                readOnly
+                            />
+                        </div>
 
-                    <div className="flex flex-col-reverse md:flex-row-reverse lg:flex-row-reverse">
-                        <div className="mt-5 md:mt-0 lg:mt-0 md:ml-10 lg:ml-28 2xl:ml-36">
+                    <div className="flex justify-end">
+                        <div className="mt-5 md:mt-0 lg:mt-0">
                             <button
-                                className={`btn  ${rating === 0 ? "bg-lapak border-none" : "btn-outline btn-accent"}`}
+                                className={`btn btn-sm ${rating === 0 ? "bg-lapak border-none" : "btn-outline btn-accent"}`}
                                 onClick={rating === 0 ? handleFeedback : handleEdit}
                             >
                                 {rating === 0 ? "Beri Ulasan" : "Edit Ulasan"}
                             </button>
                         </div>
 
-                        <div className="rating">
-                            <Rating
-                                value={rating}
-                                style={{ maxWidth: 120 }}
-                                itemStyles={customStyles}
-                                readOnly
-                            />
-                        </div>
                     </div>
                 </div>
             </div>

@@ -23,6 +23,7 @@ import CustomButton from '../components/CustomButton'
 import Default from "../assets/default.jpg"
 import { stringify } from 'querystring'
 
+
 interface Product {
   selected: unknown
   id: number
@@ -188,24 +189,22 @@ const Detail = () => {
 
   }
 
-  useEffect(() => {
-    feedbackData()
-  }, [])
-
   function feedbackData() {
     setLoading(true);
     axios
       .get(`https://lapakumkm.mindd.site/products/${id}/feedbacks`)
       .then((res) => {
-        const { data } = res.data
-        setFeedback(data)
-
+        setFeedback(res.data.data)
       })
       .catch((err) => {
 
       })
       .finally(() => setLoading(false))
   }
+  useEffect(() => {
+    feedbackData()
+  }, [])
+
 
   function diskusiData() {
     setLoading(true);
@@ -439,6 +438,7 @@ const Detail = () => {
   const [recipientID, setRecipientID] = useState<number>(0)
   const [idFetch, setIdFetch] = useState<any>('')
 
+
   const handleShowChat = () => {
     setShowChat(true)
     const body = {
@@ -468,25 +468,8 @@ const Detail = () => {
       .catch((err) => {
         console.log(err.response.data.message)
       })
-      
-    }
+  }
 
-//   function fetchDataChat(room_id: any) {
-//     setLoading(true)
-//     console.log("room ID ceked 2:", room_id)
-//     axios
-//         .get(`https://lapakumkm.mindd.site/rooms/${idFetch}/chats`, {
-//             headers: {
-//                 Authorization: `Bearer ${cookie.token}`
-//             }
-//         })
-//         .then((res) => {
-//             console.log("data chat :", res.data.data)
-             
-//         })
-//         .catch((err) => { })
-//         .finally(() => setLoading(false))
-// }
   return (
     <Layout>
       {
@@ -635,11 +618,12 @@ const Detail = () => {
                     <a href='#diskusi' className='text-[16px] flex items-center text-zinc-800 mb-2  hover:cursor-pointer hover:text-lapak dark:text-white dark:hover:text-lapak'>Lihat diskusi <HiOutlineArrowLongDown /></a>
                   </div>
 
-                  {feedback.length === 0 ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
+
+                  {feedback === undefined ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
 
                     <div >
                       {feedback.map((item) => (
-                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile} comment={item.feedback} name={item.user.full_name}
+                        <CardFeedback key={item.id} rating={item.rating} image={item.user.photo_profile ? item.user.photo_profile: Default } comment={item.feedback} name={item.user.full_name}
                         />
                       ))}
                     </div>
