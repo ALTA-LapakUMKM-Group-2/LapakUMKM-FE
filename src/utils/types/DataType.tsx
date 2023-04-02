@@ -19,6 +19,7 @@ type Child = {
   parent_id: number
   user_id: number
   discussion: string
+  feedback:string
   user: Profile
 }
 
@@ -42,6 +43,7 @@ export interface FeedbackTypes {
   rating: number
   feedback: string
   discussion: string
+  product_transaction_detail_id: number
   user: Profile
   childs: Child[]
 }
@@ -70,7 +72,7 @@ export interface HistoryType {
   product_id: number
   product: Product
   rating: number
-  product_image: string
+  product_image?: any
   shop_name: string
   size: string
   product_name: string

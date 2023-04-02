@@ -178,9 +178,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                     Authorization: `Bearer ${cookies.token}`
                 }
             });
-            const data = response.data.data
-            console.log('testt data cartt babi', data);
-            
+            const data = response.data.data            
             setNewCart(data);
             setCount(response.data.data.product_pcs)
         } catch (error) {
