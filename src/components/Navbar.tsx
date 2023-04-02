@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     // handle log out
     const MySwal = withReactContent(Swal)
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile', 'name']);
+    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile', 'name', 'tokoId']);
     const checkToken = cookies.token
     const navigate = useNavigate()
     const [cart, setCart] = useState([])
@@ -63,6 +63,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 dispatch(handleAuth(false));
                 removeCookie('name');
                 removeCookie('token');
+                removeCookie('id');
+                removeCookie('tokoId');
                 removeCookie('photo_profile');
                 navigate("/login");
             }
@@ -111,8 +113,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 setPhoto(photo_profile)
             })
             .catch((err) => {
-                // const { statusText } = err.response
-                // console.log(statusText)
+           
                 console.log(err);
 
             })
@@ -204,8 +205,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                             {checkToken ?
                                 <>
                                     <div className="px-4 py-3 text-sm text-gray-900 w-44 dark:text-white">
-                                        <div className=''> {nama}</div>
-                                        <div className="font-medium ">{mail}</div>
+                                        <div className='truncate'> {nama}</div>
+                                        <div className="font-medium truncate">{mail}</div>
                                     </div>
                                 </>
                                 : <></>}

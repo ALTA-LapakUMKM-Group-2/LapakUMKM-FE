@@ -48,7 +48,7 @@ const CartCard: React.FC<CartProps> = ({
                 <img className="object-cover md:w-full md:h-24 lg:w-32 lg:h-40 rounded-t-lg md:rounded-none md:rounded-l-lg "
                     src={produkimg} alt={produkimg} />
 
-                <div className="flex flex-col px-4 leading-normal md:w-72 lg:w-80 justify-start dark:text-white">
+                <div className="flex flex-col px-4 leading-normal md:w-72 lg:w-80 justify-start dark:text-white gap-1">
                     <h5 className="mb-2 text-lg font-semibold tracking-tight text-gray-900 text-start dark:text-white">{produkName}</h5>
                     <p className="font-normal text-gray-700 text-start dark:text-white">{counts} pcs</p>
                     <p className="font-semibold text-gray-700 text-start dark:text-white">
@@ -57,10 +57,10 @@ const CartCard: React.FC<CartProps> = ({
                             groupSeparator: '.',
                             decimalSeparator: ',',
                             prefix: 'Rp. ',
-                        })}
+                        })} /pcs
                     </p>
                     <p className="font-semibold text-gray-700 text-start dark:text-white">
-                        {"Total : "} {counts > 1 ? formatValue({
+                        {"Total : "} {counts ? formatValue({
                             value: JSON.stringify(totalPrice),
                             groupSeparator: '.',
                             decimalSeparator: ',',

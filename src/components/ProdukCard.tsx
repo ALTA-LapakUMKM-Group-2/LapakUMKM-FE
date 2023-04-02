@@ -76,10 +76,10 @@ const ProdukCard: React.FC<ListingProps> = ({
             </a>
             <div className="px-5 pb-5 flex flex-col space-y-1 gap-2 dark:text-white">
                 <a href="#">
-                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2 ">{produkName}</h5>
-                    <h5 className="text-l font-medium tracking-tight text-gray-900 dark:text-white mt-5">Ukuran : {size }</h5>
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2 " style={{ height: '3rem', lineHeight: '1.5rem', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical' }}>{produkName}</h5>
+                    <h5 className="text-l font-medium tracking-tight text-gray-900 dark:text-white mt-5">Ukuran : <span className='ml-1'>{size }</span> </h5>
                 </a>
-                <h5 className="text-l font-semibold tracking-tight text-gray-900 flex dark:text-white"><MdLocationOn className=' w-6 h-6 mr-2 dark:text-lapak' />{location}</h5>
+                <h5 className="text-l font-semibold tracking-tight text-gray-900 flex dark:text-white truncate text-ellipsis"><MdLocationOn className=' w-6 h-6 mr-2 dark:text-lapak ' />{location}</h5>
                 <div className="rating ">
                     <Rating
                         value={rating}

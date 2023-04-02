@@ -126,6 +126,7 @@ const Home = () => {
       },[])
       
       useEffect(() => {
+        if(cookie.token)
           getStock.map((item:any) => {  
                 // console.log('test stock Toko', item.stock_remaining)
                 if(item.stock_remaining < 5) {

@@ -177,6 +177,8 @@ const Cart: React.FC<CartData> = ({ products }) => {
                 }
             });
             const data = response.data.data
+            console.log('testt data cartt babi', data);
+            
             setNewCart(data);
             setCount(response.data.data.product_pcs)
         } catch (error) {
@@ -221,7 +223,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                     <label>
                                                         <input
                                                             type="checkbox"
-                                                            className="checkbox checkbox-accent"
+                                                            className="checkbox checkbox-accent "
                                                             id='checkcart'
                                                             checked={selectedItems.length === cart.length}
                                                             onChange={handleCheckAll}
@@ -279,7 +281,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                         </div>
                         <div className="flex h-40 md:w-40 2xl:w-80 sticky-top mb-2">
                             <div className="block w-96 p-6 bg-white border border-gray-200 rounded-xl shadow hover:bg-gray-100 dark:bg-slate-800 dark:border-lapak">
-                                <div className="flex justify-between border-b-2 dark:border-lapak">
+                                <div className="flex justify-between border-b-2 dark:border-lapak 2xl:text-lg">
                                     <h5 className="mb-2 font-bold 2xl:text-md tracking-tight text-gray-900 dark:text-white">Total Harga</h5>
                                     <h5 className="mb-2 2xl:text-md font-bold tracking-tight text-gray-900 dark:text-white"> {formatValue({
                                         value: JSON.stringify(price),
