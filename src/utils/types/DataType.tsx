@@ -29,7 +29,11 @@ export interface Chat {
   sender_id: number
   recipient_id: number
   recipient: Profile
+  sender: Profile
   text: string
+  full_name: string
+  photo_profile: string
+  user_id: number
 }
 
 export interface FeedbackTypes {

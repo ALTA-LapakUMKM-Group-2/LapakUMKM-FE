@@ -51,6 +51,7 @@ const initialFormValues: FormValues = {
 };
 
 const Detail = () => {
+  
   const { id } = useParams();
   const MySwal = withReactContent(Swal);
   const [loading, setLoading] = useState<boolean>(false);
@@ -62,7 +63,8 @@ const Detail = () => {
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
-  const [cookie, setCookie] = useCookies(['token', "id", "senderID", "roomID", "name"])
+  const [cookie, setCookie] = useCookies(["token", "id", "roomID", "name" ,'photo_profile', 'tokoId' , 'name'])
+
   const [feedbacks, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
   const [balas, setBalas] = useState<string | undefined>("")
@@ -124,6 +126,8 @@ const Detail = () => {
         res.data.data.product_pcs = count
         SetTestCount(res.data.data.product_pcs)
         setTestPrice(res.data.data.total_price)
+        console.log('res.data.data', res.data.data);
+        setCookie('tokoId', res.data.data.user_id , {path: "/"})
       })
       .catch((err) => {
         // console.log(err.response.statusText)
@@ -322,6 +326,7 @@ const Detail = () => {
       .get(`https://lapakumkm.mindd.site/products/${id}/discussions`)
       .then((res) => {
         const { data } = res.data
+        
         setDiskusi(data)
       })
       .catch((err) => {
@@ -546,12 +551,13 @@ const Detail = () => {
   const [roomID, setRoomID] = useState<string>("")
   const [senderID, setSenderID] = useState<number>(0)
   const [recipientID, setRecipientID] = useState<number>(0)
+  const [idFetch, setIdFetch] = useState<any>('')
 
 
   const handleShowChat = () => {
     setShowChat(true)
     const body = {
-      recipient_id: productId
+      recipient_id: userId
     }
 
     axios
@@ -561,24 +567,20 @@ const Detail = () => {
         }
       })
       .then((res) => {
-        console.log("room_id :", res.data.data.room_id)
         const cekID = res.data.data.room_id
-
         if (cekID) {
           setRoomID(cekID)
           setSenderID(res.data.data.sender_id)
           setRecipientID(res.data.data.recipient_id)
         }
-      })
+      }
+      
+      )
       .catch((err) => {
         console.log(err.response.data.message)
       })
   }
-  console.log("feed", feedbacks);
-  console.log("diskus", diskusi);
-  console.log("id", userId);
-  console.log("cookie id", cookie.id);
-  
+
   return (
     <Layout>
       {
@@ -595,10 +597,11 @@ const Detail = () => {
               product_id={productId}
               Room={roomID}
               Recipient_id={recipientID}
+              userID={userId}
             />
 
             {/* card for image */}
-            <div className='w-full mt-10 mx-auto px-5 py-10  border dark:border-none rounded-lg'>
+            <div className='w-full mt-10 mx-auto px-5 py-10   dark:border-none rounded-lg'>
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
@@ -674,7 +677,7 @@ const Detail = () => {
                       <div className="flex gap-2 border w-fit mt-10 items-center overflow-hidden dark:border-lapak">
                         <button onClick={handleDecrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-none dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 mr-5 ml-2">-</button>
                         <h1 className="font-bold dark:text-white">{count}</h1>
-                        <button onClick={handleIncrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-none dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
+                        <button onClick={handleIncrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-transparent dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
                       </div>
                       <div className="border-2 mt-5 dark:border-lapak"></div>
                       <div className="flex 2xl:flex-row lg:flex-row md:flex-row flex-col justify-center gap-5 mt-10 w-fit mx-auto ">

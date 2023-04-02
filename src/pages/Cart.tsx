@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import Loading from '../components/Loading'
 import Search from '../components/Search'
+import Default from "../assets/default.jpg"
+import noimg from "../assets/download.png"
 
 interface Product {
     selected: unknown
@@ -176,7 +178,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                     Authorization: `Bearer ${cookies.token}`
                 }
             });
-            const data = response.data.data
+            const data = response.data.data            
             setNewCart(data);
             setCount(response.data.data.product_pcs)
         } catch (error) {
@@ -221,7 +223,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                     <label>
                                                         <input
                                                             type="checkbox"
-                                                            className="checkbox checkbox-accent"
+                                                            className="checkbox checkbox-accent "
                                                             id='checkcart'
                                                             checked={selectedItems.length === cart.length}
                                                             onChange={handleCheckAll}
@@ -254,10 +256,10 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                             <CartCard
                                                                 key={item.id}
                                                                 id={"keranjang"}
-                                                                img={FotoProfile}
+                                                                img={item.photo_profile ? item.photo_profile : Default}
                                                                 sellerName={item.lapak_name}
                                                                 produkName={item.product_name}
-                                                                produkimg={item.product_image}
+                                                                produkimg={item.product_image == "" ? noimg :  item.product_image }
                                                                 counts={item.product_pcs}
                                                                 price={item.product_price}
                                                                 onCheck={handleCheckAll}
@@ -279,7 +281,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                         </div>
                         <div className="flex h-40 md:w-40 2xl:w-80 sticky-top mb-2">
                             <div className="block w-96 p-6 bg-white border border-gray-200 rounded-xl shadow hover:bg-gray-100 dark:bg-slate-800 dark:border-lapak">
-                                <div className="flex justify-between border-b-2 dark:border-lapak">
+                                <div className="flex justify-between border-b-2 dark:border-lapak 2xl:text-lg">
                                     <h5 className="mb-2 font-bold 2xl:text-md tracking-tight text-gray-900 dark:text-white">Total Harga</h5>
                                     <h5 className="mb-2 2xl:text-md font-bold tracking-tight text-gray-900 dark:text-white"> {formatValue({
                                         value: JSON.stringify(price),

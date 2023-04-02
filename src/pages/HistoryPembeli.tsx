@@ -172,6 +172,7 @@ const HistoryPembeli = () => {
           return item
         }
       })
+
       setCombineProduk(cekDetail)
     }
   }, [product, detailHistory]);
@@ -198,6 +199,7 @@ const HistoryPembeli = () => {
     setValue(initialFormValues);
     const body = {
       product_id: prodFeedId,
+      parent_id: 0,
       transaction_id: transactionsId,
       product_transaction_detail_id: prodTransDetail,
       rating: value.rating,
@@ -331,7 +333,7 @@ const HistoryPembeli = () => {
                               status="Done"
                               quantity={item.total_product}
                               rating={item.rating}
-                              handleEdit={()=> navigate(`/detail/${item.product_id}`)}
+                              handleEdit={()=> navigate(`/detail/${item.product}`)}
                               handleFeedback={() => {setShowFeedback(true), handleIdClick(item)
                               }}
                             />

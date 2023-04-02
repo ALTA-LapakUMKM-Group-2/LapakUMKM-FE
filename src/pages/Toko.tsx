@@ -38,6 +38,7 @@ const Toko = () => {
             setFullName(fullName)
             setData(res.data.data)
             setGetUserToko(res.data.data[0].user_id)
+            console.log('cekk toko data', res.data.data[0].id)
         } catch (error) {
 
         }
@@ -66,7 +67,6 @@ const Toko = () => {
 
 
     console.log('cek foto', foto);
-    
     console.log('test data toko', data);
     console.log('ambil data toko', getUserToko);
     const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/' + foto
@@ -83,9 +83,29 @@ const Toko = () => {
                         img={FotoProfile}
                         isOpen={showChat}
                         isClose={() => setShowChat(false)}
-                        
                     >
-                       
+                        <div className="chat chat-start">
+                            <div className="chat-image avatar">
+                                <div className="w-10 rounded-full">
+                                    <img src={FotoProfile} />
+                                </div>
+                            </div>
+                            <div className="chat-header">
+                                Obi-Wan Kenobi
+                            </div>
+                            <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
+                        </div>
+                        <div className="chat chat-end">
+                            <div className="chat-image avatar">
+                                <div className="w-10 rounded-full">
+                                    <img src={FotoProfile} />
+                                </div>
+                            </div>
+                            <div className="chat-header">
+                                Anakin
+                            </div>
+                            <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
+                        </div>
                     </ChatModal>
                     {/*test card  */}
                     {/* from-green-300 via-blue-500 to-purple-600 */}
@@ -116,14 +136,14 @@ const Toko = () => {
                                     data?.map((item: any, i: number) => {
                                       
                                         return (
-                                            <ProdukCard
+                                            <ProdukCard 
                                                 produkName={item.product_name}
-                                                location='jakarta'
+                                                location={item.user.address}
                                                 sell={item.stock_sold}
-                                                id={i}
+                                                id={item.id}
                                                 key={i}
                                                 image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
-                                                rating={4}
+                                                rating={item.rating ? Number(item.rating.toFixed(1)) : 0}
                                                 price={item.price}
                                             />
                                         )
