@@ -147,7 +147,6 @@ const ListProduct = () => {
           Authorization: `Bearer ${cookie.token}`
         }
       })
-      console.log("dashboard", res.data.data)
       setDashboardData(res.data.data)
     } catch (error) {
 
@@ -180,9 +179,6 @@ const ListProduct = () => {
   useEffect(() => {
     fetchImage(productId)
   }, [])
-  console.log("product Id", product)
-  console.log("gambaer", picture)
-  console.log('test dashboard', dashboardData)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true)
@@ -372,31 +368,30 @@ const ListProduct = () => {
         }
       }
     )
-      .then((response) => {
-        console.log(response.data.data)
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          text: response.data.message,
-          iconColor: '#31CFB9',
-          showConfirmButton: false,
-          timer: 2000,
-        })
-        fetchProduct()
-        setShowEditProduk(false)
+    .then((response)=> {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        text: response.data.message,
+        iconColor: '#31CFB9',
+        showConfirmButton: false,
+        timer: 2000,
       })
-      .catch((error) => {
-        console.log(error)
-        Swal.fire({
-          icon: "error",
-          title: error.message,
-          text: "gagal",
-          showConfirmButton: false,
-          showCancelButton: false,
-          timer: 1500,
-        })
-      }).finally(() => setLoading(false))
-  }
+      fetchProduct()
+      setShowEditProduk(false)
+    })
+    .catch((error)=> {
+      console.log(error)
+      Swal.fire({
+        icon: "error",
+        title: error.message,
+        text: "gagal",
+        showConfirmButton: false,
+        showCancelButton: false,
+        timer: 1500,
+      })
+    }).finally(()=>setLoading(false))
+}
 
   const handleDelete = async (id: any) => {
     Swal.fire({
@@ -563,7 +558,6 @@ const ListProduct = () => {
                       label="Submit"
                       type="submit"
                       disabled={formValues === null}
-                      onClick={() => console.log(formValues)}
                     />
                   </div>
                 </div>
@@ -653,7 +647,6 @@ const ListProduct = () => {
                       id="btn-update"
                       label="Submit"
                       type="submit"
-                      onClick={() => console.log(formValues)}
                     />
                   </div>
                 </div>
@@ -808,24 +801,24 @@ const ListProduct = () => {
             isClose={() => setShowImage(false)}
             title="Gambar Produk"
           >
-            <div className="grid grid-cols-3 gap-3">
-              {picture.data !== null ?
-                picture?.data?.map((item: any, index: any) => {
-                  return (
-                    <label
-                      className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-800`}>
-                      <div className="flex flex-col items-center justify-center ">
-                        <div key={index}>
-                          <img src={item.image} className="w-20 h-20" alt="" />
-                        </div>
-                      </div>
-                      <button className="btn btn-sm btn-outline btn-error mt-2" onClick={() => handleDeleteImage(item.id)}>Hapus</button>
-                    </label>
-                  )
-                })
-                :
-                <>
-                </>}
+          <div className="grid gird-cols-1 md:grid-cols-3 gap-3">
+                    { picture.data !== null ? 
+                        picture?.data?.map((item:any, index:any) => {
+                          return(
+                            <label
+                              className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-800`}>
+                              <div className="flex flex-col items-center justify-center ">
+                                <div key={index}>
+                                  <img src={item.image} className="w-20 h-20" alt="" />
+                                </div>
+                              </div>
+                              <button className="btn btn-sm btn-outline btn-error mt-2" onClick={()=> handleDeleteImage(item.id)}>Hapus</button>
+                            </label>
+                          )
+                        })
+                      :
+                      <>
+                      </> }
               <form onSubmit={handleUpload}>
                 <label htmlFor="dropzone-file"
                   onDrop={handleDrop}
@@ -859,12 +852,11 @@ const ListProduct = () => {
                   />
                 </label>
                 <div className="mt-8">
-                  <CustomButton
-                    id="btn-update"
-                    label="Submit"
-                    type="submit"
-                    onClick={() => console.log(formValues)}
-                  />
+                    <CustomButton
+                      id="btn-update"
+                      label="Submit"
+                      type="submit"
+                    />
                 </div>
               </form>
             </div>

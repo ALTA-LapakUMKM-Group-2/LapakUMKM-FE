@@ -74,12 +74,6 @@ const HistoryPembeli = () => {
     setProdTransDetail(id.id)
   }
 
-  useEffect(() => {
-    if (transactionsId !== null && prodFeedId !== null) {
-      console.log("ini id trans", transactionsId);
-      console.log("ini id prod", prodFeedId);
-    }
-  }, [transactionsId, prodFeedId]);
 
   function dataTransaksi() {
     setLoading(true)
@@ -111,7 +105,6 @@ const HistoryPembeli = () => {
         res.data.data.size = ''
         res.data.data.shop_name = ''
         setDetailHistory(res.data.data)
-        console.log("ini history coo", res.data.data)
         const productIds = res.data.data.map((id: any) => id.product_id)
         if (productIds) {
           setProductId(productIds)
@@ -162,7 +155,7 @@ const HistoryPembeli = () => {
             ...item,
             ...data
           }
-        } else {
+        } else{
           return item
         }
       })
@@ -199,8 +192,8 @@ const HistoryPembeli = () => {
       rating: value.rating,
       feedback: value.comment,
     };
-    await axios.post(feedbackEndpoint, body, {
-      headers: {
+    await axios.post(feedbackEndpoint, body,{
+      headers:{
         Authorization: `Bearer ${cookie.token}`,
         "Content-Type": 'application/json',
         Accept: 'application/json'
@@ -240,11 +233,11 @@ const HistoryPembeli = () => {
   }
   const [historyDetail, setHistoryDetail] = useState<any>(null);
 
-  const handleOpenCollapsible = (id: any) => {
-    const selectedHistory: any = history.find((item) => item.id === id);
+  const handleOpenCollapsible = (id:any) => {
+    const selectedHistory:any = history.find((item) => item.id === id);
     setHistoryDetail(selectedHistory);
   };
-  console.log("comcafbcdasdbf", combineProduk);
+  
 
   return (
     <Layout>
@@ -254,8 +247,8 @@ const HistoryPembeli = () => {
           <div className="flex flex-col justify-center items-center">
             <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
             <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5">
-              {history ? history.map((item) => {
-                return (
+              {history ? history.map((item)=>{
+                return(
                   <CollapsiblePrimitive.Root key={item.id} open={historyDetail?.id === item.id} onOpenChange={() => handleOpenCollapsible(item.id)}>
                     <CollapsiblePrimitive.Trigger
                       className={clsx(
@@ -266,7 +259,7 @@ const HistoryPembeli = () => {
                       onClick={() => dataTransaksiId(item.id)}
                     >
                       <div className="mb-1 rounded-lg bg-white text-gray-900 dark:bg-slate-700 dark:text-gray-100 
-                      select-none items-center justify-between px-4 py-2 text-left text-sm font-medium">
+                      select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium">
                         <p>{`Total Barang : ${item.total_product}`}</p>
                         <p className=''>Total Belanja :
                           {formatValue({
@@ -278,14 +271,14 @@ const HistoryPembeli = () => {
                         </p>
                         <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
-                        <div className="flex mt-2 flex-wrap gap-y-2 sm:gap-4 ">
+                        <div className="flex mt-2 flex-wrap gap-y-2 sm:gap-4 relative">
                           <div className='ml-auto'>
                             <CustomButton
                               id="btn-balas"
                               label='Bayar sekarang'
                               type='submit'
-                              className='btn btn-xs rounded-lg border-none bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400'
-                              onClick={() => { handleBayar(item.payment_link) }}
+                              className={`btn btn-xs rounded-lg border-none ${item.payment_status === "pending" || "" ? "hidden" : "block" } bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400`}
+                              onClick={()=> {handleBayar(item.payment_link)}}
                             />
                           </div>
 
@@ -302,41 +295,40 @@ const HistoryPembeli = () => {
                       <HiChevronDown className="transform duration-300 ease-in-out group-radix-state-open:rotate-90" />
                     </CollapsiblePrimitive.Trigger>
                     <CollapsiblePrimitive.Content className="mt-4 flex flex-col space-y-4 mb-10">
-                      {loadingItem ?
-                        <div className={clsx(
-                          "group flex w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
-                          "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100",
-                          "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
-                        )}>
-                          <Loading />
-                        </div>
-                        :
-                        <div className="grid">
-                          {combineProduk ?
-                            <>
-                              {combineProduk.map((item: any) => (
-                                <CardHistory
-                                  key={item.id}
-                                  id={item.id}
-                                  produkImg={item.product_image ? item.product_image : NotFound}
-                                  sellerName={item.shop_name}
-                                  produkName={item.product.product_name}
-                                  size={item.size}
-                                  price={item.product.price}
-                                  totalPrice={item.product.price}
-                                  status="Done"
-                                  quantity={item.total_product}
-                                  rating={item.rating}
-                                  handleEdit={() => navigate(`/detail/${item.product}`)}
-                                  handleFeedback={() => {
-                                    setShowFeedback(true), handleIdClick(item)
-                                  }}
-                                />
-                              ))}
-                            </> : <></>
-                          }
-                        </div>
-                      }
+                    {loadingItem ? 
+                    <div className={clsx(
+                      "group flex w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
+                      "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100",
+                      "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+                    )}>
+                      <Loading/> 
+                    </div>
+                    :
+                      <div className="grid">
+                        {combineProduk ? 
+                          <>
+                          {combineProduk.map((item:any) => (
+                            <CardHistory
+                              key={item.id}
+                              id={item.id}
+                              produkImg={item.product_image ? item.product_image : NotFound}
+                              sellerName={item.shop_name}
+                              produkName={item.product.product_name}
+                              size={item.size}
+                              price={item.product.price}
+                              totalPrice={item.product.price}
+                              status="Done"
+                              quantity={item.total_product}
+                              rating={item.rating}
+                              handleEdit={()=> navigate(`/detail/${(item.product_id)}`)}
+                              handleFeedback={() => {setShowFeedback(true), handleIdClick(item)
+                              }}
+                            />
+                          ))}
+                          </> : <></> 
+                        }
+                      </div>
+                    }
                     </CollapsiblePrimitive.Content>
                   </CollapsiblePrimitive.Root>
                 )

@@ -14,6 +14,7 @@ import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CutomInput';
 import { useGoogleLogin } from '@react-oauth/google';
 import Modal from '../components/Modal';
+import { FcGoogle } from 'react-icons/fc'
 
 const Login = () => {
 
@@ -24,7 +25,7 @@ const Login = () => {
   const [cookie, setCookie] = useCookies(["token", "id", "photo_profile", "name", "full_name"]);
 
   const login = useGoogleLogin({
-    onSuccess: tokenResponse => { console.log("buat ngambil token", tokenResponse), setUser(tokenResponse) },
+    onSuccess: tokenResponse =>  setUser(tokenResponse),
   });
 
   const handleGetAccessToken = async () => {
@@ -36,7 +37,6 @@ const Login = () => {
         }
       });
       setProfile(response.data);
-      console.log(response.data);
       if (response.data) {
         handleLoginWithGoogle(response.data);
       }
@@ -53,8 +53,6 @@ const Login = () => {
         verified_email: profile.verified_email,
         photo: profile.picture
       });
-      console.log('test data userLogin', response.data);
-
       const { message, data } = response.data;
       setCookie("token", data.token, { path: "/" });
       setCookie('id', data.user.id, { path: '/' })
@@ -70,15 +68,12 @@ const Login = () => {
       });
       navigate('/home');
     } catch (error) {
-      console.log(error);
-      // handle errors here
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    console.log("ini token", user.access_token);
     if (user) {
       handleGetAccessToken();
     }
@@ -119,9 +114,7 @@ const Login = () => {
       .post(`
       https://lapakumkm.mindd.site/auth/login`, body)
       .then((res) => {
-        console.log('test data userLogin', res.data);
         const { message, data } = res.data
-        console.log(data.token)
         setCookie("token", data.token, { path: "/" });
         setCookie('id', data.user.id, { path: '/' })
         setCookie('full_name', data.user.full_name, { path: '/' })
@@ -276,11 +269,18 @@ const Login = () => {
               </form>
 
               <div className="mt-3">
-                <CustomButton
-                  id='btn-login'
-                  label='Masuk Dengan Google'
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  data-te-ripple-init
+                  data-te-ripple-color="light"
                   onClick={() => login()}
-                />
+                  className="btn mb-2 flex rounded px-6 bg-white text-slate-700 hover:bg-slate-200 hover:scale-125 rounded-xl font-semibold shadow-xl  border-gray-300 w-80 font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+                  >
+                    <FcGoogle className='mr-5' size={25}/>
+                  Masuk Dengan Google 
+                </button>
+              </div>
               </div>
 
               <p className="mt-8 text-sm font-semibold  text-center text-gray-700">

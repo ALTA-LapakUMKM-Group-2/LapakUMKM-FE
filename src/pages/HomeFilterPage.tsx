@@ -80,10 +80,8 @@ const HomeFilter = () => {
         setLoading(true)
         try {
             const res = await axios.get(`${productEndpoint}price_min=${minPrice}&price_max=${maxPrice}&rating=${rating}&category_id=${categori_id}`,
-                {
-                    headers: { Authorization: `Bearer ${cookie.token}` }
-                })
-            console.log("products", res.data.data)
+            { headers:{ Authorization: `Bearer ${cookie.token}`}
+            })
             setProducts(res.data.data)
         } catch (error) {
             if (error) {
@@ -139,8 +137,7 @@ const HomeFilter = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
-    console.log('test kategori', category);
-    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
             <Navbar
@@ -211,48 +208,46 @@ const HomeFilter = () => {
                                                         className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
                                                         focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
                                                         bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
-                                                        id="maxprice"
-                                                        name="maxprice"
-                                                        prefix='Rp. '
-                                                        decimalSeparator=','
-                                                        groupSeparator='.'
-                                                        placeholder="Rp. "
-                                                        defaultValue={formValues.maxprice}
-                                                        decimalsLimit={2}
-                                                        onValueChange={(value, name) => setFormValues({ ...formValues, maxprice: value ? parseInt(value) : 0 })}
-                                                    />
-                                                </div>
-                                                <div className="">
-                                                    <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minrating" id='minrating'>Minimal Ratings</label>
-                                                    <Rating
-                                                        itemStyles={customStyles}
-                                                        isRequired
-                                                        style={{ maxWidth: 200 }}
-                                                        value={formValues.minrating}
-                                                        // visibleLabelId="minrating"
-                                                        onChange={(selectedValue: any) =>
-                                                            setFormValues((prevData) => ({ ...prevData, minrating: selectedValue }))
-                                                        }
-                                                    />
-                                                </div>
-                                                <CustomButton
-                                                    id='submit'
-                                                    name='submit'
-                                                    label='Cari'
-                                                    onClick={() => console.log(formValues)}
+                                                    id="maxprice"
+                                                    name="maxprice"
+                                                    prefix='Rp. '
+                                                    decimalSeparator=','
+                                                    groupSeparator='.'
+                                                    placeholder="Rp. "
+                                                    defaultValue={formValues.maxprice}
+                                                    decimalsLimit={2}
+                                                    onValueChange={(value, name) => setFormValues({ ...formValues, maxprice: value ? parseInt(value) : 0 })}
                                                 />
-                                            </form>
                                         </div>
-                                    </div>
+                                        <div className="">
+                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minrating" id='minrating'>Minimal Ratings</label>
+                                            <Rating
+                                                itemStyles={customStyles}
+                                                isRequired
+                                                style={{ maxWidth: 200 }}
+                                                value={formValues.minrating}
+                                                // visibleLabelId="minrating"
+                                                onChange={(selectedValue: any) =>
+                                                setFormValues((prevData) => ({ ...prevData, minrating: selectedValue }))
+                                                }
+                                            />
+                                        </div>
+                                        <CustomButton
+                                        id='submit'
+                                        name='submit'
+                                        label='Cari'
+                                        />
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                        <div className="my-4 gap-y-5 gap-x-5 grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mx-auto mt-10">
+                    </div>
+                </div>
+                <div className="my-4 gap-y-5 gap-x-5 grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mx-auto mt-10">
                             {products?.filter((item: any) => {
                                 return search.toLocaleLowerCase() === "" ?
-                                    item : item.product_name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-                            }).map((item: any, index: number) => {
-                                // console.log('test', item);
+                                item : item.product_name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+                            }).map((item: any, index:number) => {
                                 return (
                                     <ProdukCard
                                         size={item.size}

@@ -70,7 +70,7 @@ const LupaPassword = () => {
         showCancelButton: false,
         timer: 1500,
       });
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       console.log(error)
     } finally {
@@ -144,6 +144,7 @@ const LupaPassword = () => {
               <CustomButton
                 id='btn-login'
                 label='Ubah Password'
+                type='submit'
               />
             </div>
 

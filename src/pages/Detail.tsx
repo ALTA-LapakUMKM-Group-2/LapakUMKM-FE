@@ -110,11 +110,9 @@ const Detail = () => {
         res.data.data.product_pcs = count
         SetTestCount(res.data.data.product_pcs)
         setTestPrice(res.data.data.total_price)
-
         setCookie('tokoId', res.data.data.user_id , {path: "/"})
       })
       .catch((err) => {
-     
         MySwal.fire({
           icon: "error",
           title: err.response.statusText,
@@ -246,7 +244,7 @@ const Detail = () => {
         MySwal.fire({
           icon: "success",
           iconColor: "#31CFB9",
-          title: "Anda berhasil membalas diskusi",
+          title: "Anda berhasil membalas Feedback",
           showCancelButton: false,
           showConfirmButton: false,
           timer: 1500
@@ -567,9 +565,6 @@ const Detail = () => {
         loading ? <Loading /> :
           <>
             <Navbar />
-
-            {/* chatting */}
-
             <ChatModal
               img={photoToko}
               isOpen={showChat}
@@ -581,11 +576,9 @@ const Detail = () => {
               tokoName={name}
             />
 
-            {/* card for image */}
             <div className='w-full mt-10 mx-auto px-5 py-10   dark:border-none rounded-lg'>
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
-                  {/* Card kiri */}
                   <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-lapak dark:border-2">
                     {loading ? <Loading /> :
                       image ?
@@ -676,11 +669,9 @@ const Detail = () => {
                     </div>
                   </div>
                 </div>
-                {/* Break Line  */}
                 <div className='border-2 mt-10 dark:border-lapak'>
 
                 </div>
-                {/* Card toko */}
                 <div className='flex flex-col gap-10'>
                   <div className='flex mt-10 shadow-xl w-fit p-10 gap-5 border rounded-md dark:border-lapak'>
                     <div className="avatar cursor-pointer">
@@ -717,7 +708,6 @@ const Detail = () => {
                     <h1>{description}</h1>
                   </div>
                 </div>
-                {/* end */}
                 <div className='border-2 mt-20 mb-5 dark:border-lapak'>
                 </div>
 
@@ -806,7 +796,6 @@ const Detail = () => {
                                     id="btn-edit"
                                     label='Perbarui'
                                     type='submit'
-                                    onClick={() => console.log(value)}
                                   />
                                 </div>
                               </form>
@@ -830,15 +819,14 @@ const Detail = () => {
                                   onChange={handleFeedbackReply}
                                 />
 
-                                <div className='w-3/12 mt-4 ml-auto'>
-                                  <CustomButton
-                                    id="btn-balas"
-                                    label='Balas'
-                                    type='submit'
-                                    onClick={() => console.log("isinya", replyFeed)}
-                                  />
-                                </div>
-                              </form>
+                                  <div className='w-3/12 mt-4 ml-auto'>
+                                    <CustomButton
+                                      id="btn-balas"
+                                      label='Balas'
+                                      type='submit'
+                                    />
+                                  </div>
+                                </form>
 
                               <div className='absolute bottom-0 right-48 w-3/12'>
                                 <CustomButton
