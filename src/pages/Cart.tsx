@@ -13,28 +13,10 @@ import Loading from '../components/Loading'
 import Search from '../components/Search'
 import Default from "../assets/default.jpg"
 import noimg from "../assets/download.png"
+import { Products } from '../utils/types/DataType'
 
-interface Product {
-    selected: unknown
-    id: number
-    lapak_address: string
-    lapak_name: string
-    product_id: number
-    product_name: string
-    product_pcs: number
-    product_price: number
-    user_id: number
-    total_price: number
-}
 interface CartData {
-    products?: Product
-}
-
-interface CartItem {
-    id: number
-    product_price: number
-    lapak_name: string
-    product_pcs: number
+    products?: Products
 }
 
 const Cart: React.FC<CartData> = ({ products }) => {
@@ -42,16 +24,16 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [data, setData] = useState<any>([])
     const [cookies, setCookies, removeCookies] = useCookies(['token'])
     const [checked, setChecked] = useState(false);
-    const [selectedItems, setSelectedItems] = useState<Product[]>([]);
-    const [newCart, setnewCart] = useState<Product[]>([]);
+    const [selectedItems, setSelectedItems] = useState<Products[]>([]);
+    const [newCart, setnewCart] = useState<Products[]>([]);
     const [price, setPrice] = useState<number>(0)
     const [count, setCount] = useState<number>()
-    const [cart, setNewCart] = useState<Product[]>([])
+    const [cart, setNewCart] = useState<Products[]>([])
     const [totalPrice, setTotalPrice] = useState<number>(price)
     const navigate = useNavigate()
 
 
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Product) => {
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, product: Products) => {
         const isChecked = e.target.checked;
         setSelectedItems((prevState) => {
             const updatedItems = isChecked
@@ -69,7 +51,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             setSelectedItems([]);
         }
     };
-    const handleIncrement = (i: CartItem) => {
+    const handleIncrement = (i: Products) => {
         let _cart = cart.map((item) => {
             if (item.id === i.id) {
                 item.product_pcs++;
@@ -79,7 +61,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
         setnewCart(_cart);
     };
 
-    const handleDecrement = (i: CartItem) => {
+    const handleDecrement = (i: Products) => {
         let _cart = cart.map((item) => {
             if (item.id === i.id) {
                 if (item.product_pcs === 1) {
@@ -178,7 +160,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                     Authorization: `Bearer ${cookies.token}`
                 }
             });
-            const data = response.data.data            
+            const data = response.data.data
             setNewCart(data);
             setCount(response.data.data.product_pcs)
         } catch (error) {
@@ -259,7 +241,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                                                 img={item.photo_profile ? item.photo_profile : Default}
                                                                 sellerName={item.lapak_name}
                                                                 produkName={item.product_name}
-                                                                produkimg={item.product_image == "" ? noimg :  item.product_image }
+                                                                produkimg={item.product_image == "" ? noimg : item.product_image}
                                                                 counts={item.product_pcs}
                                                                 price={item.product_price}
                                                                 onCheck={handleCheckAll}

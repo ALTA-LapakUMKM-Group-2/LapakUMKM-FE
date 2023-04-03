@@ -19,8 +19,13 @@ type Child = {
   parent_id: number
   user_id: number
   discussion: string
-  feedback:string
+  feedback: string
   user: Profile
+}
+
+type Detail = {
+  product_id: number
+  total_products: number
 }
 
 export interface Chat {
@@ -84,4 +89,35 @@ export interface HistoryIDType {
   product?: Product
   total_product?: number
   rating?: number
+}
+
+export interface Products {
+  selected: unknown
+  id: number
+  lapak_address: string
+  lapak_name: string
+  product_id: number
+  product_name: string
+  product_pcs: number
+  product_price: number
+  user_id: number
+  total_price: number
+}
+
+export interface FormValues {
+  comment: string;
+  rating: number;
+}
+
+export interface FormValue {
+  minprice: number | any
+  maxprice: number | any
+  kategori: number | any;
+  minrating: number | any
+}
+
+export interface Transactions {
+  total_products: number
+  total_payment: number
+  product_detail: Detail
 }

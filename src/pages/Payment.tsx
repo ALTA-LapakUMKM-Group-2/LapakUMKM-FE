@@ -16,20 +16,9 @@ import { BsShop } from 'react-icons/bs'
 import Loading from '../components/Loading'
 import Loading2 from '../components/Loading2'
 import Default from "../assets/default.jpg"
-
-type Detail = {
-    product_id: number
-    total_products: number
-}
-
-interface Transactions extends Detail {
-    total_products: number
-    total_payment: number
-    product_detail: Detail
-}
+import { Transactions } from '../utils/types/DataType';
 
 const Payment = () => {
-    // const [showModal, setShowModal] = useState(false)
     const [cookie, setCookie] = useCookies(['token'])
     const location = useLocation()
     const navigate = useNavigate()

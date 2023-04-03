@@ -17,7 +17,7 @@ import { HiOutlineArrowLongDown, HiOutlineArrowLongUp } from 'react-icons/hi2'
 import { GoKebabVertical } from 'react-icons/go'
 import Loading from '../components/Loading'
 import { useCookies } from 'react-cookie'
-import { FeedbackTypes } from '../utils/types/DataType'
+import { FeedbackTypes, FormValues, Products } from '../utils/types/DataType'
 import CustomInput from '../components/CutomInput'
 import CustomButton from '../components/CustomButton'
 import Default from "../assets/default.jpg"
@@ -27,31 +27,13 @@ import '@smastrom/react-rating/style.css'
 import { Rating } from '@smastrom/react-rating';
 
 
-interface Product {
-  selected: unknown
-  id: number
-  lapak_address: string
-  lapak_name: string
-  product_id: number
-  product_name: string
-  product_pcs: number
-  product_price: number
-  user_id: number
-  total_price: number
-}
-
-interface FormValues {
-  comment: string;
-  rating: number;
-}
-
 const initialFormValues: FormValues = {
   comment: '',
   rating: 0
 };
 
 const Detail = () => {
-  
+
   const { id } = useParams();
   const MySwal = withReactContent(Swal);
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,7 +45,7 @@ const Detail = () => {
   const [address, setAddress] = useState('')
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
-  const [cookie, setCookie] = useCookies(["token", "id", "roomID", "name" ,'photo_profile', 'tokoId' , 'name'])
+  const [cookie, setCookie] = useCookies(["token", "id", "roomID", "name", 'photo_profile', 'tokoId', 'name'])
 
   const [feedbacks, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
@@ -72,7 +54,7 @@ const Detail = () => {
   const [disable, setDisable] = useState<boolean>(true)
   const [hide, setHide] = useState<boolean>(true)
   const navigate = useNavigate()
-  const [test, setTest] = useState<Product[]>([])
+  const [test, setTest] = useState<Products[]>([])
   const [productId, setProductId] = useState<any>()
   const [userId, setUserId] = useState<any>()
 
@@ -81,9 +63,9 @@ const Detail = () => {
   );
 
   const customStyles = {
-      itemShapes: StarDrawing,
-      activeFillColor: '#FDD231',
-      inactiveFillColor: '#ffffff',
+    itemShapes: StarDrawing,
+    activeFillColor: '#FDD231',
+    inactiveFillColor: '#ffffff',
 
   };
 
@@ -127,7 +109,7 @@ const Detail = () => {
         SetTestCount(res.data.data.product_pcs)
         setTestPrice(res.data.data.total_price)
         console.log('res.data.data', res.data.data);
-        setCookie('tokoId', res.data.data.user_id , {path: "/"})
+        setCookie('tokoId', res.data.data.user_id, { path: "/" })
       })
       .catch((err) => {
         // console.log(err.response.statusText)
@@ -230,11 +212,11 @@ const Detail = () => {
     feedbackData()
   }, [])
 
-  const [parentId, setParentId] = useState<number|null>()
-  const [prodTransDetail, setProdTransDetail] = useState<number|null>()
+  const [parentId, setParentId] = useState<number | null>()
+  const [prodTransDetail, setProdTransDetail] = useState<number | null>()
   const [replyFeed, setReplyFeed] = useState<string>('')
   console.log(parentId, prodTransDetail);
-  
+
   const handleFeedbackReply = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReplyFeed(e.target.value);
   };
@@ -290,12 +272,12 @@ const Detail = () => {
       rating: value.rating
     }
     await axios.put(`https://lapakumkm.mindd.site/feedbacks/${feedbackId}`, body, {
-        headers: {
-          Authorization: `Bearer ${cookie.token}`,
-          Accept: 'application/json',
-          "Content-Type": 'application/json'
-        }
-      })
+      headers: {
+        Authorization: `Bearer ${cookie.token}`,
+        Accept: 'application/json',
+        "Content-Type": 'application/json'
+      }
+    })
       .then((res) => {
         MySwal.fire({
           icon: "success",
@@ -326,7 +308,7 @@ const Detail = () => {
       .get(`https://lapakumkm.mindd.site/products/${id}/discussions`)
       .then((res) => {
         const { data } = res.data
-        
+
         setDiskusi(data)
       })
       .catch((err) => {
@@ -574,7 +556,7 @@ const Detail = () => {
           setRecipientID(res.data.data.recipient_id)
         }
       }
-      
+
       )
       .catch((err) => {
         console.log(err.response.data.message)
@@ -606,47 +588,47 @@ const Detail = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-5 ">
                   {/* Card kiri */}
                   <div className="bg-transparent shadow-lg  rounded-lg h-fit p-5 dark:border-lapak dark:border-2">
-                    {loading   ? <Loading/> : 
-                      image ? 
-                      <>
-                      {
-                      image.length === 1? 
-                        <div className="max-w-5xl max-h-96 ">
-                          <img src={image[0]?.image} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
-                        </div>
-                          :
-                        image.length === 2 ?
-                        <div className="max-w-5xl max-h-96 grid grid-cols-2 gap-2">
-                          <img src={image[0]?.image} className="object-cover w-full h-96 rounded-md" alt="" />
-                          <img src={image[1]?.image} className="object-cover w-full h-96 rounded-md" alt="" />
-                        </div>
+                    {loading ? <Loading /> :
+                      image ?
+                        <>
+                          {
+                            image.length === 1 ?
+                              <div className="max-w-5xl max-h-96 ">
+                                <img src={image[0]?.image} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
+                              </div>
+                              :
+                              image.length === 2 ?
+                                <div className="max-w-5xl max-h-96 grid grid-cols-2 gap-2">
+                                  <img src={image[0]?.image} className="object-cover w-full h-96 rounded-md" alt="" />
+                                  <img src={image[1]?.image} className="object-cover w-full h-96 rounded-md" alt="" />
+                                </div>
+                                :
+                                image.length === 3 ?
+                                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
+                                    <img src={image[0]?.image} className="md:col-span-2 w-full h-full md:max-h-96 rounded-md" alt="" />
+                                    <div className="grid grid-rows-2">
+                                      <img src={image[1]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                                      <img src={image[2]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                                    </div>
+                                  </div>
+                                  :
+                                  image.length > 3 ?
+                                    <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
+                                      <img src={image[0]?.image} className="object-cover col-span-3 w-full h-28 md:max-h-60 rounded-md" alt="" />
+                                      <img src={image[1]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                                      <img src={image[2]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                                      <img src={image[3]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
+                                    </div>
+                                    :
+                                    <div className="max-w-5xl max-h-96 ">
+                                      <img src={NotFound} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
+                                    </div>
+                          }
+                        </>
                         :
-                        image.length === 3 ?
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                            <img src={image[0]?.image} className="md:col-span-2 w-full h-full md:max-h-96 rounded-md" alt="" />
-                            <div className="grid grid-rows-2">
-                              <img src={image[1]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-                              <img src={image[2]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-                            </div>
-                          </div>
-                        :
-                        image.length > 3 ?
-                        <div className="grid grid-cols-3 gap-2 max-w-5xl mx-auto mt-5">
-                          <img src={image[0]?.image} className="object-cover col-span-3 w-full h-28 md:max-h-60 rounded-md" alt="" />
-                          <img src={image[1]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-                          <img src={image[2]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-                          <img src={image[3]?.image} className="w-full h-sm rounded-md max-w-xs max-h-72" alt="" />
-                        </div>
-                      :
                         <div className="max-w-5xl max-h-96 ">
                           <img src={NotFound} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
                         </div>
-                        }
-                      </>
-                      :
-                      <div className="max-w-5xl max-h-96 ">
-                          <img src={NotFound} className="object-cover w-full max-h-96 md:col-span-2 rounded-md mx-auto" alt="" />
-                      </div>
                     }
                   </div>
                   <div className="p-5 rounded-md max-w-3xl w-full h-fit border-2 dark:border-lapak border-gray-200 shadow-lg mx-auto">
@@ -761,15 +743,15 @@ const Detail = () => {
                                 tabIndex={0}
                                 className="dropdown-content menu rounded-box menu-compact mt-3 bg-zinc-50 text-zinc-800 px-10 py-4 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.3)] space-y-4 text-[16px] hover:cursor-pointer"
                               >
-                                <li onClick={() => {handleDisplayEdit(item.id),setValue((prevData) => ({ ...prevData, rating: item.rating, comment: item.feedback })), setFeedbackId(item.id)}} className='hover:text-zinc-500  text-zinc-800'>perbarui</li>
+                                <li onClick={() => { handleDisplayEdit(item.id), setValue((prevData) => ({ ...prevData, rating: item.rating, comment: item.feedback })), setFeedbackId(item.id) }} className='hover:text-zinc-500  text-zinc-800'>perbarui</li>
                               </ul>
                             </div>
                             <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
-                                <img src={item.user.photo_profile ? item.user.photo_profile: Default} alt="profil.svg" />
+                              <img src={item.user.photo_profile ? item.user.photo_profile : Default} alt="profil.svg" />
                             </div>
 
                             <div className='flex justify-between text-zinc-800 items-center py-3 '>
-                                <h1 className='text-lg font-bold dark:text-white'>{item.user.full_name ? item.user.full_name : "Tidak Diketahui"}</h1>
+                              <h1 className='text-lg font-bold dark:text-white'>{item.user.full_name ? item.user.full_name : "Tidak Diketahui"}</h1>
                             </div>
                             <div id={`edit_diskusi ${item.id}`} className="my-5 border-b-2 pb-2 shadow dark:border-lapak">
                               <Rating
@@ -779,30 +761,30 @@ const Detail = () => {
                                 readOnly
                                 className='dark:text-lapak'
                               />
-                            <p className='text-gray-700 dark:text-white mt-3'>{item.feedback}</p>
+                              <p className='text-gray-700 dark:text-white mt-3'>{item.feedback}</p>
                             </div>
                             {item.childs ?
-                            <div className='pl-10 relative'>
-                              {item.childs?.map((child) => {
-                                return (
-                                  <>
-                                    <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
-                                      <img src={child.user.photo_profile ? child.user.photo_profile : Default} alt="profil.svg" />
-                                    </div>
+                              <div className='pl-10 relative'>
+                                {item.childs?.map((child) => {
+                                  return (
+                                    <>
+                                      <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
+                                        <img src={child.user.photo_profile ? child.user.photo_profile : Default} alt="profil.svg" />
+                                      </div>
 
-                                    <div className='flex justify-between text-zinc-800 items-center py-3'>
-                                      <h1 className='text-lg font-bold dark:text-white'>{child.user.full_name ? item.user.full_name : "Tidak Diketahui"}</h1>
-                                    </div>
+                                      <div className='flex justify-between text-zinc-800 items-center py-3'>
+                                        <h1 className='text-lg font-bold dark:text-white'>{child.user.full_name ? item.user.full_name : "Tidak Diketahui"}</h1>
+                                      </div>
 
-                                    <p id={``} className='text-gray-700 my-4 dark:text-white'>{child.feedback}</p>
-                                  </>
-                                )
-                              })
-                              }
-                            </div> : ""}
+                                      <p id={``} className='text-gray-700 my-4 dark:text-white'>{child.feedback}</p>
+                                    </>
+                                  )
+                                })
+                                }
+                              </div> : ""}
                             <div id={`input-edit_diskusi ${item.id}`} className="relative hidden my-5">
                               <form className='space-y-3' onSubmit={handleEditFeedback}>
-                                <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Edit Rating</label>
+                                <label className="text-xs font-medium text-gray-700 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Edit Rating</label>
                                 <Rating
                                   itemStyles={customStyles}
                                   isRequired
@@ -825,7 +807,7 @@ const Detail = () => {
                                     id="btn-edit"
                                     label='Perbarui'
                                     type='submit'
-                                    onClick={()=> console.log(value)}
+                                    onClick={() => console.log(value)}
                                   />
                                 </div>
                               </form>
@@ -833,40 +815,40 @@ const Detail = () => {
                                 <CustomButton
                                   id="btn-kembali"
                                   label='Kembali'
-                                  onClick={() => {handleHide(item.id), setValue((prevData) => ({ ...prevData, rating: 0 })),setFeedbackId(null)}}
+                                  onClick={() => { handleHide(item.id), setValue((prevData) => ({ ...prevData, rating: 0 })), setFeedbackId(null) }}
                                 />
                               </div>
                             </div>
-                            <p id={`btn-balas ${item.id}`} onClick={() => {handleDisplay(item.id), setParentId(item.parent_id), setProdTransDetail(item.product_transaction_detail_id)}} className={`${parseInt(cookie.id) === userId ? "flex" : "hidden" } text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white`}>Balas Feedback ...</p>
-                              <div id={`input-balas_diskusi ${item.id}`} className="relative mb-5 hidden">
-                                <form onSubmit={handleBalasFeedback}>
-                                  <CustomInput
-                                    id={`input-balas-Feedback`}
-                                    placeholder='Balas Ulasan Anda'
-                                    label=''
-                                    type='text'
-                                    name='balas_feedback'
-                                    onChange={handleFeedbackReply}
-                                  />
+                            <p id={`btn-balas ${item.id}`} onClick={() => { handleDisplay(item.id), setParentId(item.parent_id), setProdTransDetail(item.product_transaction_detail_id) }} className={`${parseInt(cookie.id) === userId ? "flex" : "hidden"} text-zinc-800 inline font-semibold hover:cursor-pointer hover:text-lapak dark:text-white`}>Balas Feedback ...</p>
+                            <div id={`input-balas_diskusi ${item.id}`} className="relative mb-5 hidden">
+                              <form onSubmit={handleBalasFeedback}>
+                                <CustomInput
+                                  id={`input-balas-Feedback`}
+                                  placeholder='Balas Ulasan Anda'
+                                  label=''
+                                  type='text'
+                                  name='balas_feedback'
+                                  onChange={handleFeedbackReply}
+                                />
 
-                                  <div className='w-3/12 mt-4 ml-auto'>
-                                    <CustomButton
-                                      id="btn-balas"
-                                      label='Balas'
-                                      type='submit'
-                                      onClick={() => console.log("isinya",replyFeed)}
-                                    />
-                                  </div>
-                                </form>
-
-                                <div className='absolute bottom-0 right-48 w-3/12'>
+                                <div className='w-3/12 mt-4 ml-auto'>
                                   <CustomButton
-                                    id="btn-kembali"
-                                    label='Kembali'
-                                    onClick={() => {handleHide(item.id), setParentId(null), setProdTransDetail(null)}}
+                                    id="btn-balas"
+                                    label='Balas'
+                                    type='submit'
+                                    onClick={() => console.log("isinya", replyFeed)}
                                   />
                                 </div>
+                              </form>
+
+                              <div className='absolute bottom-0 right-48 w-3/12'>
+                                <CustomButton
+                                  id="btn-kembali"
+                                  label='Kembali'
+                                  onClick={() => { handleHide(item.id), setParentId(null), setProdTransDetail(null) }}
+                                />
                               </div>
+                            </div>
                           </div>
                         </>
                       ))}
@@ -913,7 +895,7 @@ const Detail = () => {
                             className="dropdown-content menu rounded-box menu-compact mt-3 bg-zinc-50 text-zinc-800 px-10 py-4 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.3)] space-y-4 text-[16px] hover:cursor-pointer dark:bg-slate-700 "
                           >
                             <li onClick={() => handleDisplayEdit(item.id)} className='hover:text-zinc-500  text-zinc-800 dark:text-white'>perbarui</li>
-                            <li onClick={() => DeleteDiskusi(item.id)} className={`${item.childs ? "hidden" : "flex" } hover:text-red-400 text-red-500`}>hapus</li>
+                            <li onClick={() => DeleteDiskusi(item.id)} className={`${item.childs ? "hidden" : "flex"} hover:text-red-400 text-red-500`}>hapus</li>
                           </ul>
                         </div>
 
