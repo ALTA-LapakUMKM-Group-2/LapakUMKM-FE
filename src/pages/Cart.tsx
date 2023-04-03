@@ -174,7 +174,8 @@ const Cart: React.FC<CartData> = ({ products }) => {
         fetchDataCart()
     }, [])
 
-    const imgURL = "https://storage.googleapis.com/images_lapak_umkm/product/"
+  console.log('test cart', cart);
+  
 
     return (
         <Layout>

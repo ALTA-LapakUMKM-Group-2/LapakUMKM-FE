@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
-import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
-import dai from '../assets/dai.jpg'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import Modal from '../components/Modal'
 import CustomInput from '../components/CutomInput'
@@ -14,9 +12,9 @@ import { formatValue } from 'react-currency-input-field'
 import { MdLocationOn } from 'react-icons/md'
 import { BsShop } from 'react-icons/bs'
 import Loading from '../components/Loading'
-import Loading2 from '../components/Loading2'
 import Default from "../assets/default.jpg"
 import { Transactions } from '../utils/types/DataType';
+import noimg from "../assets/download.png"
 
 const Payment = () => {
     const [cookie, setCookie] = useCookies(['token'])
@@ -31,16 +29,7 @@ const Payment = () => {
     const test = location.state.dca
     const testPrice = location.state.testPrice
     const testCount = location.state.testCount
-    console.log('ceck dca', test);
-    // console.log('ceck testCount', testCount);
-    // console.log('ceck testPrice', testPrice);
-    // // console.log('test dca id', test.id);
-    console.log('total cart price', cart);
-    console.log('Cart Id', cartId);
-
-    // // .map((item: any) => { 
-    // //     return item.product_pcs
-    // // })
+    const [loading, setLoading] = useState(false)
     const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
     const handleDelete = async (idToDelete: any[]) => {
@@ -60,6 +49,8 @@ const Payment = () => {
                 });
         });
     }
+
+    // payment from cart
     useEffect(() => {
         if (cart && cartPrice) {
             setCartTrans(
@@ -84,13 +75,9 @@ const Payment = () => {
             }
         }
     }, [totalCartPrice, cartTrans])
-    // console.log('cek id ', cartTrans.id);
-    // console.log('cek dan pcs', cartTrans.product_pcs);
-    // console.log("test cart", cart)
-    // console.log("test cart2", cartTrans)
-    // console.log("test cartPrice", totalCartPrice)
-    console.log('data trans', dataTrans);
+    
 
+    // payment from detail
     useEffect(() => {
         if (test && testPrice && testCount) {
             setDataTrans({
@@ -98,11 +85,11 @@ const Payment = () => {
                 total_products: testCount,
                 product_detail: [{ product_id: test.id, total_products: testCount }]
             })
-            console.log('dataTrans', dataTrans);
+         
         }
 
     }, [test, testPrice, testCount])
-    const [loading, setLoading] = useState(false)
+
     const handlePay = async (e: any) => {
         e.preventDefault()
         const data = dataTrans
@@ -114,9 +101,7 @@ const Payment = () => {
                     Authorization: `Bearer ${cookie.token}`
                 }
             })
-            console.log('test respon payment', res.data);
-
-            console.log('res.data', res.data.data.payment_link);
+         
             handleDelete(cartId)
             if (res.data) {
                 window.open(res.data.data.payment_link, "_blank")
@@ -138,32 +123,6 @@ const Payment = () => {
         setLoading(false);
     }
 
-    const sumCartPcs = () => {
-        const sum = cart?.reduce((total: any, current: any) => {
-            return total + current.product_pcs;
-        }, 0);
-
-        console.log('Total sum:', sum);
-    }
-    // useEffect(() => {
-    //  let sum2 =  cart?.reduce((total: any, i: any) => {
-    //     console.log('tess quan', i)
-    //     return total + i.product_pcs
-    //     console.log('test pcs', i.product_pcs);
-    //     const sum = i.product_pcs.
-
-    //     return sum
-    // },0)
-
-
-    //     console.log('test summ', sum2)
-    // },[cart])
-
-    // useEffect(() => {
-    //     const sum = 
-
-    //     console.log('Total sum:', sum);
-    //   }, [cart]);
 
     const handleAddAlamat = async () => {
         try {
@@ -172,7 +131,7 @@ const Payment = () => {
 
         }
     }
-    // const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+
     return (
         <Layout>
 
@@ -198,12 +157,12 @@ const Payment = () => {
                                 Pilih Alamat palsu
                             </button> */}
                                     <div className="card-body lg:mx-10 2xl:mx-20">
-                                        {/* nama toko dan foto */}
-                                        {/* end first card */}
                                     </div>
                                     <div className="card-body lg:mx-10 2xl:mx-5">
                                         {/* nama toko dan foto */}
                                         <div className='flex flex-col p-2 md:p-5 rounded-lg     border border-gray dark:border-lapak'>
+                                            {/* left side card from cart */}
+
                                             {
                                                 cart ?
                                                     cart.map((item: any, i: number) => {
@@ -222,7 +181,7 @@ const Payment = () => {
                                                                 </div>
                                                                 {/*selesai*/}
                                                                 <div className='flex flex-row mt-5 gap-5 p-2 md:p-5'>
-                                                                    <img src={item.product_image} className='rounded-lg cover w-20 md:w-1/2' />
+                                                                    <img src={item.product_image == "" ? noimg : item.product_image} className='rounded-lg cover w-20 md:w-1/2' />
                                                                     <div className='flex flex-col text-sm 2xl:text-xl font-semibold justify-center gap-2'>
                                                                         <h1 className='dark:text-white 2xl:text-3xl'>{item.product_name}</h1>
                                                                         <h1 className='dark:text-white'>{item.product_pcs} pcs</h1>
@@ -253,6 +212,7 @@ const Payment = () => {
 
                                                     </>
                                             }
+                                            {/* left side card from detail */}
 
                                             {
                                                 test ?
@@ -268,7 +228,7 @@ const Payment = () => {
                                                         </div>
                                                         {/*selesai*/}
                                                         <div className='flex flex-row mt-5 gap-5 p-2 md:p-5'>
-                                                            <img src={test.product_image[0].image} className='rounded-lg cover w-20 md:w-1/2' />
+                                                            <img src={test.product_image ? test.product_image[0].image : noimg} className='rounded-lg cover w-20 md:w-1/2' />
                                                             <div className='flex flex-col text-sm 2xl:text-xl font-semibold justify-center'>
                                                                 <h1 className='dark:text-white 2xl:text-3xl'>{test.product_name}</h1>
                                                                 <h1 className='dark:text-white'>{testCount} pcs</h1>
@@ -312,6 +272,7 @@ const Payment = () => {
                                             <h1 className="2xl:text-4xl 2xl:font-semibold dark:text-white">Ringkasan Belanja </h1>
                                             <div className='border-2 mt-5 mb-5'>
                                             </div >
+                                            {/* right side card from cart */}
                                             {
                                                 cart ?
                                                     cart.map((item: any, i: number) => {
@@ -346,6 +307,8 @@ const Payment = () => {
                                                     }) : <>
                                                     </>
                                             }
+
+                                            {/* right side card from detail */}
                                             {
                                                 test ?
                                                     <>
@@ -376,21 +339,18 @@ const Payment = () => {
                                                     </> : <></>
                                             }
 
+
+                                                {/* Right side card From cart */}
                                             {
                                                 cart ?
                                                     <>
-                                                        {/* {
-                                                        cart.map((item: any) => {
-                                                            return ( */}
                                                         <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:text-xl dark:text-white">
                                                             <div>Total semua barang</div>
                                                             <div>{cart?.reduce((total: any, i: any) => {
                                                                 return total + i.product_pcs;
                                                             }, 0)} pcs</div>
                                                         </div>
-                                                        {/* //         )
-                                                    //     })
-                                                    // } */}
+                                                   
                                                         <div className="flex flex-row  justify-between text-sm lg:text-lg  font-semibold 2xl:font-bold 2xl:text-3xl dark:text-white mt-5">
                                                             <div>
                                                                 Total Semua
@@ -406,6 +366,7 @@ const Payment = () => {
                                                     </> : <></>
                                             }
 
+                                            {/* right side card from detail */}
                                             {
                                                 test ?
                                                     <>
