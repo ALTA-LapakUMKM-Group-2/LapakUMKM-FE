@@ -393,7 +393,7 @@ const Payment = () => {
                                                     className="btn btn-wide flex bg-lapak border-none 2xl:w-full text-white hover:bg-lapak hover:text-white hover:translate-y-2 2xl:font-semibold 2xl:text-xl"
                                                     onClick={handlePay}
                                                 >
-                                                    Confirm and Pay
+                                                    Bayar
                                                 </button>
                                             </div>
                                         </div>

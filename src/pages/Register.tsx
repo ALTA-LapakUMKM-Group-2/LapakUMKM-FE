@@ -56,7 +56,7 @@ const Register = () => {
                 setEmail('');
                 setPassword('');
                 setName('');
-                navigate('/');
+                navigate('/login');
             }
         } catch (error) {
             Swal.fire({

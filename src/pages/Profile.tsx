@@ -246,6 +246,7 @@ const Profile = () => {
           showConfirmButton: false,
           timer: 1500
         });
+        setModalImage(false)
       }
       getProfile()
     } catch (error) {

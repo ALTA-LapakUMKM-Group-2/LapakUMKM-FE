@@ -244,7 +244,7 @@ const Detail = () => {
         MySwal.fire({
           icon: "success",
           iconColor: "#31CFB9",
-          title: "Anda berhasil membalas diskusi",
+          title: "Anda berhasil membalas Feedback",
           showCancelButton: false,
           showConfirmButton: false,
           timer: 1500

@@ -237,6 +237,7 @@ const HistoryPembeli = () => {
     const selectedHistory:any = history.find((item) => item.id === id);
     setHistoryDetail(selectedHistory);
   };
+  
 
   return (
     <Layout>
@@ -328,41 +329,6 @@ const HistoryPembeli = () => {
                         }
                       </div>
                     }
-                      {loadingItem ?
-                        <div className={clsx(
-                          "group flex w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
-                          "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100",
-                          "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
-                        )}>
-                          <Loading />
-                        </div>
-                        :
-                        <div className="grid">
-                          {combineProduk ?
-                            <>
-                              {combineProduk.map((item: any) => (
-                                <CardHistory
-                                  key={item.id}
-                                  id={item.id}
-                                  produkImg={item.product_image ? item.product_image : NotFound}
-                                  sellerName={item.shop_name}
-                                  produkName={item.product.product_name}
-                                  size={item.size}
-                                  price={item.product.price}
-                                  totalPrice={item.product.price}
-                                  status="Done"
-                                  quantity={item.total_product}
-                                  rating={item.rating}
-                                  handleEdit={() => navigate(`/detail/${item.product}`)}
-                                  handleFeedback={() => {
-                                    setShowFeedback(true), handleIdClick(item)
-                                  }}
-                                />
-                              ))}
-                            </> : <></>
-                          }
-                        </div>
-                      }
                     </CollapsiblePrimitive.Content>
                   </CollapsiblePrimitive.Root>
                 )

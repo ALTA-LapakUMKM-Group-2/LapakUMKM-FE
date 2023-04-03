@@ -26,7 +26,6 @@ function App() {
 
   const handleToggleTheme = () => {
     dispatch(getDark(true))
-    console.log("cek")
     console.log(dispatch(getDark(true)))
   }
 
@@ -39,15 +38,15 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
-            <Route path="/detail/:id" element={<Detail />} />
-            <Route path="/payment/:name" element={<Payment />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/detail/:id" element={checkToken ? <Detail /> : <Login/>} />
+            <Route path="/payment/:name" element={checkToken ? <Payment /> : <Login/>} />
+            <Route path="/cart" element={checkToken ? <Cart /> : <Login/>} />
             <Route path="/home" element={<Home />} />
             <Route path="/home/:kategori" element={<HomeFilter />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/listproduct/:nama_toko" element={<ListProduct />} />
-            <Route path="/historypembeli" element={<HistoryPembeli />} />
-            <Route path="/toko/:name" element={<Toko />} />
+            <Route path="/profile" element={checkToken ? <Profile /> : <Login/>}/>
+            <Route path="/listproduct/:nama_toko" element={checkToken ? <ListProduct /> : <Login/>} />
+            <Route path="/historypembeli" element={checkToken ? <HistoryPembeli /> : <Login/>} />
+            <Route path="/toko/:name" element={checkToken ?  <Toko /> : <Login/> } />
             <Route path="/new-password" element={<LupaPassword />} />
           </Routes >
         </BrowserRouter >
