@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
-import { Cookies, useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
@@ -9,12 +9,10 @@ import { handleAuth } from '../utils/redux/reducer/reducer';
 import Loading from '../components/Loading';
 import Layout from '../components/Layout';
 import LapakUmkm from '../assets/LapakUmkm2.png'
-import bgregis from '../assets/bgregis.jpg'
-import { HiEye, HiEyeOff, HiOutlineMail } from "react-icons/hi";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CutomInput';
 import { useGoogleLogin } from '@react-oauth/google';
-var test = ""
 import Modal from '../components/Modal';
 
 const Login = () => {

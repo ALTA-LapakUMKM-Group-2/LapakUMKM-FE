@@ -18,31 +18,24 @@ import Search from '../components/Search'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import sowwy from '../assets/photo_2023-03-16_20-34-20.jpg'
 import { gsap } from 'gsap'
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-    interface FormValues {
-    minprice: number | any
-    maxprice: number | any
-    kategori: number | any;
-    minrating: number | any
-    }
-    const initialFormValues: FormValues = {
-        minprice: 0,
-        maxprice: 0,
-        kategori: 0,
-        minrating: 0
-    };
-const HomeFilter = () => {
+import { FormValue } from '../utils/types/DataType'
 
+const initialFormValues: FormValue = {
+    minprice: 0,
+    maxprice: 0,
+    kategori: 0,
+    minrating: 0
+};
+
+const HomeFilter = () => {
     const [showFilter, setShowFilter] = useState(false);
     const [products, setProducts] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const [search, setSearch] = useState('')
     const location = useLocation()
     const [cookie, setCookie] = useCookies(["token"])
-    const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
+    const [formValues, setFormValues] = useState<FormValue>(initialFormValues);
     const [categoryId, setCategoryId] = useState(location.state.id)
-    
-    const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const handleToggle = () => {
@@ -81,9 +74,9 @@ const HomeFilter = () => {
     };
     const [defaultValue, setDefaultValue] = useState('')
     const productEndpoint = 'https://lapakumkm.mindd.site/products?'
-    
+
     const filter = `price_min=${formValues.minprice}&price_max=${formValues.maxprice}&rating=${formValues.minrating}&category_id=${formValues.kategori ? formValues.kategori : categoryId}`
-    const fetchProduct = async (minPrice: any, maxPrice:any, rating: any, categori_id:any) => {
+    const fetchProduct = async (minPrice: any, maxPrice: any, rating: any, categori_id: any) => {
         setLoading(true)
         try {
             const res = await axios.get(`${productEndpoint}price_min=${minPrice}&price_max=${maxPrice}&rating=${rating}&category_id=${categori_id}`,
@@ -91,7 +84,7 @@ const HomeFilter = () => {
             })
             setProducts(res.data.data)
         } catch (error) {
-            if(error){
+            if (error) {
                 Swal.fire({
                     title: 'Maaf!',
                     text: 'Barang yang anda cari mungkin belum tersedia',
@@ -102,7 +95,7 @@ const HomeFilter = () => {
                     imageWidth: 400,
                     imageHeight: 200,
                     imageAlt: 'Custom image',
-                }).then((willReFetch)=>{
+                }).then((willReFetch) => {
                     if (willReFetch.isConfirmed) {
                         setFormValues({
                             minprice: 0,
@@ -117,9 +110,9 @@ const HomeFilter = () => {
         }
         setLoading(false)
     }
-    
+
     useEffect(() => {
-        if(formValues){
+        if (formValues) {
             fetchProduct(formValues.minprice, formValues.maxprice, formValues.minrating, formValues.kategori ? formValues.kategori : categoryId)
         }
     }, [])
@@ -127,20 +120,20 @@ const HomeFilter = () => {
 
 
     const categoryEndpoint = 'https://lapakumkm.mindd.site/categories'
-    const [category,setCategory] =useState<any>([''])
+    const [category, setCategory] = useState<any>([''])
     const fetchCategory = async () => {
         try {
-            const res = await axios.get(categoryEndpoint,{
-                headers:{
-                Authorization: `Bearer ${cookie.token}`
+            const res = await axios.get(categoryEndpoint, {
+                headers: {
+                    Authorization: `Bearer ${cookie.token}`
                 }
             })
             setCategory(res.data.data)
         } catch (error) {
-    
+
         }
     }
-    
+
     useEffect(() => {
         fetchCategory()
     }, [])
@@ -148,71 +141,71 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
             <Navbar
-            children={<Search onSearch={(e) => setSearch(e.target.value)} />}
+                children={<Search onSearch={(e) => setSearch(e.target.value)} />}
             />
             {
-                    loading ? 
-                    <Loading /> 
+                loading ?
+                    <Loading />
                     :
-            <div className="flex flex-col lg:flex-row w-11/12">
-                <div className="flex mt-10 mx-auto lg:ml-auto">
-                    <div className="w-80 h-fit bg-white border rounded-xl shadow-xl flex flex-col dark:bg-slate-800 dark:border-lapak">
-                        <div className="flex flex-col">
-                            <div className="flex flex-row justify-between border-b-2 mx-3 mt-2 pb-2 dark:text-white dark:border-lapak">
-                                <p className='my-auto text-xl font-semibold'>Filter</p>
-                                    <label className="swap swap-rotate">
-                                        <input type="checkbox" />
-                                        <IoIosArrowDropup onClick={()=> {setShowFilter(false), handleAnimation()}}  className="swap-on fill-current w-8 h-8"/>
-                                        <IoIosArrowDropdown onClick={()=> {setShowFilter(true), handleAnimation()}} className="swap-off fill-current w-8 h-8"/>
-                                    </label>
-                            </div>
-                            <div ref={dropdownRef} className={`text-lapak font-semibold ${showFilter? 'open' : ''}`}>
-                                <div className="px-4 py-3 text-sm text-gray-900 "> 
-                                    <form onSubmit={handleSubmit} className={`space-y-5 ${showFilter? 'open' : ''}`} >
-                                        <div className='w-full'>
-                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor='kategori'>
-                                                Kategori
-                                            </label>
-                                            <select className="border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                    <div className="flex flex-col lg:flex-row w-11/12">
+                        <div className="flex mt-10 mx-auto lg:ml-auto">
+                            <div className="w-80 h-fit bg-white border rounded-xl shadow-xl flex flex-col dark:bg-slate-800 dark:border-lapak">
+                                <div className="flex flex-col">
+                                    <div className="flex flex-row justify-between border-b-2 mx-3 mt-2 pb-2 dark:text-white dark:border-lapak">
+                                        <p className='my-auto text-xl font-semibold'>Filter</p>
+                                        <label className="swap swap-rotate">
+                                            <input type="checkbox" />
+                                            <IoIosArrowDropup onClick={() => { setShowFilter(false), handleAnimation() }} className="swap-on fill-current w-8 h-8" />
+                                            <IoIosArrowDropdown onClick={() => { setShowFilter(true), handleAnimation() }} className="swap-off fill-current w-8 h-8" />
+                                        </label>
+                                    </div>
+                                    <div ref={dropdownRef} className={`text-lapak font-semibold ${showFilter ? 'open' : ''}`}>
+                                        <div className="px-4 py-3 text-sm text-gray-900 ">
+                                            <form onSubmit={handleSubmit} className={`space-y-5 ${showFilter ? 'open' : ''}`} >
+                                                <div className='w-full'>
+                                                    <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor='kategori'>
+                                                        Kategori
+                                                    </label>
+                                                    <select className="border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
                                                 focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
                                                 bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]"
-                                            defaultValue={''}
-                                            id='kategori'
-                                            name='kategori'
-                                            value={formValues.kategori}
-                                            onChange={handleSelectChange}
-                                            >
-                                                <option value={''}>Semua Kategori</option>
-                                            { 
-                                                category?.map((item: any, i:number)=> {
-                                                    return (
-                                                        <option className='' value={item.id}>{item.category}</option>
-                                                    )
-                                                })  
-                                            }
-                                            </select>
-                                        </div>
-                                        <div className="w-full">
-                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minprice">Harga Minimal</label>
-                                                <CurrencyInput
-                                                    className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                                                        defaultValue={''}
+                                                        id='kategori'
+                                                        name='kategori'
+                                                        value={formValues.kategori}
+                                                        onChange={handleSelectChange}
+                                                    >
+                                                        <option value={''}>Semua Kategori</option>
+                                                        {
+                                                            category?.map((item: any, i: number) => {
+                                                                return (
+                                                                    <option className='' value={item.id}>{item.category}</option>
+                                                                )
+                                                            })
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div className="w-full">
+                                                    <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="minprice">Harga Minimal</label>
+                                                    <CurrencyInput
+                                                        className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
                                                         focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
                                                         bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
-                                                    id="minprice"
-                                                    name="minprice"
-                                                    prefix='Rp. '
-                                                    decimalSeparator=','
-                                                    groupSeparator='.'
-                                                    placeholder="Rp. "
-                                                    defaultValue={formValues.minprice}
-                                                    decimalsLimit={2}
-                                                    onValueChange={(value, name) => setFormValues({ ...formValues, minprice: value ? parseInt(value) : 0 })}
-                                                />
-                                        </div>
-                                        <div className="">
-                                            <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="maxprice">Harga Maksimal</label>
-                                                <CurrencyInput
-                                                    className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
+                                                        id="minprice"
+                                                        name="minprice"
+                                                        prefix='Rp. '
+                                                        decimalSeparator=','
+                                                        groupSeparator='.'
+                                                        placeholder="Rp. "
+                                                        defaultValue={formValues.minprice}
+                                                        decimalsLimit={2}
+                                                        onValueChange={(value, name) => setFormValues({ ...formValues, minprice: value ? parseInt(value) : 0 })}
+                                                    />
+                                                </div>
+                                                <div className="">
+                                                    <label className="text-zinc-800 text-[18px] font-semibold dark:text-white" htmlFor="maxprice">Harga Maksimal</label>
+                                                    <CurrencyInput
+                                                        className='border-2 mt-2 input w-full max-w-full  border-gray-400 focus-visible:border-transparent dark:border-gray-700 dark:bg-slate-800 rounded-lg
                                                         focus:outline-none focus-visible:ring focus-visible:ring-lapak focus-visible:ring-opacity-75
                                                         bg-zinc-100 px-4 font-normal text-zinc-800 dark:text-white placeholder-white disabled:bg-slate-400 text-[16px]'
                                                     id="maxprice"
@@ -269,9 +262,9 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                     />
                                 )
                             })}
-                </div>
-            </div>
-                    }
+                        </div>
+                    </div>
+            }
         </Layout>
     )
 }

@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import axios from "axios"
-import * as CollapsiblePrimitive  from "@radix-ui/react-collapsible";
+import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { Rating } from "@smastrom/react-rating"
 import '@smastrom/react-rating/style.css'
 import { HiChevronDown } from "react-icons/hi";
 import withReactContent from "sweetalert2-react-content"
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
-import { HistoryType, DataType } from "../utils/types/DataType"
+import { HistoryType, DataType, FormValues } from "../utils/types/DataType"
 import NotFound from '../assets/download.png'
 
 import CustomButton from "../components/CustomButton"
@@ -21,12 +21,6 @@ import Navbar from "../components/Navbar"
 import Modal from "../components/Modal"
 import clsx from "clsx"
 import TextArea from "../components/TextArea"
-
-
-interface FormValues {
-  comment: string;
-  rating: number;
-}
 
 const initialFormValues: FormValues = {
   comment: '',
@@ -65,7 +59,7 @@ const HistoryPembeli = () => {
   const [prodFeedId, setProdFeedId] = useState<number>()
   const [prodTransDetail, setProdTransDetail] = useState<number>()
 
-  function handleItemClick(itemId:any) {
+  function handleItemClick(itemId: any) {
     setOpenItemId((prevOpenItemId) =>
       prevOpenItemId === itemId ? null : itemId
     );
@@ -74,7 +68,7 @@ const HistoryPembeli = () => {
     dataTransaksi()
   }, [])
 
-  const handleIdClick = (id:any) => {
+  const handleIdClick = (id: any) => {
     setTransactionsId(id.product_transaction_id);
     setProdFeedId(id.product_id)
     setProdTransDetail(id.id)
@@ -122,11 +116,11 @@ const HistoryPembeli = () => {
       })
       .finally(() => setLoading(false))
   }
-  
+
   useEffect(() => {
     productId ? dataProdukId(productId) : ""
   }, [])
-  
+
   const dataProdukId = async (productId: any[]) => {
     setLoadingItem(true)
     const combine: any = []
@@ -161,7 +155,7 @@ const HistoryPembeli = () => {
             ...item,
             ...data
           }
-        }else{
+        } else{
           return item
         }
       })
@@ -169,10 +163,10 @@ const HistoryPembeli = () => {
       setCombineProduk(cekDetail)
     }
   }, [product, detailHistory]);
-  
-  
+
+
   const feedbackEndpoint = 'https://lapakumkm.mindd.site/feedbacks'
-  
+
 
   useEffect(() => {
     if (value.rating !== 0) {
@@ -199,12 +193,12 @@ const HistoryPembeli = () => {
       feedback: value.comment,
     };
     await axios.post(feedbackEndpoint, body,{
-        headers:{
-          Authorization: `Bearer ${cookie.token}`,
-          "Content-Type": 'application/json',
-          Accept: 'application/json'
-        }
-      })
+      headers:{
+        Authorization: `Bearer ${cookie.token}`,
+        "Content-Type": 'application/json',
+        Accept: 'application/json'
+      }
+    })
       .then((res) => {
         const { message } = res.data;
         MySwal.fire({
@@ -215,10 +209,10 @@ const HistoryPembeli = () => {
           showConfirmButton: false,
           timer: 1200,
         })
-          setShowFeedback(false)
-          dataProdukId(productId)
-          dataTransaksi()
-          handleOpenCollapsible(null)
+        setShowFeedback(false)
+        dataProdukId(productId)
+        dataTransaksi()
+        handleOpenCollapsible(null)
       })
       .catch((err) => {
         const { data } = err.response;
@@ -231,9 +225,9 @@ const HistoryPembeli = () => {
           confirmButtonColor: "#31CFB9"
         })
       })
-    }
+  }
 
-    
+
   const handleBayar = (payment_link: string) => {
     window.open(payment_link, "_blank")
   }
@@ -243,7 +237,7 @@ const HistoryPembeli = () => {
     const selectedHistory:any = history.find((item) => item.id === id);
     setHistoryDetail(selectedHistory);
   };
-  
+
   return (
     <Layout>
       {loading ? <Loading /> :
@@ -334,14 +328,49 @@ const HistoryPembeli = () => {
                         }
                       </div>
                     }
+                      {loadingItem ?
+                        <div className={clsx(
+                          "group flex w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
+                          "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100",
+                          "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+                        )}>
+                          <Loading />
+                        </div>
+                        :
+                        <div className="grid">
+                          {combineProduk ?
+                            <>
+                              {combineProduk.map((item: any) => (
+                                <CardHistory
+                                  key={item.id}
+                                  id={item.id}
+                                  produkImg={item.product_image ? item.product_image : NotFound}
+                                  sellerName={item.shop_name}
+                                  produkName={item.product.product_name}
+                                  size={item.size}
+                                  price={item.product.price}
+                                  totalPrice={item.product.price}
+                                  status="Done"
+                                  quantity={item.total_product}
+                                  rating={item.rating}
+                                  handleEdit={() => navigate(`/detail/${item.product}`)}
+                                  handleFeedback={() => {
+                                    setShowFeedback(true), handleIdClick(item)
+                                  }}
+                                />
+                              ))}
+                            </> : <></>
+                          }
+                        </div>
+                      }
                     </CollapsiblePrimitive.Content>
                   </CollapsiblePrimitive.Root>
                 )
               })
-              :
-              <>
-                <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>
-              </>
+                :
+                <>
+                  <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>
+                </>
               }
             </div>
           </div>
@@ -354,7 +383,7 @@ const HistoryPembeli = () => {
                 onChange={handleTextAreaChange}
                 placeholder="tulis ulasan anda"
               />
-              <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Beri Rating</label>
+              <label className="text-xs font-medium text-gray-700 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Beri Rating</label>
               <Rating
                 itemStyles={customStyles}
                 isRequired
