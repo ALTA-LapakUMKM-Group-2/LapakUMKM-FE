@@ -32,11 +32,20 @@ const Profile = () => {
   const [data, setData] = useState<any>([])
   const [disable, setDisable] = useState<boolean>(true);
   const [shopName, setShopName] = useState('')
-  const location = useLocation()
+  const [modalImage, setModalImage] = useState(false)
+  const [changeImg, setChangeImg] = useState<File | any>()
+  const [fullName, setFullName] = useState('')
+  const [address, setAddress] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [cookies, setCookies, removeCookies] = useCookies(['token'])
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [verivyPassword, setVerivyPassword] = useState<string>("");
+  const [modalPassword, setModalPassword] = useState<boolean>(false);
+  const [hide, setHide] = useState<boolean>(false)
+  const [hideConfirm, setHideConfirm] = useState<boolean>(false)
 
-  // const showFromHome = location.state.showModal
-
-  // console.log(showFromHome);
 
   const handleUpdateStatus = async (e: any) => {
     e.preventDefault()
@@ -67,12 +76,6 @@ const Profile = () => {
     }
   }
 
-  const [oldPassword, setOldPassword] = useState<string>("");
-  const [newPassword, setNewPassword] = useState<string>("");
-  const [verivyPassword, setVerivyPassword] = useState<string>("");
-  const [modalPassword, setModalPassword] = useState<boolean>(false);
-  const [hide, setHide] = useState<boolean>(false)
-  const [hideConfirm, setHideConfirm] = useState<boolean>(false)
 
   const getProfile = async () => {
     setLoading(true)
@@ -94,21 +97,12 @@ const Profile = () => {
 
   useEffect(() => {
     getProfile()
-    // if(showFromHome){
-    //   setShowModal(showFromHome)
-    // }
+  
   }, [])
 
 
 
-  const [fullName, setFullName] = useState('')
-  const [address, setAddress] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [cookies, setCookies, removeCookies] = useCookies(['token'])
-  const [imageProfile, setImageProfile] = useState<File>()
-  const [cek, setCek] = useState<string>("hidden")
-  console.log("test token ", cookies.token);
+
 
   const handleEditProfile = async (e: any) => {
     e.preventDefault()
@@ -119,7 +113,6 @@ const Profile = () => {
       email: email,
       phone_number: phone
     }
-    // formData.append('photo_profile' , imageProfile)  
     try {
       const res = await axios.post(`https://lapakumkm.mindd.site/users`, data, {
         headers: {
@@ -233,8 +226,7 @@ const Profile = () => {
     oldPassword && newPassword && verivyPassword ? setDisable(false) : setDisable(true);
   }, [oldPassword, newPassword, verivyPassword]);
 
-  const [modalImage, setModalImage] = useState(false)
-  const [changeImg, setChangeImg] = useState<File | any>()
+
   const udpateImageProfile = async (e: any) => {
     e.preventDefault()
     const data = new FormData()
@@ -277,7 +269,6 @@ const Profile = () => {
       : setModalAing(true)
   }
 
-  console.log('test data', data);
 
   return (
     <Layout>

@@ -39,6 +39,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     const [mail, setMail] = useState<string>("")
     const [photo, setPhoto] = useState<string>("")
     const [role, setRole] = useState<string>("")
+    const [dataRoomsID, setDataRoomsID] = useState<Chat[]>([])
+    const [showChat, setShowChat] = useState<boolean>(false)
 
     const handleLogout = () => {
         MySwal.fire({
@@ -135,6 +137,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         }
     }
 
+    // DarkMode
     const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
     useEffect(() => {
         if (theme === "dark") {
@@ -149,10 +152,6 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         setTheme(theme === "dark" ? "light" : "dark");
     };
 
-    const [dataRoomsID, setDataRoomsID] = useState<Chat[]>([])
-    const [senderID, setSenderID] = useState<number>(0)
-    const [recipientID, setRecipientID] = useState<number>(0)
-    const [showChat, setShowChat] = useState<boolean>(false)
 
     const handleShowChat = async () => {
         setShowChat(true)

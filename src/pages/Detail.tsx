@@ -4,12 +4,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
-import CardFeedback from '../components/CardFeedback'
 import ChatModal from '../components/ChatModal'
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
-import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
-import dai from '../assets/dai.jpg'
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { BsChatText } from 'react-icons/bs'
 import { MdStarRate } from 'react-icons/md'
@@ -64,17 +61,33 @@ const Detail = () => {
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
   const [cookie, setCookie] = useCookies(["token", "id", "roomID", "name" ,'photo_profile', 'tokoId' , 'name'])
-
   const [feedbacks, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
   const [balas, setBalas] = useState<string | undefined>("")
   const [newDiskus, setnewDiskus] = useState<string>("")
   const [disable, setDisable] = useState<boolean>(true)
-  const [hide, setHide] = useState<boolean>(true)
   const navigate = useNavigate()
-  const [test, setTest] = useState<Product[]>([])
   const [productId, setProductId] = useState<any>()
   const [userId, setUserId] = useState<any>()
+  const [roomID, setRoomID] = useState<string>("")
+  const [senderID, setSenderID] = useState<number>(0)
+  const [recipientID, setRecipientID] = useState<number>(0)
+  const [count, setCount] = useState<number>(1);
+  const [price, setPrice] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(price)
+  const [testCount, SetTestCount] = useState<any>(count)
+  const [dca, setDca] = useState<any>({})
+  const [tesPrice, setTestPrice] = useState<any>(totalPrice)
+  const [image, setImage] = useState<any>([])
+  const [photoToko, setPhotoToko] = useState('')
+  const [category, setCategory] = useState<any>('')
+  const [feedbackId, setFeedbackId] = useState<number | null>()
+  const [parentId, setParentId] = useState<number|null>()
+  const [prodTransDetail, setProdTransDetail] = useState<number|null>()
+  const [replyFeed, setReplyFeed] = useState<string>('')
+  const [diskus, setDiskus] = useState<string>("")
+  const [newBalas, setNewBalas] = useState<string>("")
+
 
   const StarDrawing = (
     <path d="M11.0748 3.25583C11.4141 2.42845 12.5859 2.42845 12.9252 3.25583L14.6493 7.45955C14.793 7.80979 15.1221 8.04889 15.4995 8.07727L20.0303 8.41798C20.922 8.48504 21.2841 9.59942 20.6021 10.1778L17.1369 13.1166C16.8482 13.3614 16.7225 13.7483 16.8122 14.1161L17.8882 18.5304C18.1 19.3992 17.152 20.0879 16.3912 19.618L12.5255 17.2305C12.2034 17.0316 11.7966 17.0316 11.4745 17.2305L7.60881 19.618C6.84796 20.0879 5.90001 19.3992 6.1118 18.5304L7.18785 14.1161C7.2775 13.7483 7.1518 13.3614 6.86309 13.1166L3.3979 10.1778C2.71588 9.59942 3.07796 8.48504 3.96971 8.41798L8.50046 8.07727C8.87794 8.04889 9.20704 7.80979 9.35068 7.45955L11.0748 3.25583Z" stroke="#fdd231" strokeWidth="1" ></path>
@@ -86,19 +99,6 @@ const Detail = () => {
       inactiveFillColor: '#ffffff',
 
   };
-
-  const handleUpdate = (e: any) => {
-    e.preventDefault()
-  }
-  const [count, setCount] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0);
-  const [totalPrice, setTotalPrice] = useState<number>(price)
-  const [testCount, SetTestCount] = useState<any>(count)
-  const [dca, setDca] = useState<any>({})
-  const [tesPrice, setTestPrice] = useState<any>(totalPrice)
-  const [image, setImage] = useState<any>([])
-  const [photoToko, setPhotoToko] = useState('')
-  const [category, setCategory] = useState<any>('')
 
   function fetchData() {
     setLoading(true);
@@ -119,18 +119,18 @@ const Detail = () => {
         setTotalPrice(price);
         setUserId(user_id)
         setProductId(id)
-        setImage(product_image)
+        setImage(product_image) 
         setPhotoToko(photo_profile)
         setCategory(category)
         res.data.data.total_price = totalPrice
         res.data.data.product_pcs = count
         SetTestCount(res.data.data.product_pcs)
         setTestPrice(res.data.data.total_price)
-        console.log('res.data.data', res.data.data);
+
         setCookie('tokoId', res.data.data.user_id , {path: "/"})
       })
       .catch((err) => {
-        // console.log(err.response.statusText)
+     
         MySwal.fire({
           icon: "error",
           title: err.response.statusText,
@@ -147,12 +147,12 @@ const Detail = () => {
   const handleChangeEditFeedback = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
-  // console.log("product_id :", productId)
-  // console.log(typeof productId)
 
   useEffect(() => {
     fetchData();
   }, [])
+
+  // increment decrement
   const handleIncrement = () => {
     const tstCount = count + 1
     const newTotal = price * tstCount
@@ -176,7 +176,9 @@ const Detail = () => {
     }
 
   };
+// selesai
 
+// add to cart
   const addToCart = async () => {
 
     const data = {
@@ -213,6 +215,8 @@ const Detail = () => {
     }
 
   }
+//selesai
+
 
   function feedbackData() {
     setLoading(true);
@@ -230,10 +234,8 @@ const Detail = () => {
     feedbackData()
   }, [])
 
-  const [parentId, setParentId] = useState<number|null>()
-  const [prodTransDetail, setProdTransDetail] = useState<number|null>()
-  const [replyFeed, setReplyFeed] = useState<string>('')
-  console.log(parentId, prodTransDetail);
+
+
   
   const handleFeedbackReply = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReplyFeed(e.target.value);
@@ -279,8 +281,7 @@ const Detail = () => {
       })
       .finally(() => setLoading(false))
   }
-  const [feedbackId, setFeedbackId] = useState<number | null>()
-  console.log(feedbackId)
+
   const handleEditFeedback = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true)
     e.preventDefault()
@@ -428,7 +429,7 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  const [diskus, setDiskus] = useState<string>("")
+
 
   const changeDiskus = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDiskus(e.target.value);
@@ -469,7 +470,7 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  const [newBalas, setNewBalas] = useState<string>("")
+
 
   const changeDiskusBalas = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBalas(e.target.value);
@@ -548,11 +549,6 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-  const [roomID, setRoomID] = useState<string>("")
-  const [senderID, setSenderID] = useState<number>(0)
-  const [recipientID, setRecipientID] = useState<number>(0)
-  const [idFetch, setIdFetch] = useState<any>('')
-
 
   const handleShowChat = () => {
     setShowChat(true)
@@ -591,13 +587,14 @@ const Detail = () => {
             {/* chatting */}
 
             <ChatModal
-              img={FotoProfile}
+              img={photoToko}
               isOpen={showChat}
               isClose={() => setShowChat(false)}
               product_id={productId}
               Room={roomID}
               Recipient_id={recipientID}
               userID={userId}
+              tokoName={name}
             />
 
             {/* card for image */}

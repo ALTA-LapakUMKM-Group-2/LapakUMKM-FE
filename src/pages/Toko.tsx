@@ -15,7 +15,6 @@ import { useCookies } from 'react-cookie'
 const Toko = () => {
     const [showChat, setShowChat] = useState(false)
     const [loading, setLoading] = useState(false)
-    const { id } = useParams()
     const location = useLocation()
     const [data, setData] = useState([])
     const [getUserToko, setGetUserToko] = useState('')
@@ -23,22 +22,24 @@ const Toko = () => {
     const [address, setAddress] = useState('')
     const [foto, setFoto] = useState('')
     const [fullName, setFullName] = useState('')
-    const [userToko , ] = useState()
-    const [cookie, setCookie] =useCookies(['token'])
+    const [cookie, setCookie] = useCookies(['token'])
     const [userId, setUserId] = useState(location.state.id)
+    const [roomID, setRoomID] = useState<string>("")
+    const [senderID, setSenderID] = useState<number>(0)
+    const [recipientID, setRecipientID] = useState<number>(0)
 
     const getPrudukToko = async () => {
         setLoading(true)
         try {
             const res = await axios.get(`https://lapakumkm.mindd.site/products?user_id=${userId}`)
-            const {address, full_name , photo_profile, shop_name} = res.data.data[0].user
+            const { address, full_name, photo_profile, shop_name } = res.data.data[0].user
             setTokoName(shop_name)
             setAddress(address)
             setFoto(photo_profile)
             setFullName(fullName)
             setData(res.data.data)
             setGetUserToko(res.data.data[0].user_id)
-            console.log('cekk toko data', res.data.data[0].id)
+
         } catch (error) {
 
         }
@@ -48,31 +49,39 @@ const Toko = () => {
         getPrudukToko()
     }, [])
 
-    const chatToko = async() => {
-        try {
-            const res = await axios.post('https://lapakumkm.mindd.site/chats' , getUserToko, {
-                headers: {
-                    Authorization: `Bearer ${cookie.token}`
-                }
-            })
-            if(res.data){
-                console.log('test chat');
-                
-            }
-        } catch (error) {
-            
+  
+
+
+  
+  
+    const handleShowChat = () => {
+      setShowChat(true)
+      const body = {
+        recipient_id: userId
+      }
+  
+      axios
+        .post(`https://lapakumkm.mindd.site/chats`, body, {
+          headers: {
+            Authorization: `Bearer ${cookie.token}`
+          }
+        })
+        .then((res) => {
+          const cekID = res.data.data.room_id
+          if (cekID) {
+            setRoomID(cekID)
+            setSenderID(res.data.data.sender_id)
+            setRecipientID(res.data.data.recipient_id)
+          }
         }
+        
+        )
+        .catch((err) => {
+          console.log(err.response.data.message)
+        })
     }
 
 
-
-    console.log('cek foto', foto);
-    console.log('test data toko', data);
-    console.log('ambil data toko', getUserToko);
-    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/' + foto
-
-    console.log(imgUrl);
-    
     return (
         <Layout>
             <Navbar />
@@ -80,85 +89,68 @@ const Toko = () => {
                 <>
                     {/* chat */}
                     <ChatModal
-                        img={FotoProfile}
+                        img={foto}
                         isOpen={showChat}
                         isClose={() => setShowChat(false)}
-                    >
-                        <div className="chat chat-start">
-                            <div className="chat-image avatar">
-                                <div className="w-10 rounded-full">
-                                    <img src={FotoProfile} />
-                                </div>
-                            </div>
-                            <div className="chat-header">
-                                Obi-Wan Kenobi
-                            </div>
-                            <div className="chat-bubble">You were the Chosen One! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sequi assumenda eveniet accusantium tempora dolore dolorum fugiat doloremque rerum possimus commodi ipsam illum, dolor laborum harum voluptatibus unde maiores voluptates.</div>
-                        </div>
-                        <div className="chat chat-end">
-                            <div className="chat-image avatar">
-                                <div className="w-10 rounded-full">
-                                    <img src={FotoProfile} />
-                                </div>
-                            </div>
-                            <div className="chat-header">
-                                Anakin
-                            </div>
-                            <div className="chat-bubble bg-lapak">I hate you! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatem architecto deleniti error nisi quam eveniet tenetur veniam, ab ducimus eaque soluta numquam consequatur unde nostrum qui magnam alias commodi!</div>
-                        </div>
-                    </ChatModal>
-                    {/*test card  */}
-                    {/* from-green-300 via-blue-500 to-purple-600 */}
-                    {/*  */}
-                    {/*  */}
-                    <div className='flex flex-col mx-auto'>
-                        <div className='flex flex-col rounded-md bg-white dark:border-lapak dark:border-4 border-b-8 border-lapak mt-5 mb-5 p-10 max-w-fit w-full 2xl:min-w-[500px]  mx-auto shadow-lg dark:bg-slate-600  '>
-                            <div className='flex w-fit gap-5 '>
-                                <img src={foto ? foto : Default} className='w-32 rounded-full' />
-                                <div className=' text-lg'>
-                                    <h1 className='mb-5 2xl:text-2xl dark:text-white font-bold text-xl'>{tokoName}</h1>
-                                    <h1 className='flex items-center gap-2 dark:text-white font-semibold'><MdOutlineLocationOn className='flex items-center' /> <span className='flex items-center'>{address}</span></h1>
-                                </div>
-                            </div>
-                            <div className='flex justify-center mt-7 '>
-                                <button className='btn btn-ghost bg-lapak rounded-xl items-center justify-center hover:bg-lapak text-white' onClick={() => setShowChat(true)}>
-                                    <span className='mr-4 '>Chat penjual </span><BsChatText size={20} />
-                                </button>
-                            </div>
-                        </div>
+                        Room={roomID}
+                        Recipient_id={recipientID}
+                        userID={userId}
+                        tokoName={tokoName}
 
-
-                        <div className='mt-10'>
-                           <div className='flex flex-col items-center gap-5 justify-center'>
-                            <h1 className='text-4xl font-semibold ml-1 dark:text-white mb-5'>Produk Penjual</h1>
-                           <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
-                                {
-                                    data?.map((item: any, i: number) => {
-                                      
-                                        return (
-                                            <ProdukCard 
-                                                produkName={item.product_name}
-                                                location={item.user.address}
-                                                sell={item.stock_sold}
-                                                id={item.id}
-                                                key={i}
-                                                image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
-                                                rating={item.rating ? Number(item.rating.toFixed(1)) : 0}
-                                                price={item.price}
-                                            />
-                                        )
-                                    })
-
-                                }
-
-                            </div>
-                           </div>
+                    />
+                {/* end Chat */}
+    
+  
+       
+            {/* Detail toko */}
+            <div className='flex flex-col mx-auto'>
+                <div className='flex flex-col rounded-md bg-white dark:border-lapak dark:border-4 border-b-8 border-lapak mt-5 mb-5 p-10 max-w-fit w-full 2xl:min-w-[500px]  mx-auto shadow-lg dark:bg-slate-600  '>
+                    <div className='flex w-fit gap-5 '>
+                        <img src={foto ? foto : Default} className='w-32 rounded-full' />
+                        <div className=' text-lg'>
+                            <h1 className='mb-5 2xl:text-2xl dark:text-white font-bold text-xl'>{tokoName}</h1>
+                            <h1 className='flex items-center gap-2 dark:text-white font-semibold'><MdOutlineLocationOn className='flex items-center' /> <span className='flex items-center'>{address}</span></h1>
                         </div>
                     </div>
-                </>
+                    <div className='flex justify-center mt-7 '>
+                        <button className='btn btn-ghost bg-lapak rounded-xl items-center justify-center hover:bg-lapak text-white' onClick={() => handleShowChat()}>
+                            <span className='mr-4 '>Chat penjual </span><BsChatText size={20} />
+                        </button>
+                    </div>
+                </div>
+
+            {/* Product Toko */}
+                <div className='mt-10'>
+                    <div className='flex flex-col items-center gap-5 justify-center'>
+                        <h1 className='text-4xl font-semibold ml-1 dark:text-white mb-5'>Produk Penjual</h1>
+                        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
+                            {
+                                data?.map((item: any, i: number) => {
+
+                                    return (
+                                        <ProdukCard
+                                            produkName={item.product_name}
+                                            location={item.user.address}
+                                            sell={item.stock_sold}
+                                            id={item.id}
+                                            key={i}
+                                            image={item.product_image ? item.product_image[0].image : 'https://sellercenter.unkl-ns.com/gallery/items/604/img_604_i55_3_1667709495.jpg'}
+                                            rating={item.rating ? Number(item.rating.toFixed(1)) : 0}
+                                            price={item.price}
+                                        />
+                                    )
+                                })
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
             }
 
-        </Layout>
+        </Layout >
     )
 }
 

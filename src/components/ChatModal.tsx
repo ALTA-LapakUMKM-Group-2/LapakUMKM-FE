@@ -23,9 +23,10 @@ type ChatModalProps = {
     RoomsChat?: any[]
     role?: string
     userID?: number
+    tokoName?: string
 };
 
-const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, product_id, isOpen, isClose, img, children, size, titleStyle, Recipient_id }) => {
+const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, product_id, isOpen, isClose, img,tokoName, children, size, titleStyle, Recipient_id }) => {
     const [cookie, setCookie] = useCookies(["token", "id", "roomID", "full_name", "photo_profile"])
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -149,7 +150,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, pr
                             </div>
                         </div>
                         <h1 className={`text-xl font-semibold ${titleStyle}`}>
-                            {"Toko27"}
+                            {tokoName}
                         </h1>
                     </div>
                     <a onClick={isClose} className="text-grey-900 text-4xl hover:text-accent cursor-pointer">
