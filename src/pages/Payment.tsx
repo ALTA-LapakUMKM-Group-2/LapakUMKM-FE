@@ -13,21 +13,10 @@ import { MdLocationOn } from 'react-icons/md'
 import { BsShop } from 'react-icons/bs'
 import Loading from '../components/Loading'
 import Default from "../assets/default.jpg"
+import { Transactions } from '../utils/types/DataType';
 import noimg from "../assets/download.png"
 
-type Detail = {
-    product_id: number
-    total_products: number
-}
-
-interface Transactions extends Detail {
-    total_products: number
-    total_payment: number
-    product_detail: Detail
-}
-
 const Payment = () => {
-    // const [showModal, setShowModal] = useState(false)
     const [cookie, setCookie] = useCookies(['token'])
     const location = useLocation()
     const navigate = useNavigate()
@@ -60,7 +49,7 @@ const Payment = () => {
                 });
         });
     }
-    
+
     // payment from cart
     useEffect(() => {
         if (cart && cartPrice) {

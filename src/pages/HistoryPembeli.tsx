@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import axios from "axios"
-import * as CollapsiblePrimitive  from "@radix-ui/react-collapsible";
+import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { Rating } from "@smastrom/react-rating"
 import '@smastrom/react-rating/style.css'
 import { HiChevronDown } from "react-icons/hi";
 import withReactContent from "sweetalert2-react-content"
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
-import { HistoryType, DataType } from "../utils/types/DataType"
+import { HistoryType, DataType, FormValues } from "../utils/types/DataType"
 import NotFound from '../assets/download.png'
 
 import CustomButton from "../components/CustomButton"
@@ -21,12 +21,6 @@ import Navbar from "../components/Navbar"
 import Modal from "../components/Modal"
 import clsx from "clsx"
 import TextArea from "../components/TextArea"
-
-
-interface FormValues {
-  comment: string;
-  rating: number;
-}
 
 const initialFormValues: FormValues = {
   comment: '',
@@ -65,7 +59,7 @@ const HistoryPembeli = () => {
   const [prodFeedId, setProdFeedId] = useState<number>()
   const [prodTransDetail, setProdTransDetail] = useState<number>()
 
-  function handleItemClick(itemId:any) {
+  function handleItemClick(itemId: any) {
     setOpenItemId((prevOpenItemId) =>
       prevOpenItemId === itemId ? null : itemId
     );
@@ -74,7 +68,7 @@ const HistoryPembeli = () => {
     dataTransaksi()
   }, [])
 
-  const handleIdClick = (id:any) => {
+  const handleIdClick = (id: any) => {
     setTransactionsId(id.product_transaction_id);
     setProdFeedId(id.product_id)
     setProdTransDetail(id.id)
@@ -117,7 +111,7 @@ const HistoryPembeli = () => {
         res.data.data.size = ''
         res.data.data.shop_name = ''
         setDetailHistory(res.data.data)
-        console.log("ini history coo",res.data.data)
+        console.log("ini history coo", res.data.data)
         const productIds = res.data.data.map((id: any) => id.product_id)
         if (productIds) {
           setProductId(productIds)
@@ -129,11 +123,11 @@ const HistoryPembeli = () => {
       })
       .finally(() => setLoading(false))
   }
-  
+
   useEffect(() => {
     productId ? dataProdukId(productId) : ""
   }, [])
-  
+
   const dataProdukId = async (productId: any[]) => {
     setLoadingItem(true)
     const combine: any = []
@@ -168,7 +162,7 @@ const HistoryPembeli = () => {
             ...item,
             ...data
           }
-        }else{
+        } else {
           return item
         }
       })
@@ -176,10 +170,10 @@ const HistoryPembeli = () => {
       setCombineProduk(cekDetail)
     }
   }, [product, detailHistory]);
-  
-  
+
+
   const feedbackEndpoint = 'https://lapakumkm.mindd.site/feedbacks'
-  
+
 
   useEffect(() => {
     if (value.rating !== 0) {
@@ -205,13 +199,13 @@ const HistoryPembeli = () => {
       rating: value.rating,
       feedback: value.comment,
     };
-    await axios.post(feedbackEndpoint, body,{
-        headers:{
-          Authorization: `Bearer ${cookie.token}`,
-          "Content-Type": 'application/json',
-          Accept: 'application/json'
-        }
-      })
+    await axios.post(feedbackEndpoint, body, {
+      headers: {
+        Authorization: `Bearer ${cookie.token}`,
+        "Content-Type": 'application/json',
+        Accept: 'application/json'
+      }
+    })
       .then((res) => {
         const { message } = res.data;
         MySwal.fire({
@@ -222,10 +216,10 @@ const HistoryPembeli = () => {
           showConfirmButton: false,
           timer: 1200,
         })
-          setShowFeedback(false)
-          dataProdukId(productId)
-          dataTransaksi()
-          handleOpenCollapsible(null)
+        setShowFeedback(false)
+        dataProdukId(productId)
+        dataTransaksi()
+        handleOpenCollapsible(null)
       })
       .catch((err) => {
         const { data } = err.response;
@@ -238,20 +232,20 @@ const HistoryPembeli = () => {
           confirmButtonColor: "#31CFB9"
         })
       })
-    }
+  }
 
-    
+
   const handleBayar = (payment_link: string) => {
     window.open(payment_link, "_blank")
   }
   const [historyDetail, setHistoryDetail] = useState<any>(null);
 
-  const handleOpenCollapsible = (id:any) => {
-    const selectedHistory:any = history.find((item) => item.id === id);
+  const handleOpenCollapsible = (id: any) => {
+    const selectedHistory: any = history.find((item) => item.id === id);
     setHistoryDetail(selectedHistory);
   };
   console.log("comcafbcdasdbf", combineProduk);
-  
+
   return (
     <Layout>
       {loading ? <Loading /> :
@@ -260,8 +254,8 @@ const HistoryPembeli = () => {
           <div className="flex flex-col justify-center items-center">
             <h1 className="mt-12 mb-14 text-[20px] md:text-[22px] lg:text-[24px] 2xl:text-[30px] font-semibold dark:text-white">History Pembelian</h1>
             <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5">
-              {history ? history.map((item)=>{
-                return(
+              {history ? history.map((item) => {
+                return (
                   <CollapsiblePrimitive.Root key={item.id} open={historyDetail?.id === item.id} onOpenChange={() => handleOpenCollapsible(item.id)}>
                     <CollapsiblePrimitive.Trigger
                       className={clsx(
@@ -272,7 +266,7 @@ const HistoryPembeli = () => {
                       onClick={() => dataTransaksiId(item.id)}
                     >
                       <div className="mb-1 rounded-lg bg-white text-gray-900 dark:bg-slate-700 dark:text-gray-100 
-                      select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium">
+                      select-none items-center justify-between px-4 py-2 text-left text-sm font-medium">
                         <p>{`Total Barang : ${item.total_product}`}</p>
                         <p className=''>Total Belanja :
                           {formatValue({
@@ -291,7 +285,7 @@ const HistoryPembeli = () => {
                               label='Bayar sekarang'
                               type='submit'
                               className='btn btn-xs rounded-lg border-none bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400'
-                              onClick={()=> {handleBayar(item.payment_link)}}
+                              onClick={() => { handleBayar(item.payment_link) }}
                             />
                           </div>
 
@@ -308,48 +302,49 @@ const HistoryPembeli = () => {
                       <HiChevronDown className="transform duration-300 ease-in-out group-radix-state-open:rotate-90" />
                     </CollapsiblePrimitive.Trigger>
                     <CollapsiblePrimitive.Content className="mt-4 flex flex-col space-y-4 mb-10">
-                    {loadingItem ? 
-                    <div className={clsx(
-                      "group flex w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
-                      "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100",
-                      "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
-                    )}>
-                      <Loading/> 
-                    </div>
-                    :
-                      <div className="grid">
-                        {combineProduk ? 
-                          <>
-                          {combineProduk.map((item:any) => (
-                            <CardHistory
-                              key={item.id}
-                              id={item.id}
-                              produkImg={item.product_image ? item.product_image : NotFound}
-                              sellerName={item.shop_name}
-                              produkName={item.product.product_name}
-                              size={item.size}
-                              price={item.product.price}
-                              totalPrice={item.product.price}
-                              status="Done"
-                              quantity={item.total_product}
-                              rating={item.rating}
-                              handleEdit={()=> navigate(`/detail/${item.product}`)}
-                              handleFeedback={() => {setShowFeedback(true), handleIdClick(item)
-                              }}
-                            />
-                          ))}
-                          </> : <></> 
-                        }
-                      </div>
-                    }
+                      {loadingItem ?
+                        <div className={clsx(
+                          "group flex w-full select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium",
+                          "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100",
+                          "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+                        )}>
+                          <Loading />
+                        </div>
+                        :
+                        <div className="grid">
+                          {combineProduk ?
+                            <>
+                              {combineProduk.map((item: any) => (
+                                <CardHistory
+                                  key={item.id}
+                                  id={item.id}
+                                  produkImg={item.product_image ? item.product_image : NotFound}
+                                  sellerName={item.shop_name}
+                                  produkName={item.product.product_name}
+                                  size={item.size}
+                                  price={item.product.price}
+                                  totalPrice={item.product.price}
+                                  status="Done"
+                                  quantity={item.total_product}
+                                  rating={item.rating}
+                                  handleEdit={() => navigate(`/detail/${item.product}`)}
+                                  handleFeedback={() => {
+                                    setShowFeedback(true), handleIdClick(item)
+                                  }}
+                                />
+                              ))}
+                            </> : <></>
+                          }
+                        </div>
+                      }
                     </CollapsiblePrimitive.Content>
                   </CollapsiblePrimitive.Root>
                 )
               })
-              :
-              <>
-                <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>
-              </>
+                :
+                <>
+                  <p className="text-zinc-700 text-[22px] mt-20 font-semibold dark:text-zinc-50 underline-offset-8 underline decoration-zinc-400 dark:decoration-slate-50">Anda Belum memiliki riwayat pembelian</p>
+                </>
               }
             </div>
           </div>
@@ -362,7 +357,7 @@ const HistoryPembeli = () => {
                 onChange={handleTextAreaChange}
                 placeholder="tulis ulasan anda"
               />
-              <label className="text-xs font-medium text-gray-700 dark:text-gray-400 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Beri Rating</label>
+              <label className="text-xs font-medium text-gray-700 text-[16px] md:text-[16px] lg:text-[16px] 2xl:text-[18px] dark:text-white" htmlFor="minrating" id='minrating'>Beri Rating</label>
               <Rating
                 itemStyles={customStyles}
                 isRequired

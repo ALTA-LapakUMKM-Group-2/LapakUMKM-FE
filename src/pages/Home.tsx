@@ -37,9 +37,6 @@ const Home = () => {
             })
             setUser(res.data.data)
             setCekAddress(res.data.data.address)
-
-
-
         } catch (error) {
 
         }
@@ -119,6 +116,7 @@ const Home = () => {
         }
         setLoading(false)
     }
+
     useEffect(() => {
         getRestStock()
     }, [])
