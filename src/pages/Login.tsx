@@ -272,10 +272,8 @@ const Login = () => {
               <div className="flex justify-center">
                 <button
                   type="button"
-                  data-te-ripple-init
-                  data-te-ripple-color="light"
                   onClick={() => login()}
-                  className="btn mb-2 flex rounded px-6 bg-white text-slate-700 hover:bg-slate-200 hover:scale-125 rounded-xl font-semibold shadow-xl  border-gray-300 w-80 font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+                  className="btn mb-2 flex rounded px-6 bg-white text-black hover:bg-slate-200 hover:scale-125 rounded-xl font-semibold shadow-xl  border-gray-300 w-80 font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
                   >
                     <FcGoogle className='mr-5' size={25}/>
                   Masuk Dengan Google 
