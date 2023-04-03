@@ -80,12 +80,6 @@ const HistoryPembeli = () => {
     setProdTransDetail(id.id)
   }
 
-  useEffect(() => {
-    if (transactionsId !== null && prodFeedId !== null) {
-      console.log("ini id trans", transactionsId);
-      console.log("ini id prod", prodFeedId);
-    }
-  }, [transactionsId, prodFeedId]);
 
   function dataTransaksi() {
     setLoading(true)
@@ -117,7 +111,6 @@ const HistoryPembeli = () => {
         res.data.data.size = ''
         res.data.data.shop_name = ''
         setDetailHistory(res.data.data)
-        console.log("ini history coo",res.data.data)
         const productIds = res.data.data.map((id: any) => id.product_id)
         if (productIds) {
           setProductId(productIds)
@@ -250,7 +243,6 @@ const HistoryPembeli = () => {
     const selectedHistory:any = history.find((item) => item.id === id);
     setHistoryDetail(selectedHistory);
   };
-  console.log("comcafbcdasdbf", combineProduk);
   
   return (
     <Layout>
@@ -284,13 +276,13 @@ const HistoryPembeli = () => {
                         </p>
                         <p className="capitalize">{`Status Pembayaran : ${item.payment_status}`}</p>
 
-                        <div className="flex mt-2 flex-wrap gap-y-2 sm:gap-4 ">
+                        <div className="flex mt-2 flex-wrap gap-y-2 sm:gap-4 relative">
                           <div className='ml-auto'>
                             <CustomButton
                               id="btn-balas"
                               label='Bayar sekarang'
                               type='submit'
-                              className='btn btn-xs rounded-lg border-none bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400'
+                              className={`btn btn-xs rounded-lg border-none ${item.payment_status === "pending" || "" ? "hidden" : "block" } bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400`}
                               onClick={()=> {handleBayar(item.payment_link)}}
                             />
                           </div>
@@ -333,7 +325,7 @@ const HistoryPembeli = () => {
                               status="Done"
                               quantity={item.total_product}
                               rating={item.rating}
-                              handleEdit={()=> navigate(`/detail/${item.product}`)}
+                              handleEdit={()=> navigate(`/detail/${(item.product_id)}`)}
                               handleFeedback={() => {setShowFeedback(true), handleIdClick(item)
                               }}
                             />

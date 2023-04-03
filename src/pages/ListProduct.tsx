@@ -147,7 +147,6 @@ const ListProduct = () => {
           Authorization: `Bearer ${cookie.token}`
         }
       })
-      console.log("dashboard", res.data.data)
       setDashboardData(res.data.data)
     } catch (error) {
 
@@ -180,9 +179,6 @@ const ListProduct = () => {
   useEffect(() => {
     fetchImage(productId)
   }, [])
-  console.log("product Id", product)
-  console.log("gambaer",picture)
-console.log('test dashboard' , dashboardData)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       setLoading(true)
@@ -373,7 +369,6 @@ console.log('test dashboard' , dashboardData)
     }
     )
     .then((response)=> {
-      console.log(response.data.data)
       Swal.fire({
         position: "center",
         icon: "success",
@@ -563,7 +558,6 @@ console.log('test dashboard' , dashboardData)
                       label="Submit"
                       type="submit"
                       disabled={formValues === null}
-                      onClick={()=> console.log(formValues)}
                     />
                   </div>
                 </div>
@@ -653,7 +647,6 @@ console.log('test dashboard' , dashboardData)
                       id="btn-update"
                       label="Submit"
                       type="submit"
-                      onClick={()=> console.log(formValues)}
                     />
                   </div>
                 </div>
@@ -808,7 +801,7 @@ console.log('test dashboard' , dashboardData)
           isClose={()=>setShowImage(false)}
           title="Gambar Produk"
           >
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid gird-cols-1 md:grid-cols-3 gap-3">
                     { picture.data !== null ? 
                         picture?.data?.map((item:any, index:any) => {
                           return(
@@ -863,7 +856,6 @@ console.log('test dashboard' , dashboardData)
                       id="btn-update"
                       label="Submit"
                       type="submit"
-                      onClick={()=> console.log(formValues)}
                     />
                 </div>
               </form>

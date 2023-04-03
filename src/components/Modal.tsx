@@ -45,7 +45,7 @@ const Modal: React.FC<DialogProps> = ({isOpen, isClose, title, children, size}) 
                 forceMount
                 className={clsx(
                     "fixed z-50",
-                    `${size} rounded-lg p-4`,
+                    `${size} h-96 md:h-fit rounded-lg p-4 overflow-y-scroll md:overflow-hidden`,
                     "top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]",
                     "bg-white dark:bg-slate-700",
                     "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"

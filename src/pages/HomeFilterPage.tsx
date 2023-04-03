@@ -89,7 +89,6 @@ const HomeFilter = () => {
             const res = await axios.get(`${productEndpoint}price_min=${minPrice}&price_max=${maxPrice}&rating=${rating}&category_id=${categori_id}`,
             { headers:{ Authorization: `Bearer ${cookie.token}`}
             })
-            console.log("products",res.data.data)
             setProducts(res.data.data)
         } catch (error) {
             if(error){
@@ -145,7 +144,6 @@ const HomeFilter = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
-console.log('test kategori', category);
 const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
@@ -245,7 +243,6 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                         id='submit'
                                         name='submit'
                                         label='Cari'
-                                        onClick={()=> console.log(formValues)}
                                         />
                                     </form>
                                 </div>
@@ -258,7 +255,6 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                 return search.toLocaleLowerCase() === "" ?
                                 item : item.product_name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
                             }).map((item: any, index:number) => {
-                                // console.log('test', item);
                                 return (
                                     <ProdukCard
                                         size={item.size}

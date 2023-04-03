@@ -46,7 +46,6 @@ const Home = () => {
         }
         setLoading(false)
     }
-    // console.log("user", user)
     let testSwal: any = ''
     const [isSwalDisplayed, setIsSwalDisplayed] = useState(false);
 
@@ -71,7 +70,6 @@ const Home = () => {
             .then((res) => {
                 const { data } = res.data
                 setData(data)
-                console.log('test data poto',res.data.data)
             })
             .then((err) => {
 
@@ -114,7 +112,6 @@ const Home = () => {
                     Authorization: `Bearer ${cookie.token}`
                 }
             })
-            console.log('test restStockToko', res.data.data);
             setGetStock(res.data.data)
         } catch (error) {
 
@@ -128,14 +125,11 @@ const Home = () => {
     useEffect(() => {
         if (cookie.token)
             getStock.map((item: any) => {
-                // console.log('test stock Toko', item.stock_remaining)
                 if (item.stock_remaining < 5) {
                     toast.warning(`Stock Product " ${item.product_name} " Anda,  Tersisa " ${item.stock_remaining} ". `);
                 }
             })
     }, [getStock])
-    console.log('getStock', getStock)
-    // console.log('data', data);
     const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
@@ -155,7 +149,6 @@ const Home = () => {
                     <p className='dark:text-white font-semibold text-sm md:text-lg lg:text-xl'>Cari Berdasarkan Kategori</p>
                     <div className="flex w-full space-x-10 relative overflow-x-auto p-5">
                         {category?.map((item: any, index: any) => {
-                            console.log("item test", item);
 
                             return (
                                 <button key={index} id={item.id} className="btn w-32 bg-white text-slate-800 border-gray-200 shadow hover:bg-lapak hover:border-none dark:border-lapak dark:border-2 dark:bg-slate-700 dark:text-white"
