@@ -24,11 +24,11 @@ const Payment = () => {
     const [cartTrans, setCartTrans] = useState<any>()
     const [totalCartPrice, setTotalCartPrice] = useState<number>()
     const [cartId, setCartId] = useState<any>([])
-    const cart = location.state.forPayment
-    const cartPrice = location.state.totalPrice
-    const test = location.state.dca
-    const testPrice = location.state.testPrice
-    const testCount = location.state.testCount
+    const cart :any = location.state.forPayment
+    const cartPrice :any = location.state.totalPrice
+    const test :any = location.state.dca
+    const testPrice :any = location.state.testPrice
+    const testCount :any = location.state.testCount
     const [loading, setLoading] = useState(false)
     const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
@@ -40,11 +40,11 @@ const Payment = () => {
                 }
             })
                 .then((response) => {
-                    console.log(response);
+                   
                     // handle success
                 })
                 .catch((error) => {
-                    console.log(error);
+                  
                     // handle error
                 });
         });
@@ -71,7 +71,7 @@ const Payment = () => {
                         }
                     })
                 })
-                console.log('dataTrans', dataTrans);
+               
             }
         }
     }, [totalCartPrice, cartTrans])
@@ -93,7 +93,6 @@ const Payment = () => {
     const handlePay = async (e: any) => {
         e.preventDefault()
         const data = dataTrans
-        console.log('test clone', data);
         setLoading(true)
         try {
             const res = await axios.post('https://lapakumkm.mindd.site/transactions', data, {
@@ -117,34 +116,17 @@ const Payment = () => {
             }
 
         } catch (error) {
-            console.log('gagal payment', error);
+           
 
         }
         setLoading(false);
     }
 
 
-    const handleAddAlamat = async () => {
-        try {
-            const res = await axios.post('')
-        } catch (error) {
-
-        }
-    }
-
+    
     return (
         <Layout>
 
-            {/* <Modal isOpen={showModal} size='w-96' isClose={() => setShowModal(false)} title='Tambah Alamat'>
-                    <form action="" onSubmit={handleAddAlamat}>
-                        <div className='space-y-5 mt-10'>
-                            <CustomInput id={'alamat'} label={'alamat'} name={'alamat'} placeholder={'masukkan alamat'} />
-                            <CustomInput id={'pos'} label={'Kode Pos'} name={'pos'} placeholder={'Kode pos'} />
-                            <CustomButton id={'btn'} label={'Save'}></CustomButton>
-                        </div>
-                    </form>
-
-                </Modal> */}
             {
                 loading ? <Loading /> : <>
                     <div className='w-full h-full'>
@@ -153,9 +135,7 @@ const Payment = () => {
                             <div className="grid grid-cols-1 lg:grid-cols-2 w-full lg:mx-auto mt-20 md:mt-24 gap-5 pb-32 md:px-32 ">
                                 {/* Card 1 */}
                                 <div className="flex flex-col bg-base-100 shadow-xl border mb-5 h-fit rounded-xl justify-center dark:bg-slate-800  dark:border-lapak">
-                                    {/* <button className='btn lg:w-8/12 bg-lapak hover:bg-sky-500 border-none my-5 mx-auto' onClick={() => setShowModal(true)}>
-                                Pilih Alamat palsu
-                            </button> */}
+                                
                                     <div className="card-body lg:mx-10 2xl:mx-20">
                                     </div>
                                     <div className="card-body lg:mx-10 2xl:mx-5">
@@ -166,12 +146,11 @@ const Payment = () => {
                                             {
                                                 cart ?
                                                     cart.map((item: any, i: number) => {
-                                                        console.log('test isi cart', item);
 
                                                         return (
                                                             <>
-                                                                <div className='flex' key={i}>
-                                                                    <div className='flex flex-row gap-5 p-2 md:p-5'>
+                                                                <div className='flex' key={item.id}>
+                                                                    <div className='flex flex-row gap-5 p-2 md:p-5' >
                                                                         <img src={item.photo_profile ? item.photo_profile : Default} className='w-16 md:w-32 rounded-full' />
                                                                         <div className='flex flex-col text-sm md:text-lg 2xl:text-xl font-semibold gap-2'>
                                                                             <h1 className='dark:text-white flex'> <BsShop className=' w-6 h-6 mr-2 dark:text-white mt-1' />{item.lapak_name}</h1>
@@ -267,7 +246,7 @@ const Payment = () => {
 
                                     {/* Card 3 */}
 
-                                    <div key={`index`} className="card bg-base-100 shadow-xl border mb-5 lg:w-[450px] lg:mx-auto h-fit 2xl:w-full 2xl:ml-20 dark:bg-slate-800 dark:border-2 dark:border-lapak">
+                                    <div className="card bg-base-100 shadow-xl border mb-5 lg:w-[450px] lg:mx-auto h-fit 2xl:w-full 2xl:ml-20 dark:bg-slate-800 dark:border-2 dark:border-lapak">
                                         <div className="card-body">
                                             <h1 className="2xl:text-4xl 2xl:font-semibold dark:text-white">Ringkasan Belanja </h1>
                                             <div className='border-2 mt-5 mb-5'>
@@ -278,8 +257,8 @@ const Payment = () => {
                                                     cart.map((item: any, i: number) => {
                                                         return (
                                                             <>
-                                                                <div>
-                                                                    <div className="flex flex-row  justify-between mt-5 text-sm lg:text-lg font-semibold 2xl:font-semibold 2xl:text-2xl dark:text-white">
+                                                                <div key={i}>
+                                                                    <div  className="flex flex-row  justify-between mt-5 text-sm lg:text-lg font-semibold 2xl:font-semibold 2xl:text-2xl dark:text-white">
                                                                         <div>Nama Toko :</div>
                                                                         <div className=''>{item.lapak_name}</div>
                                                                     </div>

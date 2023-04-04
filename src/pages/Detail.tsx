@@ -555,7 +555,6 @@ const Detail = () => {
 
       )
       .catch((err) => {
-        console.log(err.response.data.message)
       })
   }
 
@@ -649,7 +648,7 @@ const Detail = () => {
                         decimalSeparator: ',',
                       })}</span></h1>
                       <div className="flex gap-2 border w-fit mt-10 items-center overflow-hidden dark:border-lapak">
-                        <button onClick={handleDecrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-none dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 mr-5 ml-2">-</button>
+                        <button onClick={handleDecrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-transparent dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 mr-5 ml-2">-</button>
                         <h1 className="font-bold dark:text-white">{count}</h1>
                         <button onClick={handleIncrement} className="btn btn-xs bg-transparent text-black border-none hover:bg-transparent dark:bg-transparent dark:text-white dark:hover:text-lapak text-2xl mb-3 ml-5 mr-2">+</button>
                       </div>
@@ -720,9 +719,9 @@ const Detail = () => {
                   {feedbacks.length === 0 ? <p className='text-[20px] text-zinc-800 font-medium dark:text-zinc-50'>Belum ada ulasan</p> :
 
                     <div >
-                      {feedbacks.map((item) => (
+                      {feedbacks.map((item: any, i: number) => (
                         <>
-                          <div className='p-5 mb-4 border-2 shadow dark:border-lapak rounded-lg relative' key={item.id}>
+                          <div className='p-5 mb-4 border-2 shadow dark:border-lapak rounded-lg relative' key={i}>
                             <div className='dropdown dropdown-bottom dropdown-end absolute top-2 right-0'>
                               <label tabIndex={0} className={`${cookie.name === item.user.full_name ? "flex" : "hidden"} btn-ghost btn-circle btn`}>
                                 <GoKebabVertical className='text-zinc-800 dark:text-zinc-50' size={20} />
@@ -754,10 +753,10 @@ const Detail = () => {
                             </div>
                             {item.childs ?
                               <div className='pl-10 relative'>
-                                {item.childs?.map((child) => {
+                                {item.childs?.map((child : any, i: number) => {
                                   return (
                                     <>
-                                      <div className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
+                                      <div key={i} className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
                                         <img src={child.user.photo_profile ? child.user.photo_profile : Default} alt="profil.svg" />
                                       </div>
 
