@@ -26,7 +26,7 @@ type ChatModalProps = {
     tokoName?: string
 };
 
-const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, product_id, isOpen, isClose, img,tokoName, children, size, titleStyle, Recipient_id }) => {
+const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, product_id, isOpen, isClose, img, tokoName, children, size, titleStyle, Recipient_id }) => {
     const [cookie, setCookie] = useCookies(["token", "id", "roomID", "full_name", "photo_profile"])
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -50,11 +50,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, pr
                 }
             })
             .then((res) => {
-                console.log(res.data.data)
                 setRoomID(res.data.data.room_id)
             })
             .catch((err) => {
-                console.log(err.response.data.message)
+
             })
             .finally(() => fetchDataChat(roomID))
             .finally(() => setLoading(false))
@@ -77,7 +76,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, pr
                 setRoomID(res.data.data.room_id)
             })
             .catch((err) => {
-                console.log(err.response.data.message)
+
             })
             .finally(() => fetchDataChat(roomID))
             .finally(() => setLoading(false))
@@ -100,9 +99,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, pr
     const [getRecepient, setGetRecepient] = useState<any>('')
     function fetchDataChat(room_id: any) {
         setLoading(true)
-        console.log("Room ID Ceked :", roomID)
-        console.log("Rooom :", Room)
-        console.log("room ID ceked 2:", room_id)
         axios
             .get(`https://lapakumkm.mindd.site/rooms/${room_id}/chats`, {
                 headers: {
@@ -119,12 +115,12 @@ const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, pr
     return (
         < div
             className={`transition-opacity ${isOpen ? "fixed opacity-100" : "opacity-0 hidden"
-                } bottom-10 right-10 h-3/6 flex items-center justify-center z-50`
+                } 2xl:bottom-10 lg:bottom-10 bottom-0 2xl:right-10 lg:right-10 right-0 2xl:h-3/6 lg:h-3/6 h-full overflow-auto flex 2xl:flex-row lg:flex-row flex-col items-center justify-center z-50`
             }
         >
             {RoomsChat && role === "seller" ?
-                <div className="w-80 py-3 px-4 h-full block bg-white dark:bg-slate-400 border-r-2 rounded-tl-lg rounded-bl-lg border-zinc-300 dark:border-zinc-100 overflow-auto ">
-                    <p className="text-[24px] font-semibold text-zinc-800">Chat</p>
+                <div className="2xl:w-80 lg:w-80 w-full 2xl:py-3 lg:py-3 py-0 px-4 2xl:h-full lg:h-full h-72 block bg-white dark:bg-slate-400 border-r-2 rounded-tl-lg rounded-bl-lg border-zinc-300 dark:border-zinc-100 overflow-auto ">
+                    <p className="text-[24px] font-semibold text-zinc-800 2xl: sticky top-0 z-50 bg-white">Chat</p>
                     <div >
                         {RoomsChat.map((data: Chat, index) => (
                             <>
