@@ -74,11 +74,11 @@ npm run dev
 
 Faizal Triasa :
 
-[![GitHub](https://img.shields.io/badge/-Alfin-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/paisalll)
+[![GitHub](https://img.shields.io/badge/-Faizal-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/paisalll)
 
 Adam Fadrian :
 
-[![GitHub](https://img.shields.io/badge/-Dhoman-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/adamfadrian)
+[![GitHub](https://img.shields.io/badge/-Adam-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/adamfadrian)
 
 M Agung Cahya D:
 
