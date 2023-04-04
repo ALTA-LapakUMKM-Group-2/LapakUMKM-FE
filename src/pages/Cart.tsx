@@ -137,7 +137,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                         fetchDataCart()
                     })
                     .catch((error) => {
-                        console.log(error)
+                        
                         Swal.fire({
                             icon: "error",
                             title: error.message,
@@ -164,7 +164,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             setNewCart(data);
             setCount(response.data.data.product_pcs)
         } catch (error) {
-            console.log(error);
+           
         } finally {
 
         }
@@ -174,8 +174,30 @@ const Cart: React.FC<CartData> = ({ products }) => {
         fetchDataCart()
     }, [])
 
-  console.log('test cart', cart);
-  
+
+    const cartKosong = () => {
+        if(cart.length === 0) {
+            Swal.fire({
+                icon: "warning",
+                title: "Cart Kosong",
+                text: "Cart Kosong",
+                confirmButtonText: "Isi Keranjang",
+                confirmButtonColor: "#31CFB9",
+            }).then((go) => {
+                if(go){
+                    navigate('/')
+                }
+            }) 
+        } else if(selectedItems.length === 0)
+      Swal.fire({
+          icon: "warning",
+          title: "Cart belom di ceklis",
+          text: "Cart belom di ceklis",
+          confirmButtonText: "Select item dulu",
+          confirmButtonColor: "#31CFB9",
+      })
+
+    }
 
     return (
         <Layout>
@@ -277,7 +299,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                                     <CustomButton
                                         id='submit'
                                         label='Beli'
-                                        onClick={() => navigate(`/payment/${data.full_name}`, {
+                                        onClick={() => cart.length === 0 || selectedItems.length === 0 ? cartKosong() : navigate(`/payment/${data.full_name}`, {
                                             state: {
                                                 forPayment: selectedItems,
                                                 totalPrice: price

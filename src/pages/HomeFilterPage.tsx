@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Layout from '../components/Layout'
-import FotoProfile from '../assets/photo_2023-03-16_20-34-20.jpg'
 import ProdukCard from '../components/ProdukCard'
 import { Rating } from '@smastrom/react-rating';
 import { IoIosArrowDropdown } from 'react-icons/io'
 import { IoIosArrowDropup } from 'react-icons/io'
-import CustomInput from '../components/CutomInput'
 import CurrencyInput from 'react-currency-input-field';
 import CustomButton from '../components/CustomButton'
-import ChatModal from '../components/ChatModal'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useLocation } from 'react-router-dom'
@@ -38,9 +35,7 @@ const HomeFilter = () => {
     const [categoryId, setCategoryId] = useState(location.state.id)
     const dropdownRef = useRef(null);
 
-    const handleToggle = () => {
-        setShowFilter(!showFilter);
-    }
+ 
 
     const handleAnimation = () => {
         const dropdown = dropdownRef.current;
@@ -72,7 +67,6 @@ const HomeFilter = () => {
         inactiveFillColor: '#ffffff',
 
     };
-    const [defaultValue, setDefaultValue] = useState('')
     const productEndpoint = 'https://lapakumkm.mindd.site/products?'
 
     const filter = `price_min=${formValues.minprice}&price_max=${formValues.maxprice}&rating=${formValues.minrating}&category_id=${formValues.kategori ? formValues.kategori : categoryId}`
@@ -137,7 +131,6 @@ const HomeFilter = () => {
     useEffect(() => {
         fetchCategory()
     }, [])
-const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
     return (
         <Layout>
             <Navbar
@@ -179,7 +172,7 @@ const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
                                                         {
                                                             category?.map((item: any, i: number) => {
                                                                 return (
-                                                                    <option className='' value={item.id}>{item.category}</option>
+                                                                    <option className='' key={i} value={item.id}>{item.category}</option>
                                                                 )
                                                             })
                                                         }

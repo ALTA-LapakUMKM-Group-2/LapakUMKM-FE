@@ -158,7 +158,7 @@ const ListProduct = () => {
     fetchProduct()
     fetchDashboard()
   }, [])
-  console.log(dashboardData)
+  
 
   const fetchImage = async (id: number) => {
     setLoading(true)
@@ -169,7 +169,6 @@ const ListProduct = () => {
         }
       })
       setPicture(res.data)
-      console.log(res.data)
     } catch (error) {
 
     }
@@ -296,19 +295,9 @@ const ListProduct = () => {
             fetchProduct()
             setShowImage(false)
           })
-          .catch((error) => {
-            console.log(error)
-            Swal.fire({
-              icon: "error",
-              title: error.message,
-              text: "gagal",
-              showConfirmButton: false,
-              showCancelButton: false,
-              timer: 1500,
-            })
-          }).finally(() => setLoading(false))
       }
     })
+   setLoading(false)
   }
 
   const initialEditValues: FormValues = {
@@ -381,7 +370,7 @@ const ListProduct = () => {
       setShowEditProduk(false)
     })
     .catch((error)=> {
-      console.log(error)
+      
       Swal.fire({
         icon: "error",
         title: error.message,
@@ -423,7 +412,6 @@ const ListProduct = () => {
             fetchProduct()
           })
           .catch((error) => {
-            console.log(error)
             Swal.fire({
               icon: "error",
               title: error.message,
@@ -436,7 +424,7 @@ const ListProduct = () => {
       }
     })
   }
-  const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+
   return (
     <Layout>
       {loading ? <Loading /> :
@@ -524,7 +512,7 @@ const ListProduct = () => {
                     <option className="">Pilih Kategori</option>
                     {category?.map((item: any, index: any) => {
                       return (
-                        <option value={item.id}>{item.category}</option>
+                        <option key={index} value={item.id}>{item.category}</option>
                       )
                     })
                     }
