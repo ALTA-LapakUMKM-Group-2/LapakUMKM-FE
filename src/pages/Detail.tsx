@@ -18,7 +18,6 @@ import { FeedbackTypes, FormValues, Products } from '../utils/types/DataType'
 import CustomInput from '../components/CutomInput'
 import CustomButton from '../components/CustomButton'
 import Default from "../assets/default.jpg"
-import { stringify } from 'querystring'
 import NotFound from '../assets/download.png'
 import '@smastrom/react-rating/style.css'
 import { Rating } from '@smastrom/react-rating';
@@ -43,14 +42,12 @@ const Detail = () => {
   const [name, setName] = useState('')
   const [showChat, setShowChat] = useState(false)
   const [cookie, setCookie] = useCookies(["token", "id", "roomID", "name", 'photo_profile', 'tokoId', 'name'])
-
   const [feedbacks, setFeedback] = useState<FeedbackTypes[]>([])
   const [diskusi, setDiskusi] = useState<FeedbackTypes[]>([])
   const [balas, setBalas] = useState<string | undefined>("")
   const [newDiskus, setnewDiskus] = useState<string>("")
   const [disable, setDisable] = useState<boolean>(true)
   const navigate = useNavigate()
-  const [test, setTest] = useState<Products[]>([])
   const [productId, setProductId] = useState<any>()
   const [userId, setUserId] = useState<any>()
   const [roomID, setRoomID] = useState<string>("")
@@ -66,8 +63,8 @@ const Detail = () => {
   const [photoToko, setPhotoToko] = useState('')
   const [category, setCategory] = useState<any>('')
   const [feedbackId, setFeedbackId] = useState<number | null>()
-  const [parentId, setParentId] = useState<number|null>()
-  const [prodTransDetail, setProdTransDetail] = useState<number|null>()
+  const [parentId, setParentId] = useState<number | null>()
+  const [prodTransDetail, setProdTransDetail] = useState<number | null>()
   const [replyFeed, setReplyFeed] = useState<string>('')
   const [diskus, setDiskus] = useState<string>("")
   const [newBalas, setNewBalas] = useState<string>("")
@@ -103,14 +100,14 @@ const Detail = () => {
         setTotalPrice(price);
         setUserId(user_id)
         setProductId(id)
-        setImage(product_image) 
+        setImage(product_image)
         setPhotoToko(photo_profile)
         setCategory(category)
         res.data.data.total_price = totalPrice
         res.data.data.product_pcs = count
         SetTestCount(res.data.data.product_pcs)
         setTestPrice(res.data.data.total_price)
-        setCookie('tokoId', res.data.data.user_id , {path: "/"})
+        setCookie('tokoId', res.data.data.user_id, { path: "/" })
       })
       .catch((err) => {
         MySwal.fire({
@@ -125,7 +122,6 @@ const Detail = () => {
       })
     setLoading(false)
   }
-
   const handleChangeEditFeedback = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
@@ -136,7 +132,7 @@ const Detail = () => {
 
   // increment decrement
   const handleIncrement = () => {
-    const tstCount = count + 1
+    const tstCount = count < stock ? count + 1 : count
     const newTotal = price * tstCount
     setCount(tstCount);
     setTotalPrice(newTotal);
@@ -158,17 +154,16 @@ const Detail = () => {
     }
 
   };
-// selesai
+  // selesai
 
-// add to cart
+  // add to cart
   const addToCart = async () => {
-
     const data = {
       product_id: parseInt(productId),
       product_pcs: count,
-      user_id: userId
+      user_id: userId,
+      stock: stock,
     };
-
     try {
       const res = await axios.post('https://lapakumkm.mindd.site/carts', data, {
         headers: {
@@ -180,10 +175,8 @@ const Detail = () => {
           icon: "success",
           title: "Produk ditambahkan ke keranjang",
           showCancelButton: false,
-
         })
       }
-
     } catch (err: any) {
       MySwal.fire({
         icon: "error",
@@ -197,7 +190,7 @@ const Detail = () => {
     }
 
   }
-//selesai
+  //selesai
 
 
   function feedbackData() {
@@ -218,7 +211,7 @@ const Detail = () => {
 
 
 
-  
+
   const handleFeedbackReply = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReplyFeed(e.target.value);
   };
@@ -309,11 +302,9 @@ const Detail = () => {
       .get(`https://lapakumkm.mindd.site/products/${id}/discussions`)
       .then((res) => {
         const { data } = res.data
-
         setDiskusi(data)
       })
       .catch((err) => {
-
       })
       .finally(() => setLoading(false))
   }
@@ -452,14 +443,6 @@ const Detail = () => {
       .finally(() => setLoading(false))
   }
 
-
-
-  const changeDiskusBalas = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBalas(e.target.value);
-    if (balas) {
-      setNewBalas(balas)
-    }
-  };
 
   const handleBalas = (parent_id: number) => {
     setLoading(true)
@@ -753,7 +736,7 @@ const Detail = () => {
                             </div>
                             {item.childs ?
                               <div className='pl-10 relative'>
-                                {item.childs?.map((child : any, i: number) => {
+                                {item.childs?.map((child: any, i: number) => {
                                   return (
                                     <>
                                       <div key={i} className="float-left w-12 h-12 mr-4 overflow-hidden rounded-full flex justify-center" >
@@ -818,14 +801,14 @@ const Detail = () => {
                                   onChange={handleFeedbackReply}
                                 />
 
-                                  <div className='w-3/12 mt-4 ml-auto'>
-                                    <CustomButton
-                                      id="btn-balas"
-                                      label='Balas'
-                                      type='submit'
-                                    />
-                                  </div>
-                                </form>
+                                <div className='w-3/12 mt-4 ml-auto'>
+                                  <CustomButton
+                                    id="btn-balas"
+                                    label='Balas'
+                                    type='submit'
+                                  />
+                                </div>
+                              </form>
 
                               <div className='absolute bottom-0 right-48 w-3/12'>
                                 <CustomButton
@@ -954,7 +937,7 @@ const Detail = () => {
                               label=''
                               type='text'
                               name='balas_diskusi'
-                              onChange={changeDiskusBalas}
+                              onChange={(e) => setNewBalas(e.target.value)}
                             />
 
                             <div className='w-3/12 mt-4 ml-auto'>

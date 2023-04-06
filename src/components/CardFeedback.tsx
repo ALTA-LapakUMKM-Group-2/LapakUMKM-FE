@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { MdStarRate } from 'react-icons/md'
-import Default from "../assets/default.jpg"
+
 
 interface Props {
     rating: number

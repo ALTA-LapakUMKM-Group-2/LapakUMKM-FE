@@ -155,9 +155,9 @@ const Login = () => {
 
   const handleChange = () => {
     setLoading(true)
-    setLupaPassword2(LupaPassword)
-    if (lupaPassword2) {
-      dataLupaPassword(lupaPassword2)
+    // setLupaPassword2(LupaPassword)
+    if (LupaPassword) {
+      dataLupaPassword(LupaPassword)
     }
     setLoading(false)
   }
@@ -303,7 +303,7 @@ const Login = () => {
                 name="password_lama"
                 type="text"
                 placeholder="contoh: admin@gmail.com"
-                onChange={lupaPassword}
+                onChange={(e: any) => setLupaPassword(e.target.value)}
               />
 
               <div className="mt-8">

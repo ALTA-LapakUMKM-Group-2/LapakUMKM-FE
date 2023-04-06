@@ -53,24 +53,19 @@ const Home = () => {
     }, [cekAddress]);
 
 
-
-
-
     useEffect(() => {
         getProfile()
     }, [testSwal])
+
     const getAllData = () => {
         setLoading(true);
-
         axios
             .get(`https://lapakumkm.mindd.site/products`)
             .then((res) => {
                 const { data } = res.data
                 setData(data)
-            
             })
             .then((err) => {
-
             })
             .finally(() => setLoading(false));
     }
@@ -78,8 +73,6 @@ const Home = () => {
     useEffect(() => {
         getAllData()
     }, []);
-
-
 
     const fetchCategory = async () => {
         try {
@@ -97,7 +90,6 @@ const Home = () => {
         fetchCategory()
     }, [])
 
-
     // test notif stock
     const productEndpoint = 'https://lapakumkm.mindd.site/products'
     const [getStock, setGetStock] = useState<any>([])
@@ -109,7 +101,6 @@ const Home = () => {
                     Authorization: `Bearer ${cookie.token}`
                 }
             })
-    
             setGetStock(res.data.data)
         } catch (error) {
 

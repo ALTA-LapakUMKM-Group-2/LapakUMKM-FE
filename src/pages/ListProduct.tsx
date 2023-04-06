@@ -7,16 +7,13 @@ import CurrencyInput from "react-currency-input-field"
 import Layout from "../components/Layout"
 import Navbar from "../components/Navbar"
 import { formatValue } from "react-currency-input-field"
-import Kaos from "../assets/kaos.png"
 import { FiShoppingBag } from 'react-icons/fi'
-import { FaUpload } from 'react-icons/fa';
 import { BiImageAdd } from 'react-icons/bi'
 import { BiMoneyWithdraw } from 'react-icons/bi'
 import { AiFillStar } from "react-icons/ai"
 import Modal from "../components/Modal"
 import TextArea from "../components/TextArea"
 import axios from "axios"
-import { Cookies } from "react-cookie"
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { useLocation, useNavigate } from "react-router-dom"
 import Loading from "../components/Loading"
@@ -24,18 +21,18 @@ import Loading from "../components/Loading"
 
 interface FormValues {
   produkName: string
-  stockRemaining: number | string | any
+  stockRemaining: number 
   ukuran: string
-  price: number | any
-  categoriId: number | any
+  price: number 
+  categoriId: number 
   deskripsi: string
   image: File[] | []
 }
 
 const initialFormValues: FormValues = {
   produkName: '',
-  stockRemaining: '',
-  categoriId: '',
+  stockRemaining: 0,
+  categoriId: 0,
   price: 0,
   ukuran: '',
   deskripsi: '',
@@ -53,7 +50,6 @@ const ListProduct = () => {
   const [productId, setProductId] = useState<number>(0)
   const [picture, setPicture] = useState<any>([])
   const [loading, setLoading] = useState(false)
-  const [imageLoading, setImageLoading] = useState(false)
   const [product, setProduct] = useState<any>([])
   const [selectedImage, setSelectedImage] = useState<File[] | []>([])
   const location = useLocation()
@@ -67,6 +63,8 @@ const ListProduct = () => {
   const [editMode, setEditMode] = useState(false)
   const [dashboardData, setDashboardData] = useState<any>()
   const navigate = useNavigate()
+
+
   const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     event.preventDefault();
@@ -77,6 +75,7 @@ const ListProduct = () => {
       image: files
     }))
   };
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files != null) {
@@ -158,7 +157,7 @@ const ListProduct = () => {
     fetchProduct()
     fetchDashboard()
   }, [])
-  
+
 
   const fetchImage = async (id: number) => {
     setLoading(true)
@@ -185,11 +184,11 @@ const ListProduct = () => {
     setFormValues(initialFormValues);
     const formData = new FormData()
     formData.append("photo_product", selectedImage[0])
-    formData.append("category_id", formValues.categoriId)
+    formData.append("category_id", formValues.categoriId.toString())
     formData.append("product_name", formValues.produkName)
     formData.append("description", formValues.deskripsi)
-    formData.append("price", formValues.price)
-    formData.append("stock_remaining", formValues.stockRemaining)
+    formData.append("price", formValues.price.toString())
+    formData.append("stock_remaining", formValues.stockRemaining.toString())
     formData.append("size", formValues.ukuran)
     await axios.post(productEndpoint, formData,
       {
@@ -211,6 +210,8 @@ const ListProduct = () => {
           showConfirmButton: false,
           timer: 1500,
         })
+        console.log('response.data', response.data);
+        
         fetchProduct()
         setShowAddProduk(false)
       })
@@ -267,6 +268,8 @@ const ListProduct = () => {
 
   const handleDeleteImage = async (id: any) => {
     setLoading(true)
+    console.log('test ,id', id);
+
     Swal.fire({
       icon: "warning",
       title: "Anda yakin Ingin menghapus Foto ini?",
@@ -297,13 +300,53 @@ const ListProduct = () => {
           })
       }
     })
-   setLoading(false)
+    setLoading(false)
   }
+
+  const deleteImage = async (id: number) => {
+    setLoading(true)
+    const res = await Swal.fire({
+      icon: "warning",
+      title: "Anda yakin Ingin menghapus Foto ini?",
+      confirmButtonText: "Saya Yakin",
+      confirmButtonColor: "#31CFB9",
+      reverseButtons: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      cancelButtonColor: "#db1f1f"
+    })
+    if (res.isConfirmed) {
+      try {
+        const res = await axios.delete(`${productEndpoint}/${productId}/delete-photo/${id}`, {
+          headers: {
+            Authorization: `Bearer ${cookie.token}`
+          }
+        })
+
+        if (res.data)
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            text: res.data.message,
+            iconColor: '#31CFB9',
+            showConfirmButton: false,
+            timer: 2000,
+          })
+        fetchProduct()
+        setShowImage(false)
+      } catch (error) {
+
+      }
+    }
+
+    setLoading(false)
+  }
+
 
   const initialEditValues: FormValues = {
     produkName: '',
-    stockRemaining: '',
-    categoriId: '',
+    stockRemaining: 0,
+    categoriId: 0,
     price: 0,
     ukuran: '',
     deskripsi: '',
@@ -342,11 +385,11 @@ const ListProduct = () => {
     e.preventDefault();
     setFormValues(initialFormValues);
     await axios.put(`${productEndpoint}/${productId}`, {
-      category_id: parseInt(formValues.categoriId),
+      category_id: parseInt(formValues.categoriId.toString()),
       product_name: formValues.produkName,
       description: formValues.deskripsi,
       price: formValues.price,
-      stock_remaining: parseInt(formValues.stockRemaining),
+      stock_remaining: parseInt(formValues.stockRemaining.toString()),
       size: formValues.ukuran
     },
       {
@@ -357,30 +400,30 @@ const ListProduct = () => {
         }
       }
     )
-    .then((response)=> {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        text: response.data.message,
-        iconColor: '#31CFB9',
-        showConfirmButton: false,
-        timer: 2000,
+      .then((response) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          text: response.data.message,
+          iconColor: '#31CFB9',
+          showConfirmButton: false,
+          timer: 2000,
+        })
+        fetchProduct()
+        setShowEditProduk(false)
       })
-      fetchProduct()
-      setShowEditProduk(false)
-    })
-    .catch((error)=> {
-      
-      Swal.fire({
-        icon: "error",
-        title: error.message,
-        text: "gagal",
-        showConfirmButton: false,
-        showCancelButton: false,
-        timer: 1500,
-      })
-    }).finally(()=>setLoading(false))
-}
+      .catch((error) => {
+
+        Swal.fire({
+          icon: "error",
+          title: error.message,
+          text: "gagal",
+          showConfirmButton: false,
+          showCancelButton: false,
+          timer: 1500,
+        })
+      }).finally(() => setLoading(false))
+  }
 
   const handleDelete = async (id: any) => {
     Swal.fire({
@@ -789,24 +832,24 @@ const ListProduct = () => {
             isClose={() => setShowImage(false)}
             title="Gambar Produk"
           >
-          <div className="grid gird-cols-1 md:grid-cols-3 gap-3">
-                    { picture.data !== null ? 
-                        picture?.data?.map((item:any, index:any) => {
-                          return(
-                            <label
-                              className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-800`}>
-                              <div className="flex flex-col items-center justify-center ">
-                                <div key={index}>
-                                  <img src={item.image} className="w-20 h-20" alt="" />
-                                </div>
-                              </div>
-                              <button className="btn btn-sm btn-outline btn-error mt-2" onClick={()=> handleDeleteImage(item.id)}>Hapus</button>
-                            </label>
-                          )
-                        })
-                      :
-                      <>
-                      </> }
+            <div className="grid gird-cols-1 md:grid-cols-3 gap-3">
+              {picture.data !== null ?
+                picture?.data?.map((item: any, index: any) => {
+                  return (
+                    <label
+                      className={`flex flex-col items-center justify-center w-full h-48 ${dropZoneStyle} border-2 border-lapak border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-800`}>
+                      <div className="flex flex-col items-center justify-center ">
+                        <div key={index}>
+                          <img src={item.image} className="w-20 h-20" alt="" />
+                        </div>
+                      </div>
+                      <button className="btn btn-sm btn-outline btn-error mt-2" onClick={() => deleteImage(item.id)}>Hapus</button>
+                    </label>
+                  )
+                })
+                :
+                <>
+                </>}
               <form onSubmit={handleUpload}>
                 <label htmlFor="dropzone-file"
                   onDrop={handleDrop}
@@ -840,11 +883,11 @@ const ListProduct = () => {
                   />
                 </label>
                 <div className="mt-8">
-                    <CustomButton
-                      id="btn-update"
-                      label="Submit"
-                      type="submit"
-                    />
+                  <CustomButton
+                    id="btn-update"
+                    label="Submit"
+                    type="submit"
+                  />
                 </div>
               </form>
             </div>

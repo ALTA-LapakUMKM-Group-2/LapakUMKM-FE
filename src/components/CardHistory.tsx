@@ -1,7 +1,6 @@
 import React from 'react'
 import { Rating } from '@smastrom/react-rating'
 import { formatValue } from 'react-currency-input-field'
-import CustomButton from './CutomInput'
 import '@smastrom/react-rating/style.css'
 
 interface FeedbackProps {
@@ -44,7 +43,7 @@ const CardHistory: React.FC<FeedbackProps> = ({
     };
     return (
         <div id={id} className="mt-5 w-60 sm:w-[400px] lg:w-[400px] 2xl:w-[400px] rounded-lg px-8 py-4 bg-white shadow dark:bg-slate-700 dark:border-lapak dark:border">
-            <p className="border-b-2 pb-2 font-semibold text-left text-sm font-medium dark:text-white dark:border-lapak">{sellerName}</p>
+            <p className="border-b-2 pb-2  text-left text-sm font-medium dark:text-white dark:border-lapak">{sellerName}</p>
             <div className="flex flex-col sm:flex-row lg:flex-row gap-5 md:gap-5 lg:gap-5 2xl:gap-8 mt-4">
                 <img src={produkImg} alt="produk.jpg" className="w-20 h-28 rounded-l" />
                 <div className="space-y-1 w-full">

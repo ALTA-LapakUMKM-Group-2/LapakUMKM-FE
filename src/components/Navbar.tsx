@@ -4,13 +4,10 @@ import { useCookies } from 'react-cookie';
 import { useDispatch } from "react-redux";
 import { handleAuth } from '../utils/redux/reducer/reducer';
 import axios from 'axios';
-
 import withReactContent from 'sweetalert2-react-content';
-
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import Logo from '../assets/LapakUmkm2.png'
 import Default from '../assets/default.jpg'
-
 import { MdOutlineWorkHistory, MdOutlineShoppingCart } from 'react-icons/md'
 import { FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'
 import { HiCog6Tooth } from 'react-icons/hi2'
@@ -31,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
     // handle log out
     const MySwal = withReactContent(Swal)
     const dispatch = useDispatch()
-    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile', 'full_name', "name"]);
+    const [cookies, setCookie, removeCookie] = useCookies(['id', 'token', 'photo_profile', 'full_name', "name","TokoId"]);
     const checkToken = cookies.token
     const navigate = useNavigate()
     const [cart, setCart] = useState([])
@@ -70,9 +67,10 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
                 removeCookie('token');
                 removeCookie('id');
                 removeCookie('photo_profile');
-                removeCookie('id');
+                removeCookie('TokoId');
                 removeCookie('full_name');
                 navigate("/login");
+                localStorage.removeItem('theme')
             }
         });
     }
@@ -81,8 +79,8 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
         checkToken ? fetchDataCart() : 0
     }, [])
 
-    const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
 
+    const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
     const fetchDataCart = async () => {
         try {
             const response = await axios.get(cartEndPoint, {
@@ -131,7 +129,19 @@ const Navbar: React.FC<NavbarProps> = ({ name, email, handleProfile, children, i
 
     const handleNavigate = () => {
         if (!cookies.token) {
-            navigate('/login')
+            Swal.fire({
+                icon: "warning",
+                title: "Anda Belum Login",
+                text: "Silahkan Login terlebih dahulu",
+                confirmButtonText: "Login",
+                confirmButtonColor: "#31CFB9",
+                cancelButtonText: "Cancel",
+                cancelButtonColor: "#FF6E40",
+                showCancelButton:true,
+            }).then((go) => {
+                if(go.isConfirmed)
+                navigate('/login')
+            })
         } else {
             navigate('/cart')
         }

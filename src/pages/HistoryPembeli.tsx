@@ -11,7 +11,6 @@ import withReactContent from "sweetalert2-react-content"
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import { HistoryType, DataType, FormValues } from "../utils/types/DataType"
 import NotFound from '../assets/download.png'
-
 import CustomButton from "../components/CustomButton"
 import CardHistory from "../components/CardHistory"
 import CustomInput from "../components/CutomInput"
@@ -74,7 +73,7 @@ const HistoryPembeli = () => {
     setProdTransDetail(id.id)
   }
 
-
+const [cekStats, setCekStats] = useState<string>('')
   function dataTransaksi() {
     setLoading(true)
     axios
@@ -84,10 +83,15 @@ const HistoryPembeli = () => {
         }
       })
       .then((res) => {
+        setCekStats(res.data.data.find((item: any) => {
+            item.payment_status
+        }
+        ))
+        // console.log('testt status', res.data.data.map((item: any) => console.log('tesst map', item.payment_status)
+        // ))
         setHistory(res.data.data)
       })
       .catch((err) => {
-        console.log(err.response.data)
       })
       .finally(() => setLoading(false))
   }
@@ -112,7 +116,6 @@ const HistoryPembeli = () => {
         }
       })
       .catch((err) => {
-        console.log(err)
       })
       .finally(() => setLoading(false))
   }
@@ -131,7 +134,6 @@ const HistoryPembeli = () => {
           setProduct(combine)
         })
         .catch((err) => {
-          console.log(err.response.data.message)
         })
         .finally(() => setLoadingItem(false))
     })
@@ -238,6 +240,15 @@ const HistoryPembeli = () => {
     setHistoryDetail(selectedHistory);
   };
   
+  const HandleCek = () => {
+    history.map((item:any) => {
+      if(item.payment_status === 'pending'){
+        setShowFeedback(false)
+      } else {
+        setShowFeedback(true)
+      }
+    })
+  }
 
   return (
     <Layout>
@@ -259,7 +270,7 @@ const HistoryPembeli = () => {
                       onClick={() => dataTransaksiId(item.id)}
                     >
                       <div className="mb-1 rounded-lg bg-white text-gray-900 dark:bg-slate-700 dark:text-gray-100 
-                      select-none items-center justify-between rounded-md px-4 py-2 text-left text-sm font-medium">
+                      select-none items-center justify-between px-4 py-2 text-left text-sm font-medium">
                         <p>{`Total Barang : ${item.total_product}`}</p>
                         <p className=''>Total Belanja :
                           {formatValue({
@@ -277,7 +288,7 @@ const HistoryPembeli = () => {
                               id="btn-balas"
                               label='Bayar sekarang'
                               type='submit'
-                              className={`btn btn-xs rounded-lg border-none ${item.payment_status === "pending" || "" ? "hidden" : "block" } bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400`}
+                              className={`btn btn-xs rounded-lg border-none ${item.payment_status === "settlement" || "" ? "hidden" : "block" } bg-lapak text-sm w-36 font-semibold capitalize tracking-wider hover:bg-sky-500 hover:border-none hover:text-zinc-50 disabled:cursor-not-allowed disabled:bg-zinc-400`}
                               onClick={()=> {handleBayar(item.payment_link)}}
                             />
                           </div>
@@ -321,7 +332,7 @@ const HistoryPembeli = () => {
                               quantity={item.total_product}
                               rating={item.rating}
                               handleEdit={()=> navigate(`/detail/${(item.product_id)}`)}
-                              handleFeedback={() => {setShowFeedback(true), handleIdClick(item)
+                              handleFeedback={() => {HandleCek(), handleIdClick(item)
                               }}
                             />
                           ))}
