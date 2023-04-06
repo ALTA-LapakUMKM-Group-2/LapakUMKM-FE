@@ -1,6 +1,6 @@
 import React from 'react'
 import { formatValue } from 'react-currency-input-field'
-import {HiTrash} from 'react-icons/hi'
+import { HiTrash } from 'react-icons/hi'
 
 interface CartProps {
     id: string
@@ -25,15 +25,13 @@ const CartCard: React.FC<CartProps> = ({
     produkimg,
     produkName,
     price,
-    onCheck,
     counts,
-    children,
     totalPrice,
     handleIncrement,
     handleDecrement,
     handleDelete
 }) => {
-    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
+
     return (
         <div id={id} className="grid gap-y-3 relative items-center bg-white border-y-2 border-gray-200 rounded-lg w-54 lg:w-[80] p-4 dark:bg-slate-800 dark:border-lapak">
             <div className="flex space-x-5">
@@ -68,7 +66,7 @@ const CartCard: React.FC<CartProps> = ({
                         }) : totalPrice}
                     </p>
                     <div className="flex items-end justify-end mt-5">
-                        <button className="btn btn-xs btn-outline btn-error mb-3" onClick={handleDelete}><HiTrash/></button>
+                        <button className="btn btn-xs btn-outline btn-error mb-3" onClick={handleDelete}><HiTrash /></button>
                         <div className="flex">
                             <button onClick={handleDecrement} className='btn btn-xs bg-gray-100 text-black border-none hover:bg-gray-100 text-lg mb-3 ml-2 mr-5 dark:bg-slate-500 dark:text-white'>-</button>
                             <h1 className=''>{counts}</h1>

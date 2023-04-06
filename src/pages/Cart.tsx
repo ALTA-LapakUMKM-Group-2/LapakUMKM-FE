@@ -23,13 +23,10 @@ const Cart: React.FC<CartData> = ({ products }) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<any>([])
     const [cookies, setCookies, removeCookies] = useCookies(['token'])
-    const [checked, setChecked] = useState(false);
     const [selectedItems, setSelectedItems] = useState<Products[]>([]);
-    const [newCart, setnewCart] = useState<Products[]>([]);
     const [price, setPrice] = useState<number>(0)
     const [count, setCount] = useState<number>()
     const [cart, setNewCart] = useState<Products[]>([])
-    const [totalPrice, setTotalPrice] = useState<number>(price)
     const navigate = useNavigate()
 
 
@@ -51,6 +48,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             setSelectedItems([]);
         }
     };
+
     const handleIncrement = (i: Products) => {
         let _cart = cart.map((item) => {
             if (item.id === i.id) {
@@ -58,7 +56,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             }
             return item;
         });
-        setnewCart(_cart);
+        setNewCart(_cart);
     };
 
     const handleDecrement = (i: Products) => {
@@ -72,7 +70,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
             }
             return item;
         });
-        setnewCart(_cart);
+        setNewCart(_cart);
     };
 
     const TotalCart = () => {
@@ -98,7 +96,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
             })
             setData(res.data.data)
         } catch (error) {
-
         }
         setLoading(false)
     }
@@ -137,7 +134,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
                         fetchDataCart()
                     })
                     .catch((error) => {
-                        
+
                         Swal.fire({
                             icon: "error",
                             title: error.message,
@@ -152,7 +149,6 @@ const Cart: React.FC<CartData> = ({ products }) => {
     }
 
     const cartEndPoint = 'https://lapakumkm.mindd.site/carts'
-
     const fetchDataCart = async () => {
         try {
             const response = await axios.get(cartEndPoint, {
@@ -162,11 +158,9 @@ const Cart: React.FC<CartData> = ({ products }) => {
             });
             const data = response.data.data
             setNewCart(data);
-            setCount(response.data.data.product_pcs)
+            setCount(data.product_pcs)
         } catch (error) {
-           
         } finally {
-
         }
     };
 
@@ -176,7 +170,7 @@ const Cart: React.FC<CartData> = ({ products }) => {
 
 
     const cartKosong = () => {
-        if(cart.length === 0) {
+        if (cart.length === 0) {
             Swal.fire({
                 icon: "warning",
                 title: "Cart Kosong",
@@ -184,18 +178,15 @@ const Cart: React.FC<CartData> = ({ products }) => {
                 confirmButtonText: "Isi Keranjang",
                 confirmButtonColor: "#31CFB9",
             }).then((go) => {
-                if(go){
+                if (go) {
                     navigate('/')
                 }
-            }) 
-        } else if(selectedItems.length === 0)
-      Swal.fire({
-          icon: "warning",
-          title: "Cart belom di ceklis",
-          text: "Cart belom di ceklis",
-          confirmButtonText: "Select item dulu",
-          confirmButtonColor: "#31CFB9",
-      })
+            })
+        } else if (selectedItems.length === 0)
+            Swal.fire({
+                icon: "warning",
+                title: "Cart belom di ceklis",
+            })
 
     }
 

@@ -25,7 +25,6 @@ import Default from "../assets/default.jpg"
 const Profile = () => {
   const navigate = useNavigate()
   const MySwal = withreactcontent(Swal)
-  const [modal, setModal] = useState<string>("modal")
   const [showModal, setShowModal] = useState(false)
   const [modalAing, setModalAing] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -38,7 +37,8 @@ const Profile = () => {
   const [address, setAddress] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [cookies, setCookies, removeCookies] = useCookies(['token'])
+  const [cookies, setCookie, removeCookies] = useCookies(["token", "id", "photo_profile", "name", "full_name", "tokoId"]);
+
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [verivyPassword, setVerivyPassword] = useState<string>("");
@@ -58,8 +58,6 @@ const Profile = () => {
         }
       })
       const { data } = res.data
-      console.log(data);
-
       if (data) {
         Swal.fire({
           position: "center",
@@ -86,27 +84,18 @@ const Profile = () => {
         }
       })
       setData(res.data.data)
-
     } catch (error) {
-
     }
     setLoading(false)
   }
-
-
 
   useEffect(() => {
     getProfile()
   
   }, [])
 
-
-
-
-
   const handleEditProfile = async (e: any) => {
     e.preventDefault()
-
     const data = {
       full_name: fullName,
       address: address,
@@ -131,7 +120,7 @@ const Profile = () => {
       getProfile()
       setShowModal(false)
     } catch (error) {
-      console.log(error);
+
     }
   }
 
@@ -147,7 +136,6 @@ const Profile = () => {
       confirmButtonColor: "#31CFB9",
       cancelButtonColor: "#FE4135",
     });
-
     if (res.isConfirmed) {
       try {
         const res = await axios.delete('https://lapakumkm.mindd.site/users', {
@@ -155,7 +143,7 @@ const Profile = () => {
             Authorization: `Bearer ${cookies.token}`
           }
         });
-        console.log(res.data);
+  
         if (res.data) {
           Swal.fire({
             position: "center",
@@ -165,11 +153,13 @@ const Profile = () => {
             timer: 1500
           });
           removeCookies('token');
-          navigate("/");
-
+          removeCookies('photo_profile');
+          removeCookies('tokoId');
+          removeCookies('name');
+          removeCookies('full_name');
+          navigate("/login");
         }
       } catch (error) {
-        console.log(error);
       }
     }
   };

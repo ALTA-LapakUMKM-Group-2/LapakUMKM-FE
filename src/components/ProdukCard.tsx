@@ -1,14 +1,13 @@
 import { formatValue } from 'react-currency-input-field'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-
 import '@smastrom/react-rating/style.css'
 import { Rating } from '@smastrom/react-rating';
-
 import { TbShoppingCartPlus } from 'react-icons/tb'
 import { MdLocationOn } from 'react-icons/md'
 import { AiFillStar } from 'react-icons/ai';
 import { useCookies } from 'react-cookie';
+import Swal from 'sweetalert2';
 
 interface ListingProps {
     id: number;
@@ -35,13 +34,7 @@ const ProdukCard: React.FC<ListingProps> = ({
     rating,
     price,
     image,
-    edit,
-    handleDelete,
-    handleEdit,
     sell,
-    toDelete,
-    name,
-    handlename,
     size
 }) => {
     const [cookie, setCookie] = useCookies(['token'])
@@ -49,7 +42,20 @@ const ProdukCard: React.FC<ListingProps> = ({
 
     const onClick = () => {
         if(!cookie.token){
-            navigate('/login')
+            Swal.fire({
+                icon: "warning",
+                title: "Anda Belum Login",
+                text: "Silahkan Login terlebih dahulu",
+                confirmButtonText: "Login",
+                confirmButtonColor: "#31CFB9",
+                cancelButtonText: "Cancel",
+                cancelButtonColor: "#FF6E40",
+                showCancelButton:true,
+            }).then((go) => {
+                if(go.isConfirmed)
+                navigate('/login')
+            })
+      
         } else {
             navigate(`/detail/${id}`)
         }
@@ -65,7 +71,6 @@ const ProdukCard: React.FC<ListingProps> = ({
         inactiveFillColor: '#ffffff',
 
     };
-    const imgUrl = 'https://storage.googleapis.com/images_lapak_umkm/product/'
 
     return (
         

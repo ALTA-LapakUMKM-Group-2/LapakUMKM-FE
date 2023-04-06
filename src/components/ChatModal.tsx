@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-
 import { Chat } from "../utils/types/DataType";
-
 import { HiOutlineXMark } from 'react-icons/hi2'
 import { FaRegPaperPlane } from 'react-icons/fa'
-import Loading from "./Loading";
-
 import Default from "../assets/default.jpg"
 
 type ChatModalProps = {
@@ -29,12 +25,11 @@ type ChatModalProps = {
 const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, product_id, isOpen, isClose, img, tokoName, children, size, titleStyle, Recipient_id }) => {
     const [cookie, setCookie] = useCookies(["token", "id", "roomID", "full_name", "photo_profile"])
     const [loading, setLoading] = useState<boolean>(false)
-
     const [chat, setChat] = useState<string>("")
     const [roomID, setRoomID] = useState<string>("")
     const [newChat, setNewChat] = useState<Chat[]>([])
     const [senderID, setSenderID] = useState<number>(0)
-    const [chats, setChats] = useState<Chat[]>([])
+
 
     const onNewChat = async (e: React.FormEvent<HTMLFormElement>) => {
         setLoading(true)
@@ -96,7 +91,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ userID, role, RoomsChat, Room, pr
         }
     }, [roomID, Room])
 
-    const [getRecepient, setGetRecepient] = useState<any>('')
     function fetchDataChat(room_id: any) {
         setLoading(true)
         axios
